@@ -10,6 +10,24 @@
     <title>Upload Files</title>
   </head>
 
+  <style> /* set the CSS for the graph, temporarily copied this, free to change */
+  body { font: 12px Arial;}
+
+  path {
+      stroke: steelblue;
+      stroke-width: 2;
+      fill: none;
+  }
+
+  .axis path,
+  .axis line {
+      fill: none;
+      stroke: grey;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+  }
+  </style>
+
   <body>
 	<form>
 		<input id="dataset-input" type="file"  accept=".csv" name="name" />
