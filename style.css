@@ -102,7 +102,6 @@
 
 /* set the CSS for the graph, temporarily copied this, free to change */
 body { font: 12px Arial;}
-
   path {
       stroke: steelblue;
       stroke-width: 2;
@@ -115,4 +114,14 @@ body { font: 12px Arial;}
       stroke: grey;
       stroke-width: 1;
       shape-rendering: crispEdges;
+  }
+
+  #formSelectionData {
+	  padding: 20px 20px;
+	  margin: 10px 10px;
+	  width: 300px;
+	  height: 400px;
+	  overflow-x: hidden;
+	  overflow-x: auto;
+	  text-align:justify;
   }
