@@ -1,40 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<html lang='en'>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="style.css">
 
-    <script src="https://d3js.org/d3.v5.js"></script>
+		<title>Hello, world!</title>
+	</head>
+	<body>
+		<div class='home'>
+			<div class="title">
+				<div class="homelink">
+					<a href="index.html"> i am the title</a>
+				</div>
+				<div class="vizlink">
+					visualizations
+				</div>
+				<div class="uploadlink">
+					<a href="upload.html">upload</a>
+				</div>
+			</div>
+			<div class="emptytitle"></div>
+			<div class="picture1 picture">
+				i am a picture 1
+			</div>
+			<div class="information1 information">
+				i am information 1
+			</div>
+			<div class="picture picture2">
+				i am picture 2
+			</div>
+			<div class="information information2">
+				i am information 2
+			</div> 
+			<div class="picture3 picture">
+				i am a picture 3
+			</div>
+			<div class="information3 information">
+				i am information 3
+			</div>
+			<div class="picture picture4">
+				i am picture 4
+			</div>
+			<div class="information information4">
+				i am information 4
+			</div> 
 
-    <title>Upload Files</title>
-  </head>
 
-  <style> /* set the CSS for the graph, temporarily copied this, free to change */
-  body { font: 12px Arial;}
+		</div>
 
-  path {
-      stroke: steelblue;
-      stroke-width: 2;
-      fill: none;
-  }
+	</body>
 
-  .axis path,
-  .axis line {
-      fill: none;
-      stroke: grey;
-      stroke-width: 1;
-      shape-rendering: crispEdges;
-  }
-  </style>
-
-  <body>
-	<form>
-		<input id="dataset-input" type="file"  accept=".csv" name="name" />
-		<input type="submit" value="Submit" name="submit" />
-	</form>
-
-  <script src="upload.js"></script>
-
-  </body>
 </html>
