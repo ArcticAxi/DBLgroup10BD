@@ -5,13 +5,13 @@
 
 .home {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: auto 3fr 2fr 1fr;
 	grid-template-areas: 
-	"emptytitle emptytitle emptytitle"
-	"picture1 information1 information1"
-	"information2 information2 picture2"
-	"picture3 information3 information3"
-	"information4 information4 picture4";
+	"emptytitle emptytitle emptytitle emptytitle"
+	"introduction introduction introduction introduction"
+	"picture1 picture2 picture3 picture4"
+	"information1 information2 information3 information4";
 }
 
 .upload {
@@ -58,8 +58,13 @@
 	height: 50px;
 }
 
+.introduction {
+	grid-area: introduction;
+	height: 400px;
+	background-color: #804040;
+}
+
 .picture {
-	height: 380px;
 	background-color: #00a500;
 }
 
@@ -80,7 +85,6 @@
 }
 
 .information {
-	height: 380px;
 	background-color: #008500;
 }
 
