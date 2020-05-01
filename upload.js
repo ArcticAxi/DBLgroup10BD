@@ -16,16 +16,29 @@ document.addEventListener("DOMContentLoaded", function () {
         const reader = new FileReader();
 
         // since our file is uploaded by the user we don't have an URL
-        // below is a workaround for this, which loads it during the callback
+        // below is a workaround for this, loads the file during the callback
         reader.onload = function () {
             loadCSV(reader.result)
         };
-        //reader.onload = function(){ simpleGraph(reader.result) };
-
 
         if (file) {
             reader.readAsDataURL(file);
         }
+
+        // attemping to load the file in certain charset to avoid the question mark blocks but it isn't working?
+        /*reader.onload = function () {
+            $(document).ready(function () {
+                $.ajax({
+                    type: "GET",
+                    url: reader.result,
+                    contentType: "text/csv; charset=iso-8859-1",
+                    dataType: "text",
+                    success: function (data) {
+                        processData(data);
+                    }
+                });
+            });
+        }*/
     })
 
     formSelection.addEventListener('submit', e => {
@@ -35,26 +48,40 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 });
 
-function createCheckboxes(dataset) {
-    var selectionForm = document.getElementById("formSelectionData");
+function processData(allText) {
+    var allTextLines = allText.split(/\r\n|\n/);
+    var headers = allTextLines[0].split('\t');
+    var lines = [];
 
-    existingCheckboxes = document.getElementsByName("stimuli");
-    existingLabels = document.getElementsByName("stimuliLabel");
-    amount = existingCheckboxes.length;
+    for (var i = 1; i < allTextLines.length; i++) {
+        var data = allTextLines[i].split('\t');
+        if (data.length == headers.length) {
 
-    if (amount > 0) {
-        parentNode = existingCheckboxes[0].parentNode;
-        for (var i = amount - 1; i >= 0; i--) {
-            try {
-                parentNode.removeChild(existingLabels[i])
-                parentNode.removeChild(existingCheckboxes[i])
-            } catch(err) {
-                // do nothing with the error
-                console.log("TypeError in createCheckBoxes, removing the current checkboxes.")
+            var tarr = [];
+            for (var j = 0; j < headers.length; j++) {
+                tarr.push(headers[j]+":"+data[j]);
             }
-
+            lines.push(tarr);
         }
     }
+    //console.log(lines)
+}
+
+var checkboxesArray = [];
+
+function removePrevCheckboxes() {
+    var selectionForm = document.getElementById("formSelectionData");
+
+    if (checkboxesArray.length > 0) {
+        for (var i = checkboxesArray.length - 1; i >= 0; i--) {
+            selectionForm.removeChild(checkboxesArray[i]);
+        }
+        checkboxesArray = [];
+    }
+}
+
+function createCheckboxes(dataset) {
+    var selectionForm = document.getElementById("formSelectionData");
 
     for (var i = 0; i < dataset.length; i++) {
         // creating checkbox element
@@ -67,6 +94,7 @@ function createCheckboxes(dataset) {
 
         // retrieves the StimuliName from nested object array
         checkbox.id = dataset[i].key;
+        checkbox.checked = Boolean(false);
 
         // creating label for checkbox
         var label = document.createElement('label');
@@ -87,6 +115,10 @@ function createCheckboxes(dataset) {
 
         linebreak = document.createElement("br");
         selectionForm.appendChild(linebreak);
+
+        checkboxesArray.push(label);
+        checkboxesArray.push(checkbox);
+        checkboxesArray.push(linebreak)
     }
 }
 
@@ -94,19 +126,15 @@ function createCheckboxes(dataset) {
 function loadCSV(content) {
     d3.tsv(content).then(function (data) {
         data.forEach(function (d) {
+            var output = "";
+            var input = d.StimuliName;
             for (var i = 0; i < d.StimuliName.length; i++) {
-                if (d.StimuliName.charCodeAt(i) == 252) {
-                    // This does not change the string value for some reason, but it does recognize them individually?
-                    // It works if I use charAt(i) == "B" instead, so I assume it has to do with the value
-                    d.StimuliName = d.StimuliName.substring(0,i)+'ü'+ d.StimuliName.substring(i+1);
-                    d.StimuliName = "OOOF";
+                var charCode = input.charCodeAt(i);
+                if (charCode <= 127 || (charCode >= 161 && charCode <= 255)) {
+                    output += input.charAt(i);
                 }
             }
-            if (d.StimuliName == "01_Antwerpen_S1.jpg") {
-                // This does change the final version
-                // No clue why this is happening. Maybe it isn't happy with the for loop and if-statement?
-                d.StimuliName = "OOF";
-            }
+            d.StimuliName = output;
             d.Timestamp = +d.Timestamp;
             d.FixationIndex = +d.FixationIndex;
             d.FixationDuration = +d.FixationDuration;
@@ -114,10 +142,10 @@ function loadCSV(content) {
             d.MappedFixationPointY = +d.MappedFixationPointY;
         });
         initialRead = data;
-        console.log(initialRead);
 
         // Nests the data based on StimuliName and creates checkboxes using the names
         // Might be useful to be able to also select other columns as choices, eg. difficulty
+        removePrevCheckboxes();
         createCheckboxes(groupingStimuli(initialRead));
     }, false);
 }
