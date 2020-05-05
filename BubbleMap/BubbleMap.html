@@ -1,0 +1,31 @@
+<html>
+
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Load color scale -->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<svg id="my_dataviz" width="630" height="350"></svg>
+<script src="BubbleMap.js"></script>
+
+<!-- Create a black outline for circles-->
+<!-- A bit of CSS: change stroke color of circle on hover (white -> black) -->
+<style>
+.bubbles {
+  stroke-width: 1px;
+  stroke: black;
+  fill: #cc4457;
+  opacity: .6;
+}
+.bubbles:hover {
+  stroke: black;
+  opacity: 1;
+}
+svg {
+  background: url('https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/pf-s48-ted-0138-jj_2.jpg?w=800&dpr=1&fit=default&crop=default&auto=format&fm=pjpg&q=75&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=42607d73fa95e64b0827888328d968c6') no-repeat;
+}
+</style>
