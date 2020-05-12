@@ -1,97 +1,13 @@
 var initialRead;
 var fileLocation;
 
-const url = 'processUpload.php';
-
 document.addEventListener("DOMContentLoaded", function () {
-    const formSelection = document.querySelector('form.selectionData');
-
-    fileLocation = "/uploads/" + localStorage.getItem("dataFilename");
     loadCSV();
-
-    formSelection.addEventListener('submit', e => {
-        e.preventDefault();
-
-        createVisualizations(initialRead);
-    })
 });
-
-function processData(allText) {
-    var allTextLines = allText.split(/\r\n|\n/);
-    var headers = allTextLines[0].split('\t');
-    var lines = [];
-
-    for (var i = 1; i < allTextLines.length; i++) {
-        var data = allTextLines[i].split('\t');
-        if (data.length == headers.length) {
-
-            var tarr = [];
-            for (var j = 0; j < headers.length; j++) {
-                tarr.push(headers[j]+":"+data[j]);
-            }
-            lines.push(tarr);
-        }
-    }
-    //console.log(lines)
-}
-
-var checkboxesArray = [];
-
-function removePrevCheckboxes() {
-    var selectionForm = document.getElementById("formSelectionData");
-
-    if (checkboxesArray.length > 0) {
-        for (var i = checkboxesArray.length - 1; i >= 0; i--) {
-            selectionForm.removeChild(checkboxesArray[i]);
-        }
-        checkboxesArray = [];
-    }
-}
-
-function createCheckboxes(dataset) {
-    var selectionForm = document.getElementById("formSelectionData");
-
-    for (var i = 0; i < dataset.length; i++) {
-        // creating checkbox element
-        var checkbox = document.createElement('input');
-
-        // Assigning the attributes
-        // to created checkbox
-        checkbox.type = "checkbox";
-        checkbox.name = "stimuli";
-
-        // retrieves the StimuliName from nested object array
-        checkbox.id = dataset[i].key;
-        checkbox.checked = Boolean(false);
-
-        // creating label for checkbox
-        var label = document.createElement('label');
-
-        // assigning attributes for
-        // the created label tag
-        label.htmlFor = dataset[i].key;
-        label.name = "stimuliLabel";
-
-        // appending the created text to
-        // the created label tag
-        label.appendChild(document.createTextNode(dataset[i].key));
-
-        // appending the checkbox
-        // and label to div
-        selectionForm.appendChild(checkbox);
-        selectionForm.appendChild(label);
-
-        linebreak = document.createElement("br");
-        selectionForm.appendChild(linebreak);
-
-        checkboxesArray.push(label);
-        checkboxesArray.push(checkbox);
-        checkboxesArray.push(linebreak)
-    }
-}
 
 // d3.tsv reads csv (commas) but with tabs from an URL, data is the result
 function loadCSV() {
+    fileLocation = "./uploads/" + localStorage.getItem("dataFilename");
     d3.tsv(fileLocation).then(function (data) {
         data.forEach(function (d) {
             var output = "";
@@ -110,12 +26,10 @@ function loadCSV() {
             d.MappedFixationPointY = +d.MappedFixationPointY;
         });
         data = data.sort(sortByDateAscending);
-        initialRead = data;
-
-        // Nests the data based on StimuliName and creates checkboxes using the names
-        // Might be useful to be able to also select other columns as choices, eg. difficulty
-        removePrevCheckboxes();
-        createCheckboxes(groupingStimuli(initialRead));
+        createVisualizations(data)
+        // create localStorage with initialRead
+        // max storage size is at least 5MB, however, initialRead probably greater than that
+        // might want to just re-read it in visualizations.js, probably the easiest I think maybe presumably
     }, false);
 }
 
@@ -124,25 +38,11 @@ function sortByDateAscending(a, b) {
 }
 
 function createVisualizations(data) {
-    var checkboxes = document.getElementsByName('stimuli');
+    var selected = JSON.parse(localStorage.getItem("selectedStimuli"))
 
-    for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].checked) {
-            simpleGraph(data, checkboxes[i].id);
-        }
+    for (var i = 0; i < selected.length; i++) {
+            simpleGraph(data, selected[i]);
     }
-}
-
-// groupedByStimuli is an array of objects. each object has the
-// StimuliName as a key and the others are values
-// can use this for counting, means, sums, multi-level indexing
-function groupingStimuli(data) {
-    var groupedByStimuli = d3.nest()
-        .key(function (d) {
-            return d.StimuliName;
-        })
-        .entries(data);
-    return groupedByStimuli;
 }
 
 // THIS GRAPH DOES NOT ACTUALLY DISPLAY ANYTHING THAT MAKES SENSE!
@@ -261,9 +161,3 @@ function msToTime(timestamp) {
     return minutes + ":" + seconds + "." + milliseconds;
 }
 
-function selectAllData(source) {
-    checkboxes = document.getElementsByName("stimuli");
-    for (var i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].checked = source.checked;
-    }
-}
