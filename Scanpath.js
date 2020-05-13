@@ -5,7 +5,7 @@ var height = 2000;
 var map = "01_Antwerpen_S1.jpg"
 
 //load data
-d3.tsv("/js/data/all_fixation_data_cleaned_up.csv").then(function (data) {
+d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
     data = data.filter(function (d) {
         return (d.StimuliName == map);
     }); 
