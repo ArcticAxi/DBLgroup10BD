@@ -32,7 +32,7 @@ var canvas = d3.select("body").append("svg")
 
 //adds the map to the canvas            
 canvas.append("svg:image")
-            .attr("xlink:href", "js/data/stimuli/" + map);
+            .attr("xlink:href", "stimuli/" + map);
 
 //create group object            
 var group = canvas.append("g");
