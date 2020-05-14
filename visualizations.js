@@ -47,73 +47,101 @@ function createVisualizations(data) {
 }
 
 function scatterplot(content, name) {
-    // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 60},
-        width = 1650 - margin.left - margin.right,
-        height = 1200 - margin.top - margin.bottom;
+    var bkgrImg = document.querySelector('#scatterplot');
+    var stimuliLocationURL = "url(" + "'" + "./stimuli/" + name + "')";
+    bkgrImg.style.backgroundImage = stimuliLocationURL;
+    bkgrImg.style.backgroundRepeat = 'no-repeat';
 
-// append the svg object to the body of the page
-    var svg = d3.select("#scatterplot")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+    // turning this opacity down also turns down the opacity of the plot
+    // attempted to fix by creating a div inside the div and overlaying the two
+    // however, changing image width/height of background image is completely ignored for some reason
+    // bkgrImg.style.opacity = '0.5';
 
-        data = content.filter(function (d) {
-            if (d.StimuliName !== name) {
-                return false;
-            }
-            d.MappedFixationPointY = -d.MappedFixationPointY;
-            return true;
-        });
+   // var sctrPlot = document.querySelector('#scatterplot');
+   // sctrPlot.style.position = 'relative';
+   // sctrPlot.style.display = 'block';
 
-        // Add X axis
-        var x = d3.scaleLinear()
-            .domain([0, 1650])
-            .range([ 0, width ]);
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
-
-        // Add Y axis
-        var y = d3.scaleLinear()
-            .domain([-1200, 0])
-            .range([ height, 0]);
-        svg.append("g")
-            .call(d3.axisLeft(y));
-
-        // Add dots
-        svg.append('g')
-            .selectAll("dot")
-            .data(data)
-            .enter()
-            .append("circle")
-            .attr("cx", function (d) { return x(d.MappedFixationPointX); } )
-            .attr("cy", function (d) { return y(d.MappedFixationPointY); } )
-            .attr("r", 5)
-            .style("fill-opacity", "1")
-            .style("fill", "#69b3a2")
-
-    var clusterPoints = [];
-    var clusterRange = 45;
-
-    svg.append('g')
-        .attr('class', 'grid');
-
-    for (var x = 0; x <= width; x += clusterRange) {
-        for (var y = 0; y <= height; y += clusterRange) {
-            svg.append('g').append('rect')
-                .attr({
-                    x: x,
-                    y: y,
-                    width: clusterRange,
-                    height: clusterRange,
-                    class: "grid"
-                });
-        }
+    function getMeta(url, callback) {
+        var img = new Image();
+        img.src = url;
+        img.onload = function() { callback(this.width, this.height); }
     }
+    getMeta(
+        "./stimuli/" + name,
+        function(width, height) {
+            let  styleWidth = "'" + width + "'";
+            let styleHeight = "'" + height + "'";
+            bkgrImg.style.width = styleWidth;
+            bkgrImg.style.height = styleHeight;
+
+            // set the dimensions and margins of the graph
+            //var margin = {top: 0, right: 0, bottom: 0, left: 0};
+            // var margin = {top: 10, right: 30, bottom: 30, left: 60},
+            //   width = 1650 - margin.left - margin.right,
+            //    height = 1200 - margin.top - margin.bottom;
+
+            // append the svg object to the body of the page
+            var svg = d3.select("#scatterplot")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g");
+
+            data = content.filter(function (d) {
+                if (d.StimuliName !== name) {
+                    return false;
+                }
+                d.MappedFixationPointY = -d.MappedFixationPointY;
+                return true;
+            });
+
+            // Add X axis
+            var x = d3.scaleLinear()
+                .domain([0, width])
+                .range([ 0, width ]);
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            // Add Y axis
+            var y = d3.scaleLinear()
+                .domain([-height, 0])
+                .range([ height, 0]);
+            svg.append("g")
+                .call(d3.axisLeft(y));
+
+            // Add dots
+            svg.append('g')
+                .selectAll("dot")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("cx", function (d) { return x(d.MappedFixationPointX); } )
+                .attr("cy", function (d) { return y(d.MappedFixationPointY); } )
+                .attr("r", 5)
+                .style("fill-opacity", "1")
+                .style("fill", "#69b3a2");
+
+            var clusterPoints = [];
+            var clusterRange = 45;
+
+            svg.append('g')
+                .attr('class', 'grid');
+
+            for (var x = 0; x <= width; x += clusterRange) {
+                for (var y = 0; y <= height; y += clusterRange) {
+                    svg.append('g').append('rect')
+                        .attr({
+                            x: x,
+                            y: y,
+                            width: clusterRange,
+                            height: clusterRange,
+                            class: "grid"
+                        });
+                }
+            }
+        }
+    );
 }
 //                background: url('./stimuli/01_Antwerpen_S1.jpg') no-repeat;
 
