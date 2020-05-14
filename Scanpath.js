@@ -2,12 +2,19 @@
 //width and height are chosen so there is always enough room for the maps, could probably be done more efficient
 var width = 2000;
 var height = 2000;
-var map = "01_Antwerpen_S1.jpg"
+var stroke_width = 1;
+var stroke_opacity = 0.5;
+var base_colour = "black";
+var highlight_colour = "red";
+var fixation_on = true;
+var fixation_color = "black";
+var fixation_radius = 3;
+var stimulus = "11_Bologna_S2.jpg"
 
 //load data
 d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
     data = data.filter(function (d) {
-        return (d.StimuliName == map);
+        return (d.StimuliName == stimulus);
     }); 
 
     //creates a set containing all unique users
@@ -32,7 +39,7 @@ var canvas = d3.select("body").append("svg")
 
 //adds the map to the canvas            
 canvas.append("svg:image")
-            .attr("xlink:href", "stimuli/" + map);
+            .attr("xlink:href", "stimuli/" + stimulus);
 
 //create group object            
 var group = canvas.append("g");
@@ -53,9 +60,19 @@ group.selectAll("path")
         .enter()
         .append("path")
         .attr("d", line)
-        .attr("marker-end", "url(#triangle)")
         .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr("stroke-width", 1);
+        .attr("stroke", base_colour)
+        .attr("stroke-width", stroke_width)
+        .attr("stroke-opacity", stroke_opacity);
+
+if (fixation_on == true) {        
+    group.selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d) { return d.MappedFixationPointX })
+            .attr("cy", function (d) { return d.MappedFixationPointY })
+            .attr("r", fixation_radius)
+            .attr("fill", fixation_color)}
 }
 
