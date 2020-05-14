@@ -42,8 +42,80 @@ function createVisualizations(data) {
 
     for (var i = 0; i < selected.length; i++) {
             simpleGraph(data, selected[i]);
+            scatterplot(data, selected[i]);
     }
 }
+
+function scatterplot(content, name) {
+    // set the dimensions and margins of the graph
+    var margin = {top: 10, right: 30, bottom: 30, left: 60},
+        width = 1650 - margin.left - margin.right,
+        height = 1200 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+    var svg = d3.select("#scatterplot")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+        data = content.filter(function (d) {
+            if (d.StimuliName !== name) {
+                return false;
+            }
+            d.MappedFixationPointY = -d.MappedFixationPointY;
+            return true;
+        });
+
+        // Add X axis
+        var x = d3.scaleLinear()
+            .domain([0, 1650])
+            .range([ 0, width ]);
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        // Add Y axis
+        var y = d3.scaleLinear()
+            .domain([-1200, 0])
+            .range([ height, 0]);
+        svg.append("g")
+            .call(d3.axisLeft(y));
+
+        // Add dots
+        svg.append('g')
+            .selectAll("dot")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d) { return x(d.MappedFixationPointX); } )
+            .attr("cy", function (d) { return y(d.MappedFixationPointY); } )
+            .attr("r", 5)
+            .style("fill-opacity", "1")
+            .style("fill", "#69b3a2")
+
+    var clusterPoints = [];
+    var clusterRange = 45;
+
+    svg.append('g')
+        .attr('class', 'grid');
+
+    for (var x = 0; x <= width; x += clusterRange) {
+        for (var y = 0; y <= height; y += clusterRange) {
+            svg.append('g').append('rect')
+                .attr({
+                    x: x,
+                    y: y,
+                    width: clusterRange,
+                    height: clusterRange,
+                    class: "grid"
+                });
+        }
+    }
+}
+//                background: url('./stimuli/01_Antwerpen_S1.jpg') no-repeat;
 
 // THIS GRAPH DOES NOT ACTUALLY DISPLAY ANYTHING THAT MAKES SENSE!
 // LINE GRAPH OF FixationDuration VS. Timestamp
@@ -76,7 +148,8 @@ function simpleGraph(content, name) {
     // append the svg obgect to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#useless")
+        .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")

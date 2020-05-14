@@ -51,14 +51,3 @@
     }
 
 ?>
-
-<script>
-    console.log("Running script of PHP");
-    function setDataFileName {
-        console.log("HALP AM A PICKLE MORTY");
-        //console.log("<?php echo $finalFileName;?>");
-        //print("ataesid");
-        //var locationName = "<?php echo $finalFileName;?>";
-        //localStorage.setItem("dataFilename", locationName);
-    }
-</script>

@@ -16,9 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
 
         const files = document.querySelector('[type=file]').files[0];
-        const firstFile = document.querySelector('[type=file]').files[0];
         const formData = new FormData();
-        const reader = new FileReader();
 
         formData.append('files[]', files);
 
@@ -31,20 +29,10 @@ document.addEventListener("DOMContentLoaded", function () {
             method: 'POST',
             body: formData,
         }).then(response => {
-            //console.log(response)
-            var fullPath = document.getElementById('dataset-input').value;
-            if (fullPath) {
-                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
-                var filename = fullPath.substring(startIndex);
-                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
-                    filename = filename.substring(1, filename.lastIndexOf('.'));
-                    //filename = filename.substring(1);
-                }
-            }
+            var filename = files.name.substr(0, files.name.lastIndexOf('.'));
+            settingFilename(filename,0);
         });
         //setDataFileName();
-        var filename = files.name.substr(0, files.name.lastIndexOf('.'));
-        settingFilename(filename,0);
     });
 
     formSelection.addEventListener('submit', e => {
