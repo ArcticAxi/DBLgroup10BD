@@ -43,7 +43,80 @@ function createVisualizations(data) {
     for (var i = 0; i < selected.length; i++) {
             simpleGraph(data, selected[i]);
             scatterplot(data, selected[i]);
+            heatmaps(data, selected[i]);
     }
+}
+
+function heatmaps(content,name) {
+    var bkgrImg = document.querySelector('#heatmap');
+    var stimuliLocationURL = "url(" + "'" + "./stimuli/" + name + "')";
+    bkgrImg.style.backgroundImage = stimuliLocationURL;
+    bkgrImg.style.backgroundRepeat = 'no-repeat';
+
+    // turning this opacity down also turns down the opacity of the plot
+    // attempted to fix by creating a div inside the div and overlaying the two
+    // however, changing image width/height of background image is completely ignored for some reason
+    // bkgrImg.style.opacity = '0.5';
+
+    // var sctrPlot = document.querySelector('#scatterplot');
+    // sctrPlot.style.position = 'relative';
+    // sctrPlot.style.display = 'block';
+
+    function getMeta(url, callback) {
+        var img = new Image();
+        img.src = url;
+        img.onload = function() { callback(this.width, this.height); }
+    }
+    getMeta(
+        "./stimuli/" + name,
+        function(width, height) {
+            let styleWidth = "'" + width + "'";
+            let styleHeight = "'" + height + "'";
+            bkgrImg.style.width = styleWidth;
+            bkgrImg.style.height = styleHeight;
+
+            div = d3.select('#heatmap');
+            canvasLayer = div.append('canvas').attr('id', 'canvas').attr('width', width).attr('height', height);
+
+            var heat = simpleheat('canvas');
+
+            dataHeat = content.filter(function (d) {
+                if (d.StimuliName !== name) {
+                    return false;
+                }
+                //   d.MappedFixationPointY = -d.MappedFixationPointY;
+                return true;
+            });
+
+            // creates d3 file thing with only the coordinates
+            // not necessary but figured it might make things easier
+            var coords = dataHeat.map(function (d) {
+                return {
+                    MappedFixationPointX: d.MappedFixationPointX,
+                    MappedFixationPointY: d.MappedFixationPointY,
+                }
+            });
+
+            // converts data in to the [[x1,y1,val],...,[xn,yn,valn]] format
+            heat.data(coords.map(function (d) {
+                return [d.MappedFixationPointX, d.MappedFixationPointY, 1]
+            }));
+
+            // changes how red things are
+            // add slider or value insertion for this because maps differ a lot in concentration
+            heat.max(5);
+
+            // set point radius and blur radius (25 and 15 by default)
+            heat.radius(25, 15);
+
+            // optionally customize gradient colors, e.g. below
+            // (would be nicer if d3 color scale worked here)
+            // not all colours seem to work
+            //heat.gradient({0: '#0000FF', 0.5: '#00FF00', 1: '#FF0000'});
+
+            // draws the heatmap
+            heat.draw();
+        });
 }
 
 function scatterplot(content, name) {
@@ -120,7 +193,7 @@ function scatterplot(content, name) {
                 .attr("cy", function (d) { return y(d.MappedFixationPointY); } )
                 .attr("r", 5)
                 .style("fill-opacity", "1")
-                .style("fill", "#69b3a2");
+                .style("fill", "#FF0000");
 
             var clusterPoints = [];
             var clusterRange = 45;
