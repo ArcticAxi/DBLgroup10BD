@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 });
 
+// checks which filename processUpload.php uploaded and stores it in localStorage
 var testingNames = 0;
 function settingFilename(filename, i) {
     $.ajax({
@@ -63,6 +64,7 @@ function settingFilename(filename, i) {
     });
 }
 
+// deletes existing checkboxes when uploading another file
 var checkboxesArray = [];
 function removePrevCheckboxes() {
     var selectionForm = document.getElementById("formSelectionData");
@@ -75,6 +77,7 @@ function removePrevCheckboxes() {
     }
 }
 
+// creates checkboxes
 function createCheckboxes(dataset) {
     var selectionForm = document.getElementById("formSelectionData");
 
@@ -149,10 +152,12 @@ function loadCSV() {
     }, false);
 }
 
+// sorts the timestamps
 function sortByDateAscending(a, b) {
     return a.Timestamp - b.Timestamp;
 }
 
+// stores the stimuliNames in local storage
 function stimuliNames(data) {
     var checkboxes = document.getElementsByName('stimuli');
     var selected = [];
@@ -178,6 +183,7 @@ function groupingStimuli(data) {
     return groupedByStimuli;
 }
 
+// toggle button which selects all the data
 function selectAllData(source) {
     checkboxes = document.getElementsByName("stimuli");
     for (var i = 0; i < checkboxes.length; i++) {
