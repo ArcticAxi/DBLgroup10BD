@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://d3js.org/d3.v5.js" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+
+    <title>Upload Files</title>
+  </head>
+
+  <body>
+
+    <div class="upload">
+      <div class="title">
+          <div class="homelink">
+            <a href="index1.html"> i am the title</a>
+          </div>
+          <div class="vizlink">
+            visualizations
+          </div>
+          <div class="uploadlink">
+            <a href="upload.html">upload</a>
+          </div>
+      </div>
+
+      <div class="emptytitle"></div>
+
+      <div class="submitlink">
+        <form class="uploadData" method="post" enctype="multipart/form-data">
+          <input id="dataset-input" type="file" name="name"/>
+		  <input type="button" id = "proba_button" value = "Upload Data" >
+		  <label for="dataset-input" id ="label_file"> No file selected</label>
+          <input type="submit" value="Submit" name="submit" />
+        </form>
+        <script src="upload.js" charset="utf-8"></script>
+      </div>
+
+      <div class="selectingdata">
+        <p> Select datasets (based on StimuliName): </p>
+        <form class="selectionData">
+          <input type="checkbox" onClick="selectAllData(this)" /> Toggle All <br/>
+          <div id="formSelectionData" class="scroll">
+
+          </div>
+
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+
+    </div>
+
+  </body>
+</html>

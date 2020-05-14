@@ -1,0 +1,171 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.home {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: auto 3fr 2fr 1fr;
+	grid-template-areas: 
+	"emptytitle emptytitle emptytitle emptytitle"
+	"introduction introduction introduction introduction"
+	"picture1 picture2 picture3 picture4"
+	"information1 information2 information3 information4";
+}
+
+.upload {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-areas: 
+	"emptytitle"
+	"submit";
+}
+
+.submitlink {
+	grid-area: submit;
+	color: green;
+	/*background-color: #ffffff !important;*/
+}
+
+#proba_button{
+  background-color: #80ccff;
+  border: 2px solid #000000;
+  color: white;
+  padding: 6px 15px;
+  text-align: center;
+  /*text-decoration: none;
+  display: inline-block;*/
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#proba_button:hover {
+  background-color: #0099ff; /* Dark blue */
+  color: white;
+}
+input[type = "file"] {
+	
+	display:none;
+	
+}
+input[type = "submit"]{
+	background-color: #80ccff;
+  border: 2px solid #000000;
+  color: white;
+  padding: 6px 15px;
+  text-align: center;
+  /*text-decoration: none;
+  display: inline-block;*/
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.emptytitle {
+	grid-area: emptytitle;
+	height: 50px;
+	padding: 10px;
+}
+
+.title {
+	height: 50px;
+	width: 100vw;
+	background-color: pink;
+	padding: 10px;
+	position: fixed;
+}
+
+.homelink {
+	float: left;
+	background-color: #a0ffff;
+	height: 50px;
+}	
+
+.vizlink {
+	float: right;
+	background-color: #ffa0ff;
+	height: 50px;
+}
+
+.uploadlink {
+	float: right;
+	background-color: #ffffa0;
+	height: 50px;
+}
+
+.introduction {
+	grid-area: introduction;
+	height: 400px;
+	background-color: #804040;
+}
+
+.picture {
+	background-color: #00a500;
+}
+
+.picture1 {
+	grid-area: picture1;
+}
+
+.picture2 {
+	grid-area: picture2;
+}
+
+.picture3 {
+	grid-area: picture3;
+}
+
+.picture4 {
+	grid-area: picture4;
+}
+
+.information {
+	background-color: #008500;
+}
+
+.information1 {
+	grid-area: information1;
+}
+
+.information2 {
+	grid-area: information2;
+}
+
+.information3 {
+	grid-area: information3;
+}
+
+.information4 {
+	grid-area: information4;
+}
+
+/* set the CSS for the graph, temporarily copied this, free to change */
+body { font: 17px Arial;}
+  path {
+      stroke: steelblue;
+      stroke-width: 2;
+      fill: none;
+  }
+
+  .axis path,
+  .axis line {
+      fill: none;
+      stroke: grey;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+  }
+
+  #formSelectionData {
+	  padding: 20px 20px;
+	  margin: 10px 10px;
+	  width: 300px;
+	  height: 400px;
+	  overflow-x: hidden;
+	  overflow-x: auto;
+	  text-align:justify;
+  }

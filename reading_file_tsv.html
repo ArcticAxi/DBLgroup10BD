@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<script src="https://d3js.org/d3.v5.js"></script>
+
+</head>
+<body>
+<div>
+<p><input type="file" id = "goodluck" onchange = "handleFiles(this.files)" accept = ".csv">
+</div>
+<script type="text/javascript">
+var width = 800;
+var height = 800;
+var map = "01_Antwerpen_S1.jpg"
+var p = "p1"
+
+ function handleFiles(files) {
+      // Check for the various File API support.
+      if (window.FileReader) {
+          // FileReader are supported.
+		  getAsText(files[0]);
+      } else {
+          alert('FileReader are not supported in this browser.');
+      }
+    }
+
+function getAsText(fileToRead) {
+      var reader = new FileReader();
+      // Read file into memory as UTF-8,
+     //if we need we can add different encoding      
+      reader.readAsText(fileToRead);
+      // Handle errors and load
+      reader.onload = loadHandler;
+      reader.onerror = errorHandler;
+    }
+
+
+function loadHandler(event) {
+      var filecsv = event.target.result;
+	  
+	  var Data = new Array();
+      Data = processData(filecsv);
+      console.log(Data);
+	  canvas(Data);  
+    }
+	
+	 function processData(filecsv) {
+        var allTextLines = filecsv.split('\n');
+        var lines = [];
+        for (var i = 1; i<allTextLines.length; i++) {
+            var data = allTextLines[i].split('\t');
+			
+                var line = {Timestamp: data[3], StimuliName: data[1],FixationIndex: data[2], FixationDuration: data[3], MappedFixationPointX: data[4],  MappedFixationPointY: data[5], description: data[7], user: data[6]}
+               
+                lines.push(line); 	
+        }
+		return lines;
+      
+    }
+function errorHandler(evt) {
+      if(evt.target.error.name == "NotReadableError") {
+          alert("Canno't read file !");
+      }
+	  }
+	  
+function canvas(Data){
+
+
+	  	newData = Data.filter(function (d) {
+            return (d.StimuliName == map && d.user == p);
+        });
+		
+		console.log(newData);
+	   
+	 var canvas = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+//create group object            
+var group = canvas.append("g")
+
+//create line object
+var line = d3.line()
+            .x(function (d) { return d.MappedFixationPointX/2 })
+            .y(function (d) { return d.MappedFixationPointY/2 })
+
+//add the scanpath to the canvas
+group.selectAll("path")
+        .data([newData])
+        .enter()
+        .append("path")
+        .attr("d", line)
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("stroke-width", 5)
+
+};
+	 
+	  
+	</script>
+</body>
+</html>
