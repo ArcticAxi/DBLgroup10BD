@@ -47,7 +47,7 @@ function createVisualizations(data) {
     }
 }
 
-function heatmaps(content,name) {
+function heatmaps(content, name) {
     var bkgrImg = document.querySelector('#heatmap');
     var stimuliLocationURL = "url(" + "'" + "./stimuli/" + name + "')";
     bkgrImg.style.backgroundImage = stimuliLocationURL;
@@ -331,7 +331,7 @@ function msToTime(timestamp) {
     minutes = (minutes < 10) ? "0" + minutes : minutes;
     seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-// parsing as "%M:%S:%L"
+    // parsing as "%M:%S:%L"
     return minutes + ":" + seconds + "." + milliseconds;
 }
 
