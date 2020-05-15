@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const formSelection = document.querySelector('form.selectionData');
 
     //changing default buttons
-    var button = document.getElementById('proba_button');
+    var button = document.getElementById('fileButton');
     var file = document.getElementById('dataset-input');
     const defaultLabelText = "No file selected";
 

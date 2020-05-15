@@ -184,7 +184,7 @@ function createVis(data, users) {
 
 function createCheckboxes(dataset) {
 
-    var selectionForm = document.getElementById("formSelectionData");
+    var selectionForm = document.getElementById("formSelectionUsers");
 
     if (userCheckboxes.length > 0) {
         for (var i = userCheckboxes.length - 1; i >= 0; i--) {
