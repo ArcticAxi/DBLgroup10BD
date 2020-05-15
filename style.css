@@ -24,6 +24,46 @@
 
 .submitlink {
 	grid-area: submit;
+	color: green;
+	/*background-color: #ffffff !important;*/
+}
+
+#proba_button{
+  background-color: #80ccff;
+  border: 2px solid #000000;
+  color: white;
+  padding: 6px 15px;
+  text-align: center;
+  /*text-decoration: none;
+  display: inline-block;*/
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#proba_button:hover {
+  background-color: #0099ff; /* Dark blue */
+  color: white;
+}
+input[type = "file"] {
+	
+	display:none;
+	
+}
+input[type = "submit"]{
+	background-color: #80ccff;
+  border: 2px solid #000000;
+  color: white;
+  padding: 6px 15px;
+  text-align: center;
+  /*text-decoration: none;
+  display: inline-block;*/
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .emptytitle {
@@ -105,7 +145,7 @@
 }
 
 /* set the CSS for the graph, temporarily copied this, free to change */
-body { font: 12px Arial;}
+body { font: 17px Arial;}
   path {
       stroke: steelblue;
       stroke-width: 2;
