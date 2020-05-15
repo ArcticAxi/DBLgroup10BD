@@ -1,171 +1,228 @@
 * {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* PLEASE ADD VARIABLES, ESCPECIALLY FOR COLORS, HERE!!
+--------------------------------------------------------*/
+:root {
+	--main-blue-color: #7cc4f4; /* before: #80ccff */
+	--dark-grey-color: #6A778D;
+	--dark-blue-color: #4477BD;
 }
 
 .home {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	grid-template-rows: auto 3fr 2fr 1fr;
-	grid-template-areas: 
-	"emptytitle emptytitle emptytitle emptytitle"
-	"introduction introduction introduction introduction"
-	"picture1 picture2 picture3 picture4"
-	"information1 information2 information3 information4";
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto 3fr 2fr 1fr;
+    grid-template-areas: "emptytitle emptytitle emptytitle emptytitle" "introduction introduction introduction introduction" "picture1 picture2 picture3 picture4" "information1 information2 information3 information4";
 }
 
 .upload {
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-areas: 
-	"emptytitle"
-	"submit";
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: "emptytitle" "submit";
 }
 
 .submitlink {
-	grid-area: submit;
-	color: green;
-	/*background-color: #ffffff !important;*/
+    grid-area: submit;
+    color: var(--dark-grey-color); /* Was green before */
+    /*background-color: #ffffff !important;*/
 }
 
-#proba_button{
-  background-color: #80ccff;
-  border: 2px solid #000000;
-  color: white;
-  padding: 6px 15px;
-  text-align: center;
-  /*text-decoration: none;
-  display: inline-block;*/
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px;
-  font-family: Arial, Helvetica, sans-serif;
+#proba_button {
+    background-color: var(--main-blue-color);
+    border: 1px solid var(--dark-grey-color); /* Was black before */
+    color: white;
+    padding: 6px 15px;
+    text-align: center;
+    /*text-decoration: none;
+    display: inline-block;*/
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: Arial, Helvetica, sans-serif;
 }
-#proba_button:hover {
-  background-color: #0099ff; /* Dark blue */
-  color: white;
+
+#proba_button:hover, input[type = "submit"]:hover {
+    background-color: var(--dark-blue-color); /* Was dark blue #0099ff before */
+    color: white;
 }
+
 input[type = "file"] {
-	
-	display:none;
-	
+    display: none;
 }
-input[type = "submit"]{
-	background-color: #80ccff;
-  border: 2px solid #000000;
-  color: white;
-  padding: 6px 15px;
-  text-align: center;
-  /*text-decoration: none;
-  display: inline-block;*/
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px;
-  font-family: Arial, Helvetica, sans-serif;
+
+input[type = "submit"] {
+    background-color: var(--main-blue-color);
+    border: 1px solid var(--dark-grey-color);
+    color: white;
+    padding: 6px 15px;
+    text-align: center;
+    /*text-decoration: none;
+    display: inline-block;*/
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .emptytitle {
-	grid-area: emptytitle;
-	height: 50px;
-	padding: 10px;
+    grid-area: emptytitle;
+    height: 50px;
+    padding: 10px;
 }
 
 .title {
-	height: 50px;
-	width: 100vw;
-	background-color: pink;
-	padding: 10px;
-	position: fixed;
+    height: 50px;
+    width: 100vw;
+    background-color: pink;
+    padding: 10px;
+    position: fixed;
 }
 
 .homelink {
-	float: left;
-	background-color: #a0ffff;
-	height: 50px;
-}	
+    float: left;
+    background-color: #a0ffff;
+    height: 50px;
+}
 
 .vizlink {
-	float: right;
-	background-color: #ffa0ff;
-	height: 50px;
+    float: right;
+    background-color: #ffa0ff;
+    height: 50px;
 }
 
 .uploadlink {
-	float: right;
-	background-color: #ffffa0;
-	height: 50px;
+    float: right;
+    background-color: #ffffa0;
+    height: 50px;
 }
 
 .introduction {
-	grid-area: introduction;
-	height: 400px;
-	background-color: #804040;
+    grid-area: introduction;
+    height: 400px;
+    background-color: #804040;
 }
 
 .picture {
-	background-color: #00a500;
+    background-color: #00a500;
 }
 
 .picture1 {
-	grid-area: picture1;
+    grid-area: picture1;
 }
 
 .picture2 {
-	grid-area: picture2;
+    grid-area: picture2;
 }
 
 .picture3 {
-	grid-area: picture3;
+    grid-area: picture3;
 }
 
 .picture4 {
-	grid-area: picture4;
+    grid-area: picture4;
 }
 
 .information {
-	background-color: #008500;
+    background-color: #008500;
 }
 
 .information1 {
-	grid-area: information1;
+    grid-area: information1;
 }
 
 .information2 {
-	grid-area: information2;
+    grid-area: information2;
 }
 
 .information3 {
-	grid-area: information3;
+    grid-area: information3;
 }
 
 .information4 {
-	grid-area: information4;
+    grid-area: information4;
 }
 
 /* set the CSS for the graph, temporarily copied this, free to change */
-body { font: 17px Arial;}
-  path {
-      stroke: steelblue;
-      stroke-width: 2;
-      fill: none;
-  }
+body {
+    font: 14px Arial;
+}
 
-  .axis path,
-  .axis line {
-      fill: none;
-      stroke: grey;
-      stroke-width: 1;
-      shape-rendering: crispEdges;
-  }
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
 
-  #formSelectionData {
-	  padding: 20px 20px;
-	  margin: 10px 10px;
-	  width: 300px;
-	  height: 400px;
-	  overflow-x: hidden;
-	  overflow-x: auto;
-	  text-align:justify;
-  }
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+#formSelectionData {
+    padding: 20px 20px;
+    margin: 10px 10px;
+    width: 300px;
+    height: 400px;
+    overflow-x: auto;
+    text-align: justify;
+}
+
+.slidecontainer {
+  width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+	-webkit-appearance: none;  /* Override default CSS styles */
+	appearance: none;
+	width: 200px;
+	height: 15px; /* Specified height */
+	background: #d3d3d3; /* Grey background */
+	outline: none; /* Remove outline */
+	opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+	-webkit-transition: .2s; /* 0.2 seconds transition on hover */
+	transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+	opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none; /* Override default look */
+	appearance: none;
+	width: 15px; /* Set a specific slider handle width */
+	height: 15px; /* Slider handle height */
+	background: var(--main-blue-color); /* Green background */
+	cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+	width: 15px; /* Set a specific slider handle width */
+	height: 15px; /* Slider handle height */
+	background: var(--main-blue-color); /* Green background */
+	cursor: pointer; /* Cursor on hover */
+}
+
+.visualization {
+    margin: 10px 10px;
+}
+
+.slidecontainer_heatmap {
+    margin: 10px 10px;
+}
+
+#radius_heatmap {
+    float: left;
+    margin-right: 10px;
+}

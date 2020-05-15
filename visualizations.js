@@ -8,11 +8,11 @@ var heat;
 
 var radius_slider_heatmap = document.getElementById("radius_slider_heatmap");
 var radius_heatmap = 30;
-radius_slider_heatmap.value = radius_heatmap;
+radius_slider_heatmap.value = radius_heatmap/4;
 
 var blur_slider_heatmap = document.getElementById("blur_slider_heatmap");
 var blur_heatmap = 15;
-blur_slider_heatmap.value = blur_heatmap;
+blur_slider_heatmap.value = blur_heatmap/3;
 
 var opacity_slider_scatterplot = document.getElementById("opacity_slider_scatterplot");
 var opacity_scatterplot = 1;
@@ -253,13 +253,13 @@ intensity_slider_heatmap.oninput = function () {
 };
 
 radius_slider_heatmap.oninput = function () {
-    radius_heatmap = this.value;
+    radius_heatmap = this.value*4;
     heat.radius(radius_heatmap, blur_heatmap);
     heat.draw();
 };
 
 blur_slider_heatmap.oninput = function () {
-    blur_heatmap = this.value;
+    blur_heatmap = this.value*3;
     heat.radius(radius_heatmap, blur_heatmap);
     heat.draw();
 };

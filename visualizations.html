@@ -54,11 +54,11 @@
         </div>
         <div id="radius_heatmap">
             <p>Radius:</p>
-            <input type="range" min="1" max="40" value="1" class="slider" id="radius_slider_heatmap">
+            <input type="range" min="1" max="10" value="1" class="slider" id="radius_slider_heatmap">
         </div>
         <div id="blur_heatmap">
             <p>Blur:</p>
-            <input type="range" min="0" max="30" value="1" class="slider" id="blur_slider_heatmap">
+            <input type="range" min="0" max="10" value="1" class="slider" id="blur_slider_heatmap">
         </div>
     </div>
 
@@ -67,7 +67,7 @@
 
     <div class="slidecontainer_heatmap">
         <div id="opacity_scatterplot">
-            <p>Intensity:</p>
+            <p>Opacity:</p>
             <input type="range" min="0" max="10" value="1" class="slider" id="opacity_slider_scatterplot">
         </div>
     </div>
@@ -77,21 +77,6 @@
 
     <div id="hiddenImage">
     </div>
-
-    <style>
-        .visualization {
-            margin: 10px 10px;
-        }
-
-        .slidecontainer_heatmap {
-            margin: 10px 10px;
-        }
-
-        #radius_heatmap {
-            float: left;
-            margin-right: 5px;
-        }
-    </style>
 
     <script src="visualizations.js" charset="utf-8"></script>
 

@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
     //changing default buttons
     var button = document.getElementById('proba_button');
     var file = document.getElementById('dataset-input');
-    var label = document.getElementById('label_file').innerHTML;
     const defaultLabelText = "No file selected";
 
     button.addEventListener('click', function () {
@@ -20,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     file.addEventListener('change', function () {
         const files = document.querySelector('[type=file]').files[0];
         var filenameButton = files.name.substr(0, files.name.lastIndexOf('.'));
-        label = filenameButton || defaultLabelText;
+        document.getElementById('label_file').innerHTML = filenameButton || defaultLabelText;
     });
 
 // INTERNET EXPLORER GIVES A SYNTAX ERROR HERE, CHANGE THIS TO NORMAL
