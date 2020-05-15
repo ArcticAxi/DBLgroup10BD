@@ -4,26 +4,29 @@ var width = 2000;
 var height = 2000;
 
 //path variables
-var highlighted_user = "p10"
+var highlighted_user = "p1"
 var base_stroke_width = 1;
-var highlight_stroke_width = 10;
+var highlight_stroke_width = 5;
 var base_stroke_opacity = 0.5;
 var highlight_stroke_opacity = 1;
 var base_colour = "black";
-var highlight_colour = "purple";
+var highlight_colour = "red";
 
 //fixation dot variables
 var fixation_on = true;
 var base_fixation_colour = "black";
-var highlight_fixation_colour = "purple";
+var highlight_fixation_colour = "red";
 var base_fixation_radius = 3;
-var highlight_fixation_radius = 30;
+var highlight_fixation_radius = 6;
+
+//slider variables
+var base_stroke_width_slider = document.getElementById("base_stroke_width_slider");
 
 //checkbox variables
 var userCheckboxes = [];
 
 //map
-var stimulus = "11_Bologna_S2.jpg"
+var stimulus = "01_Antwerpen_S1.jpg"
 
 //creates an svg element to work with
 function initialSetup() {
@@ -32,6 +35,12 @@ function initialSetup() {
     canvas = d3.select("body").append("svg")
         .attr("width", width)
         .attr("height", height);
+}
+
+// Update the current slider value (each time you drag the slider handle)
+base_stroke_width_slider.oninput = function() {
+  base_stroke_width = this.value;
+  load()
 }
 
 initialSetup()
