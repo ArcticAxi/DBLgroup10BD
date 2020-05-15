@@ -21,6 +21,7 @@ var highlight_fixation_radius = 6;
 
 //slider variables
 var base_stroke_width_slider = document.getElementById("base_stroke_width_slider");
+var base_stroke_opacity_slider = document.getElementById("base_stroke_opacity_slider");
 
 //checkbox variables
 var userCheckboxes = [];
@@ -35,13 +36,24 @@ function initialSetup() {
     canvas = d3.select("body").append("svg")
         .attr("width", width)
         .attr("height", height);
+
+    //adds the map to the canvas            
+    canvas.append("svg:image")
+                .attr("xlink:href", "stimuli/" + stimulus);
 }
 
-// Update the current slider value (each time you drag the slider handle)
+//update stroke width when moving slider
 base_stroke_width_slider.oninput = function() {
   base_stroke_width = this.value;
   load()
 }
+
+
+//update stroke opacity when moving slider
+base_stroke_opacity_slider.oninput = function() {
+    base_stroke_opacity = this.value/10;
+    load()
+  }
 
 initialSetup()
 
@@ -80,11 +92,7 @@ d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
 function createVis(data, users) {
 
     //clears the canvas
-    canvas.selectAll("*").remove();
-
-    //adds the map to the canvas            
-    canvas.append("svg:image")
-                .attr("xlink:href", "stimuli/" + stimulus);
+    canvas.selectAll("g").remove();
 
     //create group object            
     var group = canvas.append("g");
