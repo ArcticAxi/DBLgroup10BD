@@ -17,7 +17,7 @@
     <div class="upload">
       <div class="title">
           <div class="homelink">
-            <a href="index.html"> i am the title</a>
+            <a href="index1.html"> i am the title</a>
           </div>
           <div class="vizlink">
             visualizations
@@ -31,7 +31,9 @@
 
       <div class="submitlink">
         <form class="uploadData" method="post" enctype="multipart/form-data">
-          <input id="dataset-input" type="file" name="name" />
+          <input id="dataset-input" type="file" name="name"/>
+		  <input type="button" id = "proba_button" value = "Upload Data" >
+		  <label for="dataset-input" id ="label_file"> No file selected</label>
           <input type="submit" value="Submit" name="submit" />
         </form>
         <script src="upload.js" charset="utf-8"></script>
