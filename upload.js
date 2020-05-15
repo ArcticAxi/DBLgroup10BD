@@ -25,6 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
             formData.append('files[]', file);
         }*/
 
+        // go to localhost/phpinfo.php, open folder containing file in 'Loaded Configuration File'
+        // change post_max_file and upload_max_filesize to larger numbers
         fetch(url, {
             method: 'POST',
             body: formData,

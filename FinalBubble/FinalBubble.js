@@ -32,7 +32,7 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
 	});
 
 
-
+	
 //==========================================================================
 // Count how many gazes at that coordinate
 //===========================================================================
