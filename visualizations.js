@@ -1,6 +1,23 @@
 var initialRead;
 var fileLocation;
 
+var intensity_slider_heatmap = document.getElementById("intensity_slider_heatmap");
+var intensity_heatmap = 5;
+intensity_slider_heatmap.value = intensity_heatmap;
+var heat;
+
+var radius_slider_heatmap = document.getElementById("radius_slider_heatmap");
+var radius_heatmap = 30;
+radius_slider_heatmap.value = radius_heatmap;
+
+var blur_slider_heatmap = document.getElementById("blur_slider_heatmap");
+var blur_heatmap = 15;
+blur_slider_heatmap.value = blur_heatmap;
+
+var opacity_slider_scatterplot = document.getElementById("opacity_slider_scatterplot");
+var opacity_scatterplot = 1;
+opacity_slider_scatterplot.value = opacity_scatterplot * 10;
+
 document.addEventListener("DOMContentLoaded", function () {
     loadCSV();
 });
@@ -49,19 +66,6 @@ function createVisualizations(data) {
 }
 
 function loadingImage(content, name) {
-    var stimuliLocationURL = "url(" + "'" + "./stimuli/" + name + "')";
-
-    var bubblemapImage = document.querySelector('#bubblemap');
-    var heatmapImage = document.querySelector('#heatmap');
-    var scatterplotImage = document.querySelector('#scatterplot');
-
-    bubblemapImage.style.backgroundImage = stimuliLocationURL;
-    bubblemapImage.style.backgroundRepeat = 'no-repeat';
-    heatmapImage.style.backgroundImage = stimuliLocationURL;
-    heatmapImage.style.backgroundRepeat = 'no-repeat';
-    scatterplotImage.style.backgroundImage = stimuliLocationURL;
-    scatterplotImage.style.backgroundRepeat = 'no-repeat';
-
     // turning this opacity down also turns down the opacity of the plot
     // attempted to fix by creating a div inside the div and overlaying the two
     // however, changing image width/height of background image is completely ignored for some reason
@@ -82,22 +86,33 @@ function loadingImage(content, name) {
     getMeta(
         "./stimuli/" + name,
         function (width, height) {
-            let styleWidth = "'" + width + "'";
-            let styleHeight = "'" + height + "'";
-            bubblemapImage.style.width = styleWidth;
-            bubblemapImage.style.height = styleHeight;
-            heatmapImage.style.width = styleWidth;
-            heatmapImage.style.height = styleHeight;
-            scatterplotImage.style.width = styleWidth;
-            scatterplotImage.style.height = styleHeight;
+            let sizeDecrease = 2;
+            let sizeWidth = width / sizeDecrease;
+            let sizeHeight = height / sizeDecrease;
+            var stimuliLocationURL = "url(" + "'" + "./stimuli/" + name + "')";
+            var bubblemapImage = document.querySelector('#bubblemap');
+            var heatmapImage = document.querySelector('#heatmap');
+            var scatterplotImage = document.querySelector('#scatterplot');
 
-            bubbleMap(content, name, width, height);
-            heatmaps(content, name, width, height);
-            scatterplot(content, name, width, height);
+            bubblemapImage.style.backgroundImage = stimuliLocationURL;
+            bubblemapImage.style.backgroundRepeat = 'no-repeat';
+            heatmapImage.style.backgroundImage = stimuliLocationURL;
+            heatmapImage.style.backgroundRepeat = 'no-repeat';
+            scatterplotImage.style.backgroundImage = stimuliLocationURL;
+            scatterplotImage.style.backgroundRepeat = 'no-repeat';
+
+            let background_size = sizeWidth + "px " + height / 2 + "px";
+            bubblemapImage.style.backgroundSize = background_size;
+            heatmapImage.style.backgroundSize = background_size;
+            scatterplotImage.style.backgroundSize = background_size;
+
+            bubbleMap(content, name, sizeWidth, sizeHeight, sizeDecrease);
+            heatmaps(content, name, sizeWidth, sizeHeight);
+            scatterplot(content, name, sizeWidth, sizeHeight);
         });
 }
 
-function bubbleMap(content, name, width, height) {
+function bubbleMap(content, name, width, height, sizeDecrease) {
 
     // create svg
     var svg = d3.select("#bubblemap")
@@ -105,7 +120,7 @@ function bubbleMap(content, name, width, height) {
         .attr("width", width)
         .attr("height", height)
         .append('g')
-        //.attr("transform", "translate(" + 100 + "," + 100 + ")");
+    //.attr("transform", "translate(" + 100 + "," + 100 + ")");
 
     // read the data
     data = content.filter(function (d) {
@@ -117,21 +132,12 @@ function bubbleMap(content, name, width, height) {
     });
 
     data.forEach(function (d) {
-        d.averageX = Math.round(d.MappedFixationPointX / 100) * 100;
-        d.averageY = Math.round(d.MappedFixationPointY / 100) * 100;
+        d.MappedFixationPointX = d.MappedFixationPointX / sizeDecrease;
+        d.MappedFixationPointY = d.MappedFixationPointY / sizeDecrease;
+        d.averageX = Math.round(d.MappedFixationPointX / (100 / sizeDecrease)) * 100 / sizeDecrease;
+        d.averageY = Math.round(d.MappedFixationPointY / (100 / sizeDecrease)) * 100 / sizeDecrease;
         d.coordinates = d.averageX.toString() + " " + d.averageY.toString()
     });
-
-    /*d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixation_data_cleaned_up.csv", function(error, data) {
-    data = data.filter(function (d) {
-        return (d.StimuliName == stimulus);
-    });
-
-    data.forEach(function(d) {
-        d.averageX = Math.round( d.MappedFixationPointX/100) *100;
-        d.averageY = Math.round( d.MappedFixationPointY/100) *100;
-        d.coordinates = d.averageX.toString() + " " + d.averageY.toString()
-    });*/
 
     //==========================================================================
     // Count how many gazes at that coordinate
@@ -175,8 +181,8 @@ function bubbleMap(content, name, width, height) {
 
     // Add a scale for bubble size
     var z = d3.scaleSqrt()
-        .domain([0, 200])
-        .range([0, 100]);
+        .domain([0, 200 / sizeDecrease])
+        .range([0, 100 / sizeDecrease]);
 
     //=========================================================================
     // Bubbles
@@ -240,11 +246,29 @@ function bubbleMap(content, name, width, height) {
 
 }
 
+intensity_slider_heatmap.oninput = function () {
+    intensity_heatmap = this.value;
+    heat.max(intensity_heatmap);
+    heat.draw();
+};
+
+radius_slider_heatmap.oninput = function () {
+    radius_heatmap = this.value;
+    heat.radius(radius_heatmap, blur_heatmap);
+    heat.draw();
+};
+
+blur_slider_heatmap.oninput = function () {
+    blur_heatmap = this.value;
+    heat.radius(radius_heatmap, blur_heatmap);
+    heat.draw();
+};
+
 function heatmaps(content, name, width, height) {
     div = d3.select('#heatmap');
     canvasLayer = div.append('canvas').attr('id', 'canvas').attr('width', width).attr('height', height);
 
-    var heat = simpleheat('canvas');
+    heat = simpleheat('canvas');
 
     dataHeat = content.filter(function (d) {
         if (d.StimuliName !== name) {
@@ -268,23 +292,29 @@ function heatmaps(content, name, width, height) {
         return [d.MappedFixationPointX, d.MappedFixationPointY, 1]
     }));
 
-    var concentration = 5;
-
     // changes how red things are
     // add slider or value insertion for this because maps differ a lot in concentration
-    heat.max(concentration);
+    heat.max(intensity_heatmap);
 
     // set point radius and blur radius (25 and 15 by default)
-    heat.radius(25, 15);
+    heat.radius(radius_heatmap, blur_heatmap);
 
     // optionally customize gradient colors, e.g. below
     // (would be nicer if d3 color scale worked here)
-    // not all colours seem to work
-    //heat.gradient({0: '#0000FF', 0.5: '#00FF00', 1: '#FF0000'});
+    // default uses 5 different colours I believe, doesn't seem like a good idea to mess with this
+    //heat.gradient({0.4: '#0000FF', 0.65: '#00FF00', 1: '#FF0000'});
 
     // draws the heatmap
     heat.draw();
 }
+
+opacity_slider_scatterplot.oninput = function () {
+    opacity_scatterplot = this.value / 10;
+
+    d3.select('#scatterplot').selectAll('circle')
+        .transition()
+        .style("opacity", opacity_scatterplot);
+};
 
 function scatterplot(content, name, width, height) {
     // set the dimensions and margins of the graph
@@ -336,7 +366,7 @@ function scatterplot(content, name, width, height) {
             return y(d.MappedFixationPointY);
         })
         .attr("r", 5)
-        .style("fill-opacity", "1")
+        .style("fill-opacity", opacity_scatterplot)
         .style("fill", "#FF0000");
 
     var clusterPoints = [];

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <link rel="stylesheet" href="style.css">
 
     <script src="https://d3js.org/d3.v5.js" charset="utf-8"></script>
@@ -30,7 +30,7 @@
 
     <div class="emptytitle"></div>
 
-    <div id="bubblemap">
+    <div class="visualization" id="bubblemap">
     </div>
 
     <style>
@@ -40,17 +40,58 @@
             fill: #cc4457;
             opacity: .6;
         }
+
         .bubbles:hover {
             stroke: black;
             opacity: 1;
         }
     </style>
 
-    <div id="heatmap">
+    <div class="slidecontainer_heatmap">
+        <div id="intensity_heatmap">
+            <p>Intensity:</p>
+            <input type="range" min="1" max="30" value="1" class="slider" id="intensity_slider_heatmap">
+        </div>
+        <div id="radius_heatmap">
+            <p>Radius:</p>
+            <input type="range" min="1" max="40" value="1" class="slider" id="radius_slider_heatmap">
+        </div>
+        <div id="blur_heatmap">
+            <p>Blur:</p>
+            <input type="range" min="0" max="30" value="1" class="slider" id="blur_slider_heatmap">
+        </div>
     </div>
 
-    <div id="scatterplot">
+    <div class="visualization" id="heatmap">
     </div>
+
+    <div class="slidecontainer_heatmap">
+        <div id="opacity_scatterplot">
+            <p>Intensity:</p>
+            <input type="range" min="0" max="10" value="1" class="slider" id="opacity_slider_scatterplot">
+        </div>
+    </div>
+
+    <div class="visualization" id="scatterplot">
+    </div>
+
+    <div id="hiddenImage">
+    </div>
+
+    <style>
+        .visualization {
+            margin: 10px 10px;
+        }
+
+        .slidecontainer_heatmap {
+            margin: 10px 10px;
+        }
+
+        #radius_heatmap {
+            float: left;
+            margin-right: 5px;
+        }
+    </style>
 
     <script src="visualizations.js" charset="utf-8"></script>
 

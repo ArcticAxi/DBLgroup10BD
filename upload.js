@@ -7,12 +7,25 @@ document.addEventListener("DOMContentLoaded", function () {
     const formUpload = document.querySelector('form.uploadData');
     const formSelection = document.querySelector('form.selectionData');
 
-// adds listener to the submit button
-// when the button is clicked the .csv file is read as a text file
+    //changing default buttons
+    var button = document.getElementById('proba_button');
+    var file = document.getElementById('dataset-input');
+    var label = document.getElementById('label_file').innerHTML;
+    const defaultLabelText = "No file selected";
+
+    button.addEventListener('click', function () {
+        file.click();
+    });
+
+    file.addEventListener('change', function () {
+        const files = document.querySelector('[type=file]').files[0];
+        var filenameButton = files.name.substr(0, files.name.lastIndexOf('.'));
+        label = filenameButton || defaultLabelText;
+    });
 
 // INTERNET EXPLORER GIVES A SYNTAX ERROR HERE, CHANGE THIS TO NORMAL
 // FUNCTION/EVENT CALL SO THAT THERE IS HOPE FOR INTERNET EXPLORER
-    formUpload.addEventListener('submit', e => {
+    formUpload.addEventListener('submit', function (e) {
         e.preventDefault();
 
         const files = document.querySelector('[type=file]').files[0];
@@ -20,10 +33,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         formData.append('files[]', files);
 
-       /* for (let i = 0; i < files.length; i++) {
-            let file = files[i];
-            formData.append('files[]', file);
-        }*/
+        /* for (let i = 0; i < files.length; i++) {
+             let file = files[i];
+             formData.append('files[]', file);
+         }*/
 
         // go to localhost/phpinfo.php, open folder containing file in 'Loaded Configuration File'
         // change post_max_file and upload_max_filesize to larger numbers
@@ -32,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
             body: formData,
         }).then(response => {
             var filename = files.name.substr(0, files.name.lastIndexOf('.'));
-            settingFilename(filename,0);
+            settingFilename(filename, 0);
         });
         //setDataFileName();
     });
@@ -47,19 +60,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // checks which filename processUpload.php uploaded and stores it in localStorage
 var testingNames = 0;
+
 function settingFilename(filename, i) {
     $.ajax({
         url: "./uploads/" + filename + "_" + i + ".csv",
         type: 'HEAD',
-        error: function()
-        {
+        error: function () {
             let current = i - 1;
             localStorage.setItem("dataFilename", filename + "_" + current + ".csv");
             testingNames = 0;
             loadCSV();
         },
-        success: function()
-        {
+        success: function () {
             testingNames++;
             settingFilename(filename, testingNames);
         }
@@ -68,6 +80,7 @@ function settingFilename(filename, i) {
 
 // deletes existing checkboxes when uploading another file
 var checkboxesArray = [];
+
 function removePrevCheckboxes() {
     var selectionForm = document.getElementById("formSelectionData");
 
@@ -133,6 +146,9 @@ function loadCSV() {
                 var charCode = input.charCodeAt(i);
                 if (charCode <= 127 || (charCode >= 161 && charCode <= 255)) {
                     output += input.charAt(i);
+                } else {
+                    // seems like they are all '665533' which sucks because then I can't change it ;-;
+                    //console.log(charCode);
                 }
             }
             d.StimuliName = output;
@@ -205,7 +221,7 @@ function processData(allText) {
 
             var tarr = [];
             for (var j = 0; j < headers.length; j++) {
-                tarr.push(headers[j]+":"+data[j]);
+                tarr.push(headers[j] + ":" + data[j]);
             }
             lines.push(tarr);
         }
