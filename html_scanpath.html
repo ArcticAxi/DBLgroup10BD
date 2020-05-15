@@ -22,13 +22,77 @@
         <input type="submit" value="Submit">
     </form>
     <div class="slidecontainer">
-        <input type="range" min="1" max="10" value="1" class="slider" id="base_stroke_width_slider">
+        <div id="base_stroke_width">
+            <p> Base Path Width: </p>
+            <input type="range" min="1" max="10" value="1" class="slider" id="base_stroke_width_slider">
+        </div>
+        <div id="highlight_stroke_width">
+            <p> Highlight Path Width: </p>
+            <input type="range" min="1" max="10" value="3" class="slider" id="highlight_stroke_width_slider">
+        </div>
     </div>
+
+    <style>
+        #base_stroke_width {
+            float: left;
+            margin-right: 5px;
+        }
+    </style>
 
     <div class="slidecontainer">
-        <input type="range" min="0" max="10" value="7" class="slider" id="base_stroke_opacity_slider">
+        <div id="base_stroke_opacity">
+            <p> Base Path Opacity: </p>
+            <input type="range" min="0" max="10" value="7" class="slider" id="base_stroke_opacity_slider">
+        </div>
+        <div id="highlight_stroke_opacity">
+            <p> Highlight Path Opacity: </p>
+            <input type="range" min="0" max="10" value="10" class="slider" id="highlight_stroke_opacity_slider">
+        </div>
     </div>
 
+    <style>
+        #base_stroke_opacity {
+            float: left;
+            margin-right: 5px;
+        }
+    </style>
+
+    <div class="slidecontainer">
+        <div id="base_fixation_radius">
+            <p> Base Fixation Size: </p>
+            <input type="range" min="0" max="15" value="3" class="slider" id="base_fixation_radius_slider">
+        </div>
+        <div id="highlight_fixation_radius">
+            <p> Highlight Fixation Size: </p>
+            <input type="range" min="0" max="15" value="6" class="slider" id="highlight_fixation_radius_slider">
+        </div>
+    </div>
+
+    <style>
+        #base_fixation_radius {
+            float: left;
+            margin-right: 5px;
+        }
+    </style>
+
+    <div class="slidecontainer">
+        <div id="base_fixation_opacity">
+            <p> Base Fixation Opacity: </p>
+            <input type="range" min="0" max="10" value="7" class="slider" id="base_fixation_opacity_slider">
+        </div>
+        <div id="highlight_fixation_opacity">
+            <p> Highlight Fixation Opacity: </p>
+            <input type="range" min="0" max="10" value="10" class="slider" id="highlight_fixation_opacity_slider">
+        </div>
+    </div>
+
+    <style>
+        #base_fixation_opacity {
+            float: left;
+            margin-right: 5px;
+        }
+    </style>
+    
     <script src="Scanpath.js"></script>
 
 </body>

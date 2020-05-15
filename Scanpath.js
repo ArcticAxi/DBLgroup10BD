@@ -18,10 +18,22 @@ var base_fixation_colour = "black";
 var highlight_fixation_colour = "red";
 var base_fixation_radius = 3;
 var highlight_fixation_radius = 6;
+var base_fixation_opacity = 0.7;
+var highlight_fixation_opacity = 1;
 
 //slider variables
+//base stroke
 var base_stroke_width_slider = document.getElementById("base_stroke_width_slider");
 var base_stroke_opacity_slider = document.getElementById("base_stroke_opacity_slider");
+//highlight stroke
+var highlight_stroke_width_slider = document.getElementById("highlight_stroke_width_slider");
+var highlight_stroke_opacity_slider = document.getElementById("highlight_stroke_opacity_slider");
+//base fixation
+var base_fixation_radius_slider = document.getElementById("base_fixation_radius_slider");
+var base_fixation_opacity_slider = document.getElementById("base_fixation_opacity_slider");
+//highlight fixation
+var highlight_fixation_radius_slider = document.getElementById("highlight_fixation_radius_slider");
+var highlight_fixation_opacity_slider = document.getElementById("highlight_fixation_opacity_slider");
 
 //checkbox variables
 var userCheckboxes = [];
@@ -42,18 +54,54 @@ function initialSetup() {
                 .attr("xlink:href", "stimuli/" + stimulus);
 }
 
-//update stroke width when moving slider
+//update base stroke width when moving slider
 base_stroke_width_slider.oninput = function() {
   base_stroke_width = this.value;
   load()
 }
 
-
-//update stroke opacity when moving slider
+//update base stroke opacity when moving slider
 base_stroke_opacity_slider.oninput = function() {
     base_stroke_opacity = this.value/10;
     load()
-  }
+}
+
+//update highlight stroke width when moving slider
+highlight_stroke_width_slider.oninput = function() {
+    highlight_stroke_width = this.value;
+    load()
+}
+
+//update highlight stroke opacity when moving slider
+highlight_stroke_opacity_slider.oninput = function() {
+    highlight_stroke_opacity = this.value/10;
+    load()
+}
+
+
+//update base fixation radius when moving slider
+base_fixation_radius_slider.oninput = function() {
+    base_fixation_radius = this.value;
+    load()
+}
+
+//update highlight fixation radius when moving slider
+highlight_fixation_radius_slider.oninput = function() {
+    highlight_fixation_radius = this.value;
+    load()
+}
+
+//update base fixation opacity when moving slider
+base_fixation_opacity_slider.oninput = function() {
+    base_fixation_opacity = this.value/10;
+    load()
+}
+
+//update highlight fixation opacity when moving slider
+highlight_fixation_opacity_slider.oninput = function() {
+    highlight_fixation_opacity = this.value/10;
+    load()
+}
 
 initialSetup()
 
@@ -115,24 +163,24 @@ function createVis(data, users) {
             .attr("d", line)
             .attr("fill", "none")
             .attr("stroke", function (d) { if (d[0].highlighted == true) {return highlight_colour}
-                                            else {return base_colour} })
+                                                    else {return base_colour} })
             .attr("stroke-width", function (d) { if (d[0].highlighted == true) {return highlight_stroke_width}
-                                            else { return base_stroke_width} })
+                                                    else { return base_stroke_width} })
             .attr("stroke-opacity", function (d) { if (d[0].highlighted == true) {return highlight_stroke_opacity}
-                                            else { return base_stroke_opacity} });
-
-    if (fixation_on == true) {        
-        group.selectAll("circle")
-                .data(data)
-                .enter()
-                .append("circle")
-                .attr("cx", function (d) { return d.MappedFixationPointX })
-                .attr("cy", function (d) { return d.MappedFixationPointY })
-                .attr("r", function (d) { if (d.highlighted == true) {return highlight_fixation_radius}
-                else { return base_fixation_radius} })
-                .attr("fill", function (d) { if (d.highlighted == true) {return highlight_fixation_colour}
-                else { return base_fixation_colour} })}
-}
+                                                    else { return base_stroke_opacity} });
+     
+    group.selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("opacity", function (d) { if (d.highlighted == true) {return highlight_fixation_opacity}
+                                            else {return base_fixation_opacity}})
+            .attr("cx", function (d) { return d.MappedFixationPointX })
+            .attr("cy", function (d) { return d.MappedFixationPointY })
+            .attr("r", function (d) { if (d.highlighted == true) {return highlight_fixation_radius}
+                                            else { return base_fixation_radius} })
+            .attr("fill", function (d) { if (d.highlighted == true) {return highlight_fixation_colour}
+                                            else { return base_fixation_colour} })}
 
 function createCheckboxes(dataset) {
 
