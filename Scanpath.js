@@ -9,13 +9,14 @@ var base_stroke_width = 1;
 var highlight_stroke_width = 5;
 var base_stroke_opacity = 0.5;
 var highlight_stroke_opacity = 1;
-var base_colour = "black";
+var base_colour = "steelblue";
 var highlight_colour = "red";
+
+//placeholders for users array
+//var users = [];
 
 //fixation dot variables
 var fixation_on = true;
-var base_fixation_colour = "black";
-var highlight_fixation_colour = "red";
 var base_fixation_radius = 3;
 var highlight_fixation_radius = 6;
 var base_fixation_opacity = 0.7;
@@ -35,13 +36,20 @@ var base_fixation_opacity_slider = document.getElementById("base_fixation_opacit
 var highlight_fixation_radius_slider = document.getElementById("highlight_fixation_radius_slider");
 var highlight_fixation_opacity_slider = document.getElementById("highlight_fixation_opacity_slider");
 
+//button selection variables
+//base colour
+var base_colour_button_sb = document.getElementById("steelblue_base")
+var base_colour_button_b = document.getElementById("black_base")  
+//highlighted users
+var highlighted_user_container = document.getElementById("highlighted_user")
+
 //checkbox variables
 var userCheckboxes = [];
 
 //map
 var stimulus = "01_Antwerpen_S1.jpg"
 
-//creates an svg element to work with
+//creates an svg element and users array to work with
 function initialSetup() {
 
     //create canvas
@@ -52,6 +60,30 @@ function initialSetup() {
     //adds the map to the canvas            
     canvas.append("svg:image")
                 .attr("xlink:href", "stimuli/" + stimulus);
+
+                d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
+                    data = data.filter(function (d) {
+                        return (d.StimuliName == stimulus);
+                    }); 
+                
+                    data.forEach(function(d) { 
+                        if (d.user == highlighted_user) {
+                            d.highlighted = true;
+                        } 
+                        else {
+                            d.highlighted = false;
+                        }});
+                
+                    //creates a set containing all unique users
+                    var allUsers = data.map( function (d) { return d.user} );
+                    uniqueUsers = new Set(allUsers);
+                
+                    //turns the set into an array
+                    arrayUsers = [...uniqueUsers];
+                    
+                    users = arrayUsers;
+                
+                    createUserButtons(users)})                
 }
 
 //update base stroke width when moving slider
@@ -103,33 +135,53 @@ highlight_fixation_opacity_slider.oninput = function() {
     load()
 }
 
+//Buttons incoming
+//
+//
+
+//update base colour when pressing steel blue button
+base_colour_button_sb.onclick = function() {
+    base_colour = "steelblue";
+    load()
+}
+
+//update base colour when pressing black button
+base_colour_button_b.onclick = function() {
+    base_colour = "black";
+    load()
+}
+
+//user buttons event
+function highlightButton(value){
+    highlighted_user = value;
+    load()
+}
+
 initialSetup()
 
 //load data
 function load(){
-d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
-    data = data.filter(function (d) {
-        return (d.StimuliName == stimulus);
-    }); 
-
-    //creates a set containing all unique users
-    var allUsers = data.map( function (d) { return d.user} );
-    uniqueUsers = new Set(allUsers);
-
-    data.forEach(function(d) { 
-        if (d.user == highlighted_user) {
-            d.highlighted = true;
-        } 
-        else {
-            d.highlighted = false;
-        }});
-
-    //turns the set into an array and sorts said array
-    arrayUsers = [...uniqueUsers];
-    arrayUsers.sort()
-
-    //create checkboxes to select users
-    createCheckboxes(arrayUsers);
+    d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
+        data = data.filter(function (d) {
+            return (d.StimuliName == stimulus);
+        }); 
+    
+        data.forEach(function(d) { 
+            if (d.user == highlighted_user) {
+                d.highlighted = true;
+            } 
+            else {
+                d.highlighted = false;
+            }});
+    
+        //creates a set containing all unique users
+        var allUsers = data.map( function (d) { return d.user} );
+        uniqueUsers = new Set(allUsers);
+    
+        //turns the set into an array
+        arrayUsers = [...uniqueUsers];
+        
+        users = arrayUsers;
 
     //create the actual visualization
     createVis(data, arrayUsers);
@@ -179,64 +231,18 @@ function createVis(data, users) {
             .attr("cy", function (d) { return d.MappedFixationPointY })
             .attr("r", function (d) { if (d.highlighted == true) {return highlight_fixation_radius}
                                             else { return base_fixation_radius} })
-            .attr("fill", function (d) { if (d.highlighted == true) {return highlight_fixation_colour}
-                                            else { return base_fixation_colour} })}
+            .attr("fill", function (d) { if (d.highlighted == true) {return highlight_colour}
+                                            else { return base_colour} })}
 
-function createCheckboxes(dataset) {
 
-    var selectionForm = document.getElementById("formSelectionUsers");
-
-    if (userCheckboxes.length > 0) {
-        for (var i = userCheckboxes.length - 1; i >= 0; i--) {
-            selectionForm.removeChild(userCheckboxes[i]);
+//Create buttons to select highlighted user
+function createUserButtons(users) {
+    for (user in users) {
+        highlighted_user_container.innerHTML += '<input type="button" id =' + users[user] + ' value =' + users[user] + ' name="highlighted_users" onclick="highlightButton(this.value)">'
+        
+        if (user%4 == 3) {
+            highlighted_user_container.innerHTML += "</br>"
         }
-        userCheckboxes = [];
-    }
-
-    for (var i = 0; i < dataset.length; i++) {
-        // creating checkbox element
-        var checkbox = document.createElement('input');
-
-        // Assigning the attributes
-        // to created checkbox
-        checkbox.type = "checkbox";
-        checkbox.name = "user";
-
-        // retrieves the StimuliName from nested object array
-        checkbox.id = dataset[i];
-        checkbox.checked = Boolean(false);
-
-        // creating label for checkbox
-        var label = document.createElement('label');
-
-        // assigning attributes for
-        // the created label tag
-        label.htmlFor = dataset[i];
-        label.name = "userLabel";
-
-        // appending the created text to
-        // the created label tag
-        label.appendChild(document.createTextNode(dataset[i]));
-
-        // appending the checkbox
-        // and label to div
-        selectionForm.appendChild(checkbox);
-        selectionForm.appendChild(label);
-
-        linebreak = document.createElement("br");
-        selectionForm.appendChild(linebreak);
-
-        userCheckboxes.push(label);
-        userCheckboxes.push(checkbox);
-        userCheckboxes.push(linebreak)
-    }
-}
-
-//makes toggle all data work
-function selectAllData(source) {
-    checkboxes = document.getElementsByName("user");
-    for (var i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].checked = source.checked;
     }
 }
 

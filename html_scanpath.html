@@ -13,15 +13,6 @@
 </head>
 
 <body>
-    <form class="selectionData">
-        <p> Select which users to highlight: </p>
-        <input type="checkbox" onClick="selectAllData(this)" /> Toggle All <br/>
-        <div id="formSelectionUsers" class="scroll">
-
-        </div>
-
-        <input type="submit" value="Submit">
-    </form>
     <div class="slidecontainer">
         <div class="left_elem" id="base_stroke_width">
             <p> Base Path Width: </p>
@@ -64,6 +55,17 @@
             <p> Highlight Fixation Opacity: </p>
             <input type="range" min="0" max="10" value="10" class="slider" id="highlight_fixation_opacity_slider">
         </div>
+    </div>
+
+    <div class="buttoncontainer" id = "base_colours">
+            <p>Select base path and fixation color:</p>
+            <input type="button" id = "steelblue_base" value = "Steel blue" name="base_colour">
+            <input type="button" id = "black_base" value = "Black" name="base_colour">
+    </div>
+
+    <div class="buttoncontainer" id="highlighted_user">
+        <p>Click on user to highlight</p>
+        <p>Click again to undo</p>
     </div>
 
     <script src="Scanpath.js"></script>
