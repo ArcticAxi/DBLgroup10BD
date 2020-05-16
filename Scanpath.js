@@ -4,16 +4,13 @@ var width = 2000;
 var height = 2000;
 
 //path variables
-var highlighted_user = "p1"
+var highlighted_users = []
 var base_stroke_width = 1;
 var highlight_stroke_width = 5;
 var base_stroke_opacity = 0.5;
 var highlight_stroke_opacity = 1;
 var base_colour = "steelblue";
 var highlight_colour = "red";
-
-//placeholders for users array
-//var users = [];
 
 //fixation dot variables
 var fixation_on = true;
@@ -66,24 +63,27 @@ function initialSetup() {
                         return (d.StimuliName == stimulus);
                     }); 
                 
-                    data.forEach(function(d) { 
-                        if (d.user == highlighted_user) {
-                            d.highlighted = true;
-                        } 
-                        else {
-                            d.highlighted = false;
-                        }});
-                
                     //creates a set containing all unique users
                     var allUsers = data.map( function (d) { return d.user} );
                     uniqueUsers = new Set(allUsers);
                 
-                    //turns the set into an array
+                    //turns the set into an array and sorts said array
                     arrayUsers = [...uniqueUsers];
-                    
-                    users = arrayUsers;
-                
-                    createUserButtons(users)})                
+                    temp_users = [];
+
+                    for (i in arrayUsers) {
+                        temp_users[i] = arrayUsers[i].substr(1);
+                    }
+
+                    temp_users.sort(function(a, b){return a-b});
+
+                    for (i in arrayUsers) {
+                        arrayUsers[i] = "p" + temp_users[i];
+                    }
+
+                    //creates buttons used to highlight users
+                    createUserButtons(arrayUsers);
+                })                
 }
 
 //update base stroke width when moving slider
@@ -152,8 +152,14 @@ base_colour_button_b.onclick = function() {
 }
 
 //user buttons event
-function highlightButton(value){
-    highlighted_user = value;
+function highlightButton(value, id){
+    list = document.getElementById("highlighted_list");
+    if (highlighted_users.indexOf(value) !== -1) {
+        highlighted_users.splice(highlighted_users.indexOf(value), 1);
+    } else {
+        highlighted_users.push(value);
+    }
+    list.innerHTML = highlighted_users;
     load()
 }
 
@@ -165,15 +171,7 @@ function load(){
         data = data.filter(function (d) {
             return (d.StimuliName == stimulus);
         }); 
-    
-        data.forEach(function(d) { 
-            if (d.user == highlighted_user) {
-                d.highlighted = true;
-            } 
-            else {
-                d.highlighted = false;
-            }});
-    
+
         //creates a set containing all unique users
         var allUsers = data.map( function (d) { return d.user} );
         uniqueUsers = new Set(allUsers);
@@ -214,34 +212,36 @@ function createVis(data, users) {
             .append("path")
             .attr("d", line)
             .attr("fill", "none")
-            .attr("stroke", function (d) { if (d[0].highlighted == true) {return highlight_colour}
+            .attr("stroke", function (d) { if (highlighted_users.indexOf(d[0].user) !== -1) {return highlight_colour}
                                                     else {return base_colour} })
-            .attr("stroke-width", function (d) { if (d[0].highlighted == true) {return highlight_stroke_width}
+            .attr("stroke-width", function (d) { if (highlighted_users.indexOf(d[0].user) !== -1) {return highlight_stroke_width}
                                                     else { return base_stroke_width} })
-            .attr("stroke-opacity", function (d) { if (d[0].highlighted == true) {return highlight_stroke_opacity}
+            .attr("stroke-opacity", function (d) { if (highlighted_users.indexOf(d[0].user) !== -1) {return highlight_stroke_opacity}
                                                     else { return base_stroke_opacity} });
-     
+
     group.selectAll("circle")
             .data(data)
             .enter()
             .append("circle")
-            .attr("opacity", function (d) { if (d.highlighted == true) {return highlight_fixation_opacity}
+            .attr("opacity", function (d) { if (highlighted_users.indexOf(d.user) !== -1) {return highlight_fixation_opacity}
                                             else {return base_fixation_opacity}})
             .attr("cx", function (d) { return d.MappedFixationPointX })
             .attr("cy", function (d) { return d.MappedFixationPointY })
-            .attr("r", function (d) { if (d.highlighted == true) {return highlight_fixation_radius}
+            .attr("r", function (d) { if (highlighted_users.indexOf(d.user) !== -1) {return highlight_fixation_radius}
                                             else { return base_fixation_radius} })
-            .attr("fill", function (d) { if (d.highlighted == true) {return highlight_colour}
-                                            else { return base_colour} })}
+            .attr("fill", function (d) { if (highlighted_users.indexOf(d.user) !== -1) {return highlight_colour}
+                                            else { return base_colour} });
+                                }
 
 
 //Create buttons to select highlighted user
 function createUserButtons(users) {
     for (user in users) {
-        highlighted_user_container.innerHTML += '<input type="button" id =' + users[user] + ' value =' + users[user] + ' name="highlighted_users" onclick="highlightButton(this.value)">'
+        highlighted_user_container.innerHTML += '<input type="button" id =' + users[user] 
+        + ' value =' + users[user] + ' name="highlighted_users" onclick="highlightButton(this.value, this.id)">';
         
         if (user%4 == 3) {
-            highlighted_user_container.innerHTML += "</br>"
+            highlighted_user_container.innerHTML += "</br>";
         }
     }
 }
