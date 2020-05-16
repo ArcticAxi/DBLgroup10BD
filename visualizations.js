@@ -1,10 +1,10 @@
 var initialRead;
 var fileLocation;
 
+var heatmaps = [];
 var intensity_slider_heatmap = document.getElementById("intensity_slider_heatmap");
 var intensity_heatmap = 5;
 intensity_slider_heatmap.value = intensity_heatmap;
-var heat;
 
 var radius_slider_heatmap = document.getElementById("radius_slider_heatmap");
 var radius_heatmap = 30;
@@ -15,7 +15,7 @@ var blur_heatmap = 15;
 blur_slider_heatmap.value = blur_heatmap/3;
 
 var opacity_slider_scatterplot = document.getElementById("opacity_slider_scatterplot");
-var opacity_scatterplot = 1;
+var opacity_scatterplot = 0.6;
 opacity_slider_scatterplot.value = opacity_scatterplot * 10;
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -58,9 +58,23 @@ function createVisualizations(data) {
     var selected = JSON.parse(localStorage.getItem("selectedStimuli"))
 
     for (var i = 0; i < selected.length; i++) {
-        //simpleGraph(data, selected[i]);
-        //scatterplot(data, selected[i]);
-        //heatmaps(data, selected[i]);
+        // put "a" infront of the id's since d3.select uses document.querySelector, querySelector doesn't work if
+        // things start with a numeric value, putting "a" in front ensures that the first symbol is a letter
+        var stimuliBubblemap = document.createElement('div');
+        stimuliBubblemap.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_bubblemap";
+        var stimuliHeatmap = document.createElement('div');
+        stimuliHeatmap.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_heatmap";
+        var stimuliScatterplot = document.createElement('div');
+        stimuliScatterplot.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_scatterplot";
+
+        var bubblemapImage = document.querySelector('#bubblemap');
+        var heatmapImage = document.querySelector('#heatmap');
+        var scatterplotImage = document.querySelector('#scatterplot');
+
+        bubblemapImage.appendChild(stimuliBubblemap);
+        heatmapImage.appendChild(stimuliHeatmap);
+        scatterplotImage.appendChild(stimuliScatterplot);
+
         loadingImage(data, selected[i]);
     }
 }
@@ -90,9 +104,17 @@ function loadingImage(content, name) {
             let sizeWidth = width / sizeDecrease;
             let sizeHeight = height / sizeDecrease;
             var stimuliLocationURL = "url(" + "'" + "./stimuli/" + name + "')";
-            var bubblemapImage = document.querySelector('#bubblemap');
-            var heatmapImage = document.querySelector('#heatmap');
-            var scatterplotImage = document.querySelector('#scatterplot');
+
+            let idNameBubblemap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_bubblemap";
+            let idNameHeatmap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_heatmap";
+            let idNameScatterplot = "#a" + name.substr(0, name.lastIndexOf('.')) + "_scatterplot";
+
+            var bubblemapImage = document.querySelector(idNameBubblemap);
+            var heatmapImage = document.querySelector(idNameHeatmap);
+            var scatterplotImage = document.querySelector(idNameScatterplot);
+
+            bubblemapImage.style.width = sizeWidth + "px";
+            bubblemapImage.style.height = sizeHeight + "px";
 
             bubblemapImage.style.backgroundImage = stimuliLocationURL;
             bubblemapImage.style.backgroundRepeat = 'no-repeat';
@@ -101,25 +123,24 @@ function loadingImage(content, name) {
             scatterplotImage.style.backgroundImage = stimuliLocationURL;
             scatterplotImage.style.backgroundRepeat = 'no-repeat';
 
-            let background_size = sizeWidth + "px " + height / 2 + "px";
+            let background_size = sizeWidth + "px " + sizeHeight + "px";
             bubblemapImage.style.backgroundSize = background_size;
             heatmapImage.style.backgroundSize = background_size;
             scatterplotImage.style.backgroundSize = background_size;
 
-            bubbleMap(content, name, sizeWidth, sizeHeight, sizeDecrease);
-            heatmaps(content, name, sizeWidth, sizeHeight);
-            scatterplot(content, name, sizeWidth, sizeHeight);
+            bubbleMap(content, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap);
+            heatmap(content, name, sizeWidth, sizeHeight, idNameHeatmap);
+            scatterplot(content, name, sizeWidth, sizeHeight, idNameScatterplot);
         });
 }
 
-function bubbleMap(content, name, width, height, sizeDecrease) {
-
+function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     // create svg
-    var svg = d3.select("#bubblemap")
+    var svg = d3.select(idName)
         .append("svg")
         .attr("width", width)
         .attr("height", height)
-        .append('g')
+        .append('g');
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
 
     // read the data
@@ -248,27 +269,34 @@ function bubbleMap(content, name, width, height, sizeDecrease) {
 
 intensity_slider_heatmap.oninput = function () {
     intensity_heatmap = this.value;
-    heat.max(intensity_heatmap);
-    heat.draw();
+    heatmaps.forEach(function(heat) {
+        heat.max(intensity_heatmap);
+        heat.draw();
+    });
 };
 
 radius_slider_heatmap.oninput = function () {
     radius_heatmap = this.value*4;
-    heat.radius(radius_heatmap, blur_heatmap);
-    heat.draw();
+    heatmaps.forEach(function(heat) {
+        heat.radius(radius_heatmap, blur_heatmap);
+        heat.draw();
+    });
 };
 
 blur_slider_heatmap.oninput = function () {
     blur_heatmap = this.value*3;
-    heat.radius(radius_heatmap, blur_heatmap);
-    heat.draw();
+    heatmaps.forEach(function(heat) {
+        heat.radius(radius_heatmap, blur_heatmap);
+        heat.draw();
+    });
 };
 
-function heatmaps(content, name, width, height) {
-    div = d3.select('#heatmap');
-    canvasLayer = div.append('canvas').attr('id', 'canvas').attr('width', width).attr('height', height);
+function heatmap(content, name, width, height, idName) {
+    div = d3.select(idName);
+    canvasLayer = div.append('canvas').attr('id', 'canvas' + name).attr('class', 'heatmapCanvas').attr('width', width).attr('height', height);
 
-    heat = simpleheat('canvas');
+    var heat = simpleheat('canvas' + name);
+    heatmaps.push(heat);
 
     dataHeat = content.filter(function (d) {
         if (d.StimuliName !== name) {
@@ -316,7 +344,7 @@ opacity_slider_scatterplot.oninput = function () {
         .style("opacity", opacity_scatterplot);
 };
 
-function scatterplot(content, name, width, height) {
+function scatterplot(content, name, width, height, idName) {
     // set the dimensions and margins of the graph
     //var margin = {top: 0, right: 0, bottom: 0, left: 0};
     // var margin = {top: 10, right: 30, bottom: 30, left: 60},
@@ -324,7 +352,7 @@ function scatterplot(content, name, width, height) {
     //    height = 1200 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
-    var svg = d3.select("#scatterplot")
+    var svg = d3.select(idName)
         .append("svg")
         .attr("width", width)
         .attr("height", height)

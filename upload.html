@@ -43,7 +43,10 @@
     <div class="selectingdata">
         <p> Select datasets (based on StimuliName): </p>
         <form class="selectionData">
-            <input type="checkbox" onClick="selectAllData(this)"/> Toggle All <br/>
+            <label class="containerLabel"> Toggle All
+                <input type="checkbox" onClick="selectAllData(this)"/>
+                <span class="checkmark"></span>
+            </label>
             <div id="formSelectionData" class="scroll">
             </div>
             <input type="submit" value="Submit">

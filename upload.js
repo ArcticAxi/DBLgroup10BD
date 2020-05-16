@@ -98,39 +98,29 @@ function createCheckboxes(dataset) {
     for (var i = 0; i < dataset.length; i++) {
         // creating checkbox element
         var checkbox = document.createElement('input');
+        var containerLabel = document.createElement('label');
+        var span = document.createElement('span');
 
-        // Assigning the attributes
-        // to created checkbox
+        // assigned correct attributes
         checkbox.type = "checkbox";
         checkbox.name = "stimuli";
-
-        // retrieves the StimuliName from nested object array
         checkbox.id = dataset[i].key;
         checkbox.checked = Boolean(false);
 
-        // creating label for checkbox
-        var label = document.createElement('label');
+        containerLabel.classList.add("containerLabel");
+        containerLabel.name = "stimuliLabel";
+       // containerLabel.htmlFor = dataset[i].key;
 
-        // assigning attributes for
-        // the created label tag
-        label.htmlFor = dataset[i].key;
-        label.name = "stimuliLabel";
+        span.classList.add("checkmark");
 
-        // appending the created text to
-        // the created label tag
-        label.appendChild(document.createTextNode(dataset[i].key));
+        // adding label text
+        containerLabel.appendChild(document.createTextNode(dataset[i].key));
+        containerLabel.appendChild(checkbox);
+        containerLabel.appendChild(span);
 
-        // appending the checkbox
-        // and label to div
-        selectionForm.appendChild(checkbox);
-        selectionForm.appendChild(label);
+        selectionForm.appendChild(containerLabel);
 
-        linebreak = document.createElement("br");
-        selectionForm.appendChild(linebreak);
-
-        checkboxesArray.push(label);
-        checkboxesArray.push(checkbox);
-        checkboxesArray.push(linebreak)
+        checkboxesArray.push(containerLabel);
     }
 }
 
