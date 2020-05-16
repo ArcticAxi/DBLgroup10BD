@@ -3,6 +3,9 @@
 var width = 2000;
 var height = 2000;
 
+//css variables
+var dark_blue = getComputedStyle(document.documentElement).getPropertyValue('--dark-blue-color');
+
 //path variables
 var highlighted_users = []
 var base_stroke_width = 1;
@@ -153,13 +156,14 @@ base_colour_button_b.onclick = function() {
 
 //user buttons event
 function highlightButton(value, id){
-    list = document.getElementById("highlighted_list");
+    button = document.getElementById(id)
     if (highlighted_users.indexOf(value) !== -1) {
         highlighted_users.splice(highlighted_users.indexOf(value), 1);
+        button.style.backgroundColor = dark_blue;
     } else {
         highlighted_users.push(value);
+        button.style.backgroundColor = highlight_colour;
     }
-    list.innerHTML = highlighted_users;
     load()
 }
 
