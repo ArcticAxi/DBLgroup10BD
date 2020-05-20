@@ -118,7 +118,7 @@ var filtered = coord.map(function(d) {				// create array of objects without dup
 		var xPos = d3.mouse(this)[0] -15;
 		var yPos = d3.mouse(this)[1] -30;
 		tooltip.attr("transform", "translate(" + xPos + "," + yPos + ")");
-		tooltip.select("text").text("Gazes: " + d.counts + "")
+		tooltip.select("text").text("Fixations: " + d.counts + "")
 		// reduce opacity of all groups
 		d3.selectAll(".bubbles").style("opacity", .2)
 		// expect the one that is hovered
