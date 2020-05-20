@@ -5,6 +5,7 @@ var height = 2000;
 
 //css variables
 var dark_blue = getComputedStyle(document.documentElement).getPropertyValue('--dark-blue-color');
+var main_blue = getComputedStyle(document.documentElement).getPropertyValue('--main-blue-color');
 
 //path variables
 var highlighted_users = []
@@ -12,7 +13,7 @@ var base_stroke_width = 1;
 var highlight_stroke_width = 5;
 var base_stroke_opacity = 0.5;
 var highlight_stroke_opacity = 1;
-var base_colour = "steelblue";
+var base_colour = dark_blue;
 var highlight_colour = "red";
 
 //fixation dot variables
@@ -38,7 +39,7 @@ var highlight_fixation_opacity_slider = document.getElementById("highlight_fixat
 
 //button selection variables
 //base colour
-var base_colour_button_sb = document.getElementById("steelblue_base")
+var base_colour_button_db = document.getElementById("dark_blue_base")
 var base_colour_button_b = document.getElementById("black_base")  
 //highlighted users
 var highlighted_user_container = document.getElementById("highlighted_user")
@@ -142,9 +143,9 @@ highlight_fixation_opacity_slider.oninput = function() {
 //
 //
 
-//update base colour when pressing steel blue button
-base_colour_button_sb.onclick = function() {
-    base_colour = "steelblue";
+//update base colour when pressing main blue button
+base_colour_button_db.onclick = function() {
+    base_colour = dark_blue;
     load()
 }
 
