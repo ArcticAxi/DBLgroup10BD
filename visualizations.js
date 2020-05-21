@@ -3,16 +3,13 @@ var fileLocation;
 
 var heatmaps = [];
 var intensity_slider_heatmap = document.getElementById("intensity_slider_heatmap");
-var intensity_heatmap = 5;
-intensity_slider_heatmap.value = intensity_heatmap;
+var intensity_heatmap = intensity_slider_heatmap.value;
 
 var radius_slider_heatmap = document.getElementById("radius_slider_heatmap");
-var radius_heatmap = 30;
-radius_slider_heatmap.value = radius_heatmap/4;
+var radius_heatmap = radius_slider_heatmap.value * 4;
 
 var blur_slider_heatmap = document.getElementById("blur_slider_heatmap");
-var blur_heatmap = 15;
-blur_slider_heatmap.value = blur_heatmap/3;
+var blur_heatmap = blur_slider_heatmap.value;
 
 var opacity_slider_scatterplot = document.getElementById("opacity_slider_scatterplot");
 var opacity_scatterplot = 0.6;
@@ -36,11 +33,11 @@ function loadCSV() {
                 }
             }
             d.StimuliName = output;
-            d.Timestamp = +d.Timestamp;
-            d.FixationIndex = +d.FixationIndex;
-            d.FixationDuration = +d.FixationDuration;
-            d.MappedFixationPointX = +d.MappedFixationPointX;
-            d.MappedFixationPointY = +d.MappedFixationPointY;
+            //d.Timestamp = +d.Timestamp;
+            //d.FixationIndex = +d.FixationIndex;
+            //d.FixationDuration = +d.FixationDuration;
+            //d.MappedFixationPointX = +d.MappedFixationPointX;
+            //d.MappedFixationPointY = +d.MappedFixationPointY;
         });
         data = data.sort(sortByDateAscending);
         createVisualizations(data)
