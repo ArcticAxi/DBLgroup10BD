@@ -29,28 +29,32 @@
 
     <div class="emptytitle"></div>
 
-    <div class="submitlink">
-        <form class="uploadData" method="post" enctype="multipart/form-data">
-            <input type="file" id="dataset-input" name="name"/>
-            <input type="button" id="fileButton" value="Upload Data">
-            <label for="dataset-input" id="label_file"> No file selected</label>
-            <input type="submit" value="Submit" name="submit"/>
-        </form>
+    <div class='uploadbody'>
 
-        <script src="upload.js" charset="utf-8"></script>
-    </div>
+        <div class="submitlink">
+            <form class="uploadData" method="post" enctype="multipart/form-data">
+                <input type="file" id="dataset-input" name="name"/>
+                <input type="button" id="fileButton" value="Upload Data">
+                <label for="dataset-input" id="label_file"> No file selected</label>
+                <input type="submit" value="Submit" name="submit"/>
+            </form>
 
-    <div class="selectingdata">
-        <p> Select datasets (based on StimuliName): </p>
-        <form class="selectionData">
-            <label class="containerLabel"> Toggle All
-                <input type="checkbox" onClick="selectAllData(this)"/>
-                <span class="checkmark"></span>
-            </label>
-            <div id="formSelectionData" class="scroll">
-            </div>
-            <input type="submit" value="Submit">
-        </form>
+            <script src="upload.js" charset="utf-8"></script>
+        </div>
+
+        <div class="selectingdata">
+            <p> Select datasets (based on StimuliName): </p>
+            <form class="selectionData">
+                <label class="containerLabel"> Toggle All
+                    <input type="checkbox" onClick="selectAllData(this)"/>
+                    <span class="checkmark"></span>
+                </label>
+                <div id="formSelectionData" class="scroll">
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+
+        </div>
 
     </div>
 
