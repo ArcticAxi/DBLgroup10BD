@@ -8,8 +8,6 @@
 
     <script src="https://d3js.org/d3.v5.js" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
-    <script src="simpleheat.js"></script>
-    <script> src="bubblemap.js" </script>
 
     <title>Visualizations</title>
 </head>
@@ -57,18 +55,16 @@
         </div>
         <div class="left_elem" id="radius_heatmap">
             <p>Radius:</p>
-            <input type="range" min="1" max="10" value="7.5" class="slider" id="radius_slider_heatmap">
+            <input type="range" min="1" max="10" value="6" class="slider" id="radius_slider_heatmap">
         </div>
         <div id="blur_heatmap">
             <p>Blur:</p>
-            <input type="range" min="0" max="10" value="5" class="slider" id="blur_slider_heatmap">
+            <input type="range" min="0" max="10" value="10" class="slider" id="blur_slider_heatmap">
         </div>
     </div>
 
     <div class="visualization" id="heatmap">
     </div>
-
-    <script> src="visualizations/heatmap.js" </script>
 
     <div class="slidecontainer">
         <div id="opacity_scatterplot">
@@ -138,8 +134,11 @@
         <p>Click again to undo</p>
     </div>
 
+    <script src="visualizations/simpleheat.js"></script>
+    <script src="visualizations/heatmap.js"></script>
+    <script src="visualizations/bubblemap.js"></script>
     <script src="visualizations/scanpath.js"></script>
-    <script src="visualizations/new_visualizations.js" charset="utf-8"></script>
+    <script src="visualizations/visualizations.js" charset="utf-8"></script>
 
 </div>
 </body>

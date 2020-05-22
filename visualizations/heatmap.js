@@ -1,5 +1,5 @@
 //heatmap variables
-var heatmaps = [];
+
 var intensity_slider_heatmap = document.getElementById("intensity_slider_heatmap");
 var radius_slider_heatmap = document.getElementById("radius_slider_heatmap");
 var blur_slider_heatmap = document.getElementById("blur_slider_heatmap");

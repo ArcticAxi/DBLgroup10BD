@@ -1,8 +1,15 @@
-//In this file, I'll try to only add code that directly deals with the html and the interactions
-//The specific visualizations will be kept in their own files
-
 var initialRead;
 var fileLocation;
+
+var heatmaps = [];
+var intensity_slider_heatmap = document.getElementById("intensity_slider_heatmap");
+var intensity_heatmap = intensity_slider_heatmap.value;
+
+var radius_slider_heatmap = document.getElementById("radius_slider_heatmap");
+var radius_heatmap = radius_slider_heatmap.value * 4;
+
+var blur_slider_heatmap = document.getElementById("blur_slider_heatmap");
+var blur_heatmap = blur_slider_heatmap.value;
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -40,22 +47,16 @@ function createVisualizations(data) {
     var selected = JSON.parse(localStorage.getItem("selectedStimuli"))
 
     for (var i = 0; i < selected.length; i++) {
-        // put "a" infront of the id's since d3.select uses document.querySelector, querySelector doesn't work if
-        // things start with a numeric value, putting "a" in front ensures that the first symbol is a letter
         var stimuliBubblemap = document.createElement('div');
         stimuliBubblemap.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_bubblemap";
         var stimuliHeatmap = document.createElement('div');
         stimuliHeatmap.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_heatmap";
-        var stimuliScatterplot = document.createElement('div');
-        stimuliScatterplot.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_scatterplot";
 
         var bubblemapImage = document.querySelector('#bubblemap');
         var heatmapImage = document.querySelector('#heatmap');
-        var scatterplotImage = document.querySelector('#scatterplot');
 
         bubblemapImage.appendChild(stimuliBubblemap);
         heatmapImage.appendChild(stimuliHeatmap);
-        scatterplotImage.appendChild(stimuliScatterplot);
 
         loadingImage(data, selected[i]);
     }
@@ -66,10 +67,6 @@ function loadingImage(content, name) {
     // attempted to fix by creating a div inside the div and overlaying the two
     // however, changing image width/height of background image is completely ignored for some reason
     // heatmapImage.style.opacity = '0.5';
-
-    // var sctrPlot = document.querySelector('#scatterplot');
-    // sctrPlot.style.position = 'relative';
-    // sctrPlot.style.display = 'block';
 
     function getMeta(url, callback) {
         var img = new Image();
@@ -89,11 +86,9 @@ function loadingImage(content, name) {
 
             let idNameBubblemap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_bubblemap";
             let idNameHeatmap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_heatmap";
-            let idNameScatterplot = "#a" + name.substr(0, name.lastIndexOf('.')) + "_scatterplot";
 
             var bubblemapImage = document.querySelector(idNameBubblemap);
             var heatmapImage = document.querySelector(idNameHeatmap);
-            var scatterplotImage = document.querySelector(idNameScatterplot);
 
             bubblemapImage.style.width = sizeWidth + "px";
             bubblemapImage.style.height = sizeHeight + "px";
@@ -102,17 +97,13 @@ function loadingImage(content, name) {
             bubblemapImage.style.backgroundRepeat = 'no-repeat';
             heatmapImage.style.backgroundImage = stimuliLocationURL;
             heatmapImage.style.backgroundRepeat = 'no-repeat';
-            scatterplotImage.style.backgroundImage = stimuliLocationURL;
-            scatterplotImage.style.backgroundRepeat = 'no-repeat';
 
             let background_size = sizeWidth + "px " + sizeHeight + "px";
             bubblemapImage.style.backgroundSize = background_size;
             heatmapImage.style.backgroundSize = background_size;
-            scatterplotImage.style.backgroundSize = background_size;
 
             bubbleMap(content, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap);
             heatmap(content, name, sizeWidth, sizeHeight, idNameHeatmap);
-            scatterplot(content, name, sizeWidth, sizeHeight, idNameScatterplot);
         });
 }
 
