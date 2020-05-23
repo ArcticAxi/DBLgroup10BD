@@ -29,56 +29,6 @@
 
     <div class="emptytitle"></div>
 
-    <div class="visualization" id="bubblemap">
-    </div>
-
-    <style>
-        .bubbles {
-            stroke-width: 1px;
-            stroke: black;
-            fill: #cc4457;
-            opacity: .6;
-        }
-
-        .bubbles:hover {
-            stroke: black;
-            opacity: 1;
-        }
-    </style>
-
-    
-
-    <div class="slidecontainer">
-        <div id="intensity_heatmap">
-            <p>Intensity:</p>
-            <input type="range" min="1" max="30" value="5" class="slider" id="intensity_slider_heatmap">
-        </div>
-        <div class="left_elem" id="radius_heatmap">
-            <p>Radius:</p>
-            <input type="range" min="1" max="10" value="6" class="slider" id="radius_slider_heatmap">
-        </div>
-        <div id="blur_heatmap">
-            <p>Blur:</p>
-            <input type="range" min="0" max="10" value="10" class="slider" id="blur_slider_heatmap">
-        </div>
-    </div>
-
-    <div class="visualization" id="heatmap">
-    </div>
-
-    <div class="slidecontainer">
-        <div id="opacity_scatterplot">
-            <p>Opacity:</p>
-            <input type="range" min="0" max="10" value="1" class="slider" id="opacity_slider_scatterplot">
-        </div>
-    </div>
-
-    <div class="visualization" id="scatterplot">
-    </div>
-
-    <div id="hiddenImage">
-    </div>
-
     <div class="slidecontainer">
         <div class="left_elem" id="base_stroke_width">
             <p> Base Path Width: </p>
@@ -132,6 +82,44 @@
     <div class="buttoncontainer" id="highlighted_user">
         <p>Click on user to highlight</p>
         <p>Click again to undo</p>
+    </div>
+
+    <div class="visualization" id="scanpath">
+    </div>
+
+    <div class="visualization" id="bubblemap">
+    </div>
+
+    <style>
+        .bubbles {
+            stroke-width: 1px;
+            stroke: black;
+            fill: #cc4457;
+            opacity: .6;
+        }
+
+        .bubbles:hover {
+            stroke: black;
+            opacity: 1;
+        }
+    </style>
+
+    <div class="slidecontainer">
+        <div id="intensity_heatmap">
+            <p>Intensity:</p>
+            <input type="range" min="1" max="30" value="5" class="slider" id="intensity_slider_heatmap">
+        </div>
+        <div class="left_elem" id="radius_heatmap">
+            <p>Radius:</p>
+            <input type="range" min="1" max="10" value="6" class="slider" id="radius_slider_heatmap">
+        </div>
+        <div id="blur_heatmap">
+            <p>Blur:</p>
+            <input type="range" min="0" max="10" value="10" class="slider" id="blur_slider_heatmap">
+        </div>
+    </div>
+
+    <div class="visualization" id="heatmap">
     </div>
 
     <script src="visualizations/simpleheat.js"></script>

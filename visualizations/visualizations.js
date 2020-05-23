@@ -51,12 +51,16 @@ function createVisualizations(data) {
         stimuliBubblemap.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_bubblemap";
         var stimuliHeatmap = document.createElement('div');
         stimuliHeatmap.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_heatmap";
+        var stimuliScanpath = document.createElement('div');
+        stimuliScanpath.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_scanpath";
 
         var bubblemapImage = document.querySelector('#bubblemap');
         var heatmapImage = document.querySelector('#heatmap');
+        var scanpathImage = document.querySelector('#scanpath');
 
         bubblemapImage.appendChild(stimuliBubblemap);
         heatmapImage.appendChild(stimuliHeatmap);
+        scanpathImage.appendChild(stimuliScanpath);
 
         loadingImage(data, selected[i]);
     }
@@ -68,14 +72,6 @@ function loadingImage(content, name) {
     // however, changing image width/height of background image is completely ignored for some reason
     // heatmapImage.style.opacity = '0.5';
 
-    function getMeta(url, callback) {
-        var img = new Image();
-        img.src = url;
-        img.onload = function () {
-            callback(this.width, this.height);
-        }
-    }
-
     getMeta(
         "./stimuli/" + name,
         function (width, height) {
@@ -86,25 +82,41 @@ function loadingImage(content, name) {
 
             let idNameBubblemap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_bubblemap";
             let idNameHeatmap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_heatmap";
+            let idNameScanpath = "#a" + name.substr(0, name.lastIndexOf('.')) + "_scanpath";
 
             var bubblemapImage = document.querySelector(idNameBubblemap);
             var heatmapImage = document.querySelector(idNameHeatmap);
+            var scanpathImage = document.querySelector(idNameScanpath);
 
             bubblemapImage.style.width = sizeWidth + "px";
             bubblemapImage.style.height = sizeHeight + "px";
 
             bubblemapImage.style.backgroundImage = stimuliLocationURL;
             bubblemapImage.style.backgroundRepeat = 'no-repeat';
+
             heatmapImage.style.backgroundImage = stimuliLocationURL;
             heatmapImage.style.backgroundRepeat = 'no-repeat';
+
+            scanpathImage.style.backgroundImage = stimuliLocationURL;
+            scanpathImage.style.backgroundRepeat = 'no-repeat';
 
             let background_size = sizeWidth + "px " + sizeHeight + "px";
             bubblemapImage.style.backgroundSize = background_size;
             heatmapImage.style.backgroundSize = background_size;
+            scanpathImage.style.backgroundSize = background_size;
 
             bubbleMap(content, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap);
             heatmap(content, name, sizeWidth, sizeHeight, idNameHeatmap);
+            scanpath(content, name, sizeWidth, sizeHeight, sizeDecrease, idNameScanpath);
         });
+}
+
+function getMeta(url, callback) {
+    var img = new Image();
+    img.src = url;
+    img.onload = function () {
+        callback(this.width, this.height);
+    }
 }
 
 // Convertes the timestamps into format of "%M:%S:%L"
@@ -118,7 +130,3 @@ function msToTime(timestamp) {
     // parsing as "%M:%S:%L"
     return minutes + ":" + seconds + "." + milliseconds;
 }
-
-//scanpath stuff
-initialSetup();
-drawScanpath();

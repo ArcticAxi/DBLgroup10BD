@@ -1,4 +1,4 @@
-{//variables
+//variables
 //width and height are chosen so there is always enough room for the maps, could probably be done more efficient
 var width = 2000;
 var height = 2000;
@@ -43,128 +43,116 @@ var base_colour_button_db = document.getElementById("dark_blue_base")
 var base_colour_button_b = document.getElementById("black_base")  
 //highlighted users
 var highlighted_user_container = document.getElementById("highlighted_user")
-//data used by buttons
-var buttonData;
 
 //checkbox variables
 var userCheckboxes = [];
 
-//passed variables
+//map
 var stimulus = "22_Venedig_S2.jpg"
-var size_decrease = 2;
-}
-
-//to be called by visualizations.js
-//creates scanpath with given variables
-function scanpath(content, name, sizeWidth, sizeHeight, sizeDecrease, idName) {  
-    stimulus = name
-    height = sizeHeight
-    width = sizeWidth
-    buttonData = content
-    size_decrease = sizeDecrease
-    initialSetup(content, idName)
-    drawScanpath(content)
-}
 
 //creates an svg element and users array to work with
-function initialSetup(data, idName) {
+function initialSetup() {
 
     //create canvas
-    canvas = d3.select(idName)
-                .append("svg")
-                .append("width", width)
-                .append("height", height);
+    canvas = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
 
-    //d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
-    data = data.filter(function (d) {
-        return (d.StimuliName == stimulus);
-        }); 
-    
-    //creates a set containing all unique users
-    var allUsers = data.map( function (d) { return d.user} );
-    uniqueUsers = new Set(allUsers);
-    
-        //turns the set into an array and sorts said array
-    arrayUsers = [...uniqueUsers];
-    temp_users = [];
+    //adds the map to the canvas            
+    canvas.append("svg:image")
+                .attr("xlink:href", "stimuli/" + stimulus);
 
-    for (i in arrayUsers) {
-        temp_users[i] = arrayUsers[i].substr(1);
-    }
+                d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
+                    data = data.filter(function (d) {
+                        return (d.StimuliName == stimulus);
+                    }); 
+                
+                    //creates a set containing all unique users
+                    var allUsers = data.map( function (d) { return d.user} );
+                    uniqueUsers = new Set(allUsers);
+                
+                    //turns the set into an array and sorts said array
+                    arrayUsers = [...uniqueUsers];
+                    temp_users = [];
 
-    temp_users.sort(function(a, b){return a-b});
+                    for (i in arrayUsers) {
+                        temp_users[i] = arrayUsers[i].substr(1);
+                    }
 
-    for (i in arrayUsers) {
-        arrayUsers[i] = "p" + temp_users[i];
-    }
+                    temp_users.sort(function(a, b){return a-b});
 
-    //creates buttons used to highlight users
-    createUserButtons(arrayUsers);
-    //})                
+                    for (i in arrayUsers) {
+                        arrayUsers[i] = "p" + temp_users[i];
+                    }
+
+                    //creates buttons used to highlight users
+                    createUserButtons(arrayUsers);
+                })                
 }
 
-{
-//path sliders
 //update base stroke width when moving slider
 base_stroke_width_slider.oninput = function() {
     base_stroke_width = this.value;
-    drawScanpath(buttonData)
+    drawScanpath()
 }
 
 //update base stroke opacity when moving slider
 base_stroke_opacity_slider.oninput = function() {
     base_stroke_opacity = this.value/10;
-    drawScanpath(buttonData)
+    drawScanpath()
 }
 
 //update highlight stroke width when moving slider
 highlight_stroke_width_slider.oninput = function() {
     highlight_stroke_width = this.value;
-    drawScanpath(buttonData)
+    drawScanpath()
 }
 
 //update highlight stroke opacity when moving slider
 highlight_stroke_opacity_slider.oninput = function() {
     highlight_stroke_opacity = this.value/10;
-    drawScanpath(buttonData)
+    drawScanpath()
 }
 
-//fixation sliders
+
 //update base fixation radius when moving slider
 base_fixation_radius_slider.oninput = function() {
     base_fixation_radius = this.value;
-    drawScanpath(buttonData)
+    drawScanpath()
 }
 
 //update highlight fixation radius when moving slider
 highlight_fixation_radius_slider.oninput = function() {
     highlight_fixation_radius = this.value;
-    drawScanpath(buttonData)
+    drawScanpath()
 }
 
 //update base fixation opacity when moving slider
 base_fixation_opacity_slider.oninput = function() {
     base_fixation_opacity = this.value/10;
-    drawScanpath(buttonData)
+    drawScanpath()
 }
 
 //update highlight fixation opacity when moving slider
 highlight_fixation_opacity_slider.oninput = function() {
     highlight_fixation_opacity = this.value/10;
-    drawScanpath(buttonData)
+    drawScanpath()
 }
 
-//buttons
+//Buttons incoming
+//
+//
+
 //update base colour when pressing main blue button
 base_colour_button_db.onclick = function() {
     base_colour = dark_blue;
-    drawScanpath(buttonData)
+    drawScanpath()
 }
 
 //update base colour when pressing black button
 base_colour_button_b.onclick = function() {
     base_colour = "black";
-    drawScanpath(buttonData)
+    drawScanpath()
 }
 
 //user buttons event
@@ -177,32 +165,31 @@ function highlightButton(value, id){
         highlighted_users.push(value);
         button.style.backgroundColor = highlight_colour;
     }
-    drawScanpath(buttonData)
+    drawScanpath()
 }
-}
+
+
 
 //draw the scanpath visualisation
-function drawScanpath(data){
-    //d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
-    data = data.filter(function (d) {
-        //d.MappedFixationPointX = d.MappedFixationPointX / size_decrease;
-        //d.MappedFixationPointY = d.MappedFixationPointY / size_decrease;
-        return (d.StimuliName == stimulus);
-    }); 
+function drawScanpath(){
+    d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
+        data = data.filter(function (d) {
+            return (d.StimuliName == stimulus);
+        }); 
 
-    //creates a set containing all unique users
-    var allUsers = data.map( function (d) { return d.user} );
-    uniqueUsers = new Set(allUsers);
-
-    //turns the set into an array
-    arrayUsers = [...uniqueUsers];
+        //creates a set containing all unique users
+        var allUsers = data.map( function (d) { return d.user} );
+        uniqueUsers = new Set(allUsers);
     
-    users = arrayUsers;
+        //turns the set into an array
+        arrayUsers = [...uniqueUsers];
+        
+        users = arrayUsers;
 
     //create the actual visualization
     createVis(data, arrayUsers);
 
-};//)};
+})};
 
 //creates the actual visualization
 function createVis(data, users) {
@@ -254,7 +241,6 @@ function createVis(data, users) {
 
 //Create buttons to select highlighted user
 function createUserButtons(users) {
-    highlighted_user_container.innerHTML += '<p>' + stimulus + '</p>'
     for (user in users) {
         highlighted_user_container.innerHTML += '<input type="button" id =' + users[user] 
         + ' value =' + users[user] + ' name="highlighted_users" onclick="highlightButton(this.value, this.id)">';
