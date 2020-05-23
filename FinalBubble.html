@@ -1,0 +1,44 @@
+<html>
+
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Underscore.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+<!-- Load color scale -->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+
+<!-- Create a div where the graph will take place -->
+<svg id="my_dataviz" width="825" height="610"></svg>
+<script src="FinalBubble.js"></script>
+
+<!-- Insert user text for grid size -->
+<br>
+<input id="text1" placeholder="Enter grid size">
+<button onclick="change()" id="btn1">Apply this grid size</button>
+
+
+<!-- Create a black outline for circles-->
+<!-- A bit of CSS: change stroke color of circle on hover (white -> black) -->
+<style>
+.bubbles {
+  stroke-width: 1px;
+  stroke: black;
+  fill: #cc4457;
+  opacity: .6;
+}
+.bubbles:hover {
+  stroke: black;
+  opacity: 1;
+}
+
+svg {
+  background: url(https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/stimuli/01_Antwerpen_S1.jpg) no-repeat;
+  background-size: 825px 600px;
+}
+
+</style>
