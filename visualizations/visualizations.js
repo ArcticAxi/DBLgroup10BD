@@ -61,13 +61,12 @@ function loadingImage(content, name) {
     // however, changing image width/height of background image is completely ignored for some reason
     // heatmapImage.style.opacity = '0.5';
 
-    getMeta(
+    getMeta(content, name,
         "./stimuli/" + name,
-        function (width, height) {
+        function (width, height, hasImage) {
             let sizeDecrease = 2;
             let sizeWidth = width / sizeDecrease;
             let sizeHeight = height / sizeDecrease;
-            var stimuliLocationURL = "url(" + "'" + "./stimuli/" + name + "')";
 
             let idNameBubblemap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_bubblemap";
             let idNameHeatmap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_heatmap";
@@ -77,17 +76,21 @@ function loadingImage(content, name) {
             var heatmapImage = document.querySelector(idNameHeatmap);
             var scanpathImage = document.querySelector(idNameScanpath);
 
+            if (hasImage) {
+                var stimuliLocationURL = "url(" + "'" + "./stimuli/" + name + "')";
+
+                bubblemapImage.style.backgroundImage = stimuliLocationURL;
+                bubblemapImage.style.backgroundRepeat = 'no-repeat';
+
+                heatmapImage.style.backgroundImage = stimuliLocationURL;
+                heatmapImage.style.backgroundRepeat = 'no-repeat';
+
+                scanpathImage.style.backgroundImage = stimuliLocationURL;
+                scanpathImage.style.backgroundRepeat = 'no-repeat';
+            }
+
             bubblemapImage.style.width = sizeWidth + "px";
             bubblemapImage.style.height = sizeHeight + "px";
-
-            bubblemapImage.style.backgroundImage = stimuliLocationURL;
-            bubblemapImage.style.backgroundRepeat = 'no-repeat';
-
-            heatmapImage.style.backgroundImage = stimuliLocationURL;
-            heatmapImage.style.backgroundRepeat = 'no-repeat';
-
-            scanpathImage.style.backgroundImage = stimuliLocationURL;
-            scanpathImage.style.backgroundRepeat = 'no-repeat';
 
             let background_size = sizeWidth + "px " + sizeHeight + "px";
             bubblemapImage.style.backgroundSize = background_size;
@@ -98,17 +101,55 @@ function loadingImage(content, name) {
             heatmap(content, name, sizeWidth, sizeHeight, idNameHeatmap);
             scanpath(content, name, sizeWidth, sizeHeight, sizeDecrease, idNameScanpath);
         });
+
 }
 
-function getMeta(url, callback) {
-    var img = new Image();
-    img.src = url;
-    img.onload = function () {
-        callback(this.width, this.height);
+function getMeta(content, name, url, callback) {
+    var imageExists = UrlExists(url);
+    // if an image exists, load width and height of the image into visualizations
+    if (imageExists) {
+        var img = new Image();
+        img.src = url;
+        img.onload = function () {
+            callback(this.width, this.height, true);
+        }
+
+        // if no image exists, simply take the max width and height
+        // in this case, it would be useful if axis are added to the plots
+        // maybe add an extra parameter which is true or false
+    } else {
+        // read the max. width and height from svg
+        var dataMax = content.filter(function (d) {
+            if (d.StimuliName !== name) {
+                return false;
+            }
+            return true;
+        });
+
+        var maxWidth = d3.max(dataMax, function (d) {
+            return +d.MappedFixationPointX;
+        });
+
+        var maxHeight = d3.max(dataMax, function (d) {
+            return +d.MappedFixationPointY;
+        });
+
+        maxWidth+= 100;
+        maxHeight+= 100;
+
+        // it loads the visualization all the way to the left which cuts off circles and such
+        callback(maxWidth, maxHeight, false)
     }
 }
 
-// Convertes the timestamps into format of "%M:%S:%L"
+function UrlExists(url) {
+    var http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+    return http.status!=404;
+}
+
+// Converts the timestamps into format of "%M:%S:%L"
 function msToTime(timestamp) {
     var milliseconds = parseInt((timestamp % 1000) / 100),
         seconds = Math.floor((timestamp / 1000) % 60),
