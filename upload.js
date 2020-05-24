@@ -119,6 +119,8 @@ function removePrevCheckboxes() {
 // creates checkboxes
 function createCheckboxes(dataset) {
     var selectionForm = document.getElementById("formSelectionData");
+    selectionForm.style.height = '400px';
+    selectionForm.style.padding = '20px 20px';
 
     for (var i = 0; i < dataset.length; i++) {
         // creating checkbox element
