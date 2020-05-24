@@ -13,8 +13,8 @@ Loading the visualizations
 --------------------------
 	6. Go to "localhost" (or equivalent) in the address bar of your browser. This is the homepage of the web-based tool, iFish. 
 	7. Press "Upload data" in the rop right corner. This redirects you to the upload page. 
-	8. Select any file in your computer that is a Tab Separated Values file, it can be extended with either .csv or .tsv (though not recommended, even .txt is possible) but it must be Tab Separated. After selecting your file, press the first submit button.
-	9. Select the stimuli you want to visualize and press the second submit button.
+	8. Select any file in your computer that is a Tab Separated Values file, it can be extended with either .csv or .tsv (though not recommended, even .txt is possible) but it must be Tab Separated. After selecting your file, press the submit button.
+	9. Select the stimuli you want to visualize and press the confirm selection button.
 	
 Adding images behind the visualizations
 ---------------------------------------

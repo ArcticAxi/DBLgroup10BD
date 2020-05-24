@@ -79,8 +79,13 @@ table {
 
 .upload {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-areas: "emptytitle" "submit";
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "emptytitle emptytitle" "submit selectingdata";
+    margin: 0 8% 0 8%;
+    background-color: var(--light-grey-color);
+}
+
+.visualizationpage {
     margin: 0 8% 0 8%;
 }
 
@@ -129,21 +134,25 @@ table {
 }
 
 #photo_introduction{
-   grid-area: introduction;
-   margin: 0 0 0 50%;
-   
-   width: 590px;
-   height: 300px;
-   border: solid 3px;
-   border-color: var(--light-grey-color);
-   padding: 5px;
-   border-radius: 15px;
+    grid-area: introduction;   
+    width: 590px;
+    height: 300px;
+    border: solid 3px;
+    border-color: var(--light-grey-color);
+    border-radius: 15px;
+    margin: 20px;
+    float: right;
 
 }	
 .introduction {
     grid-area: introduction;
     height: 400px;
     background-color: var(--main-blue-color);
+}
+
+#intro_text {
+    margin: 10px;
+    float: left;
 }
 
 .picture1 {
@@ -182,12 +191,6 @@ table {
     grid-area: information4;
 }
 
-
-.uploadbody {
-    margin-left: 40%;
-}
-
-
 /* other style for buttons and sliders*/
 /* set the CSS for the graph, temporarily copied this, free to change */
 body {
@@ -202,7 +205,7 @@ body {
     shape-rendering: crispEdges;
 }
 
-#formSelectionData {
+#formonData {
     padding: 0px;
     margin: 10px 10px;
     width: 300px;
@@ -216,6 +219,10 @@ body {
     grid-area: submit;
     color: var(--dark-grey-color); /* Was green before */
     /*background-color: #ffffff !important;*/
+}
+
+.selectingdata {
+    grid-area: selectingdata;
 }
 
 input[type = "file"] {
@@ -235,6 +242,10 @@ input[type = "file"] {
     cursor: pointer;
     border-radius: 4px;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+#fileButton, #imageButton {
+    width: 200px;
 }
 
 #fileButton:hover, #imageButton:hover, input[type = "submit"]:hover, input[type = "button"] {
@@ -326,7 +337,7 @@ input[type = "file"] {
     left: 0;
     height: 15px;
     width: 15px;
-    background-color: var(--light-grey-color);
+    background-color: var(--dark-grey-color);
 }
 
 /* On mouse-over, add a grey background color */
