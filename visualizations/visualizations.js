@@ -1,17 +1,6 @@
 var initialRead;
 var fileLocation;
 
-var heatmaps = [];
-var intensity_slider_heatmap = document.getElementById("intensity_slider_heatmap");
-var intensity_heatmap = intensity_slider_heatmap.value;
-
-var radius_slider_heatmap = document.getElementById("radius_slider_heatmap");
-var radius_heatmap = radius_slider_heatmap.value * 4;
-
-var blur_slider_heatmap = document.getElementById("blur_slider_heatmap");
-var blur_heatmap = blur_slider_heatmap.value;
-
-
 document.addEventListener("DOMContentLoaded", function () {
     loadCSV();
 });
