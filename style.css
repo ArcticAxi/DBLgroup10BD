@@ -97,6 +97,7 @@ table {
     padding: 10px;
     position: fixed;
     margin: 0 -8% 0 -8%;
+    z-index: 1000;
 }
 
 .homelink {
