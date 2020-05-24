@@ -184,7 +184,6 @@ function heatmap(content, name, width, height, idName) {
     // add slider or value insertion for this because maps differ a lot in concentration
     heat.max(intensity_heatmap);
 
-    console.log(blur_heatmap);
     // set point radius and blur radius (25 and 15 by default)
     heat.radius(radius_heatmap, blur_heatmap);
 
