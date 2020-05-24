@@ -8,18 +8,36 @@ document.addEventListener("DOMContentLoaded", function () {
     const formSelection = document.querySelector('form.selectionData');
 
     //changing default buttons
-    var button = document.getElementById('fileButton');
+    var fileButton = document.getElementById('fileButton');
     var file = document.getElementById('dataset-input');
     const defaultLabelText = "No file selected";
 
-    button.addEventListener('click', function () {
+    var imageButton = document.getElementById('imageButton');
+    var fileImages = document.getElementById('stimuli-input');
+
+    fileButton.addEventListener('click', function () {
         file.click();
     });
 
     file.addEventListener('change', function () {
-        const files = document.querySelector('[type=file]').files[0];
+        const files = document.querySelector('#dataset-input').files[0];
         var filenameButton = files.name.substr(0, files.name.lastIndexOf('.'));
         document.getElementById('label_file').innerHTML = filenameButton || defaultLabelText;
+    });
+
+    imageButton.addEventListener('click', function() {
+        fileImages.click();
+    });
+
+    fileImages.addEventListener('change', function() {
+       const filesImages = document.querySelector('#stimuli-input').files;
+       var imagename;
+       if (filesImages.length > 1) {
+           imagename = "Multiple images selected";
+       } else {
+           imagename = filesImages[0].name.substr(0, filesImages[0].name.lastIndexOf('.'));
+       }
+       document.getElementById('label_image').innerHTML = imagename || defaultLabelText;
     });
 
 // INTERNET EXPLORER GIVES A SYNTAX ERROR HERE, CHANGE THIS TO NORMAL
@@ -27,10 +45,17 @@ document.addEventListener("DOMContentLoaded", function () {
     formUpload.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        const files = document.querySelector('[type=file]').files[0];
+        const files = document.querySelector('#dataset-input').files[0];
         const formData = new FormData();
 
         formData.append('files[]', files);
+
+        const images = document.querySelector('#stimuli-input').files;
+
+        for (let i = 0; i < images.length; i++) {
+            formData.append('images[]', images[i]);
+
+        }
 
         /* for (let i = 0; i < files.length; i++) {
              let file = files[i];

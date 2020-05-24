@@ -10,11 +10,11 @@
 
             for ($i = 0; $i < $all_files; $i ++) {
                 error_log("Uploading the files");
-                $file_name = $_FILES['files']['name'][$i];
-                $file_tmp = $_FILES['files']['tmp_name'][$i];
-                $file_type = $_FILES['files']['type'][$i];
-                $file_size = $_FILES['files']['size'][$i];
-                $file_ext = strtolower(end(explode('.', $_FILES['files']['name'][$i])));
+                $file_name = $_FILES['files']['name'][0];
+                $file_tmp = $_FILES['files']['tmp_name'][0];
+                $file_type = $_FILES['files']['type'][0];
+                $file_size = $_FILES['files']['size'][0];
+                $file_ext = strtolower(end(explode('.', $_FILES['files']['name'][0])));
 
                 $file = $path . $file_name;
                 $file_no_ext = pathinfo($file)['filename'];
@@ -33,6 +33,12 @@
                 }
             }
             if ($errors) error_log($errors);
+
+            if (isset($_FILES['images'])) {
+                error_log("Uploading images");
+            } else {
+                error_log("No images uploaded");
+            }
         }
     }
 

@@ -103,16 +103,16 @@ table {
 .homelink {
 	position: relative;
 	left: 8%;
+    bottom: 5px;
     float: left;
-    background-color: #a00000;
     height: 60px;
-	width: 120px;
+    width: 60px;
 }
 /* for the photo iFish*/
 .TITLE {
 
 	position: relative;
-	bottom: 10px;
+    bottom: 5px;
 	background-color: #a0004f;
 	left: 140px;
 	
@@ -239,7 +239,7 @@ input[type = "file"] {
     display: none;
 }
 
-#fileButton, input[type = "button"], input[type = "submit"] {
+#fileButton, #imageButton, input[type = "button"], input[type = "submit"] {
     background-color: var(--main-blue-color);
     border: 1px solid var(--dark-grey-color); /* Was black before */
     color: white;
@@ -254,7 +254,7 @@ input[type = "file"] {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#fileButton:hover, input[type = "submit"]:hover, input[type = "button"] {
+#fileButton:hover, #imageButton:hover, input[type = "submit"]:hover, input[type = "button"] {
     background-color: var(--dark-blue-color); /* Was dark blue #0099ff before */
     color: white;
 }
