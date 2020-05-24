@@ -103,20 +103,17 @@ table {
 .homelink {
 	position: relative;
 	left: 8%;
+    bottom: 5px;
     float: left;
-    background-color: #a00000;
     height: 60px;
-	width: 120px;
+	width: 60px;
 }
 /* for the photo iFish*/
 .TITLE {
-
 	position: relative;
-	bottom: 10px;
+	bottom: 5px;
 	background-color: #a0004f;
 	left: 140px;
-	
-	width: 190px;
 	height: 70px;
 }
 
