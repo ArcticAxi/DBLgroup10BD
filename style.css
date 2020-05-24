@@ -225,6 +225,10 @@ body {
     grid-area: selectingdata;
 }
 
+#formSelectionData {
+    overflow: scroll;
+}
+
 input[type = "file"] {
     display: none;
 }
@@ -373,3 +377,4 @@ input[type = "file"] {
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
+

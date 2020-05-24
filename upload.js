@@ -131,7 +131,7 @@ function createCheckboxes(dataset) {
         // assigned correct attributes
         checkbox.type = "checkbox";
         checkbox.name = "stimuli";
-        checkbox.id = dataset[i].key;
+        checkbox.id = dataset[i];
         checkbox.checked = Boolean(false);
 
         containerLabel.classList.add("containerLabel");
@@ -141,7 +141,7 @@ function createCheckboxes(dataset) {
         span.classList.add("checkmark");
 
         // adding label text
-        containerLabel.appendChild(document.createTextNode(dataset[i].key));
+        containerLabel.appendChild(document.createTextNode(dataset[i]));
         containerLabel.appendChild(checkbox);
         containerLabel.appendChild(span);
 
@@ -214,7 +214,15 @@ function groupingStimuli(data) {
             return d.StimuliName;
         })
         .entries(data);
-    return groupedByStimuli;
+
+    let stimuliArray = [];
+    for (let i = 0; i < groupedByStimuli.length; i++) {
+        stimuliArray.push(groupedByStimuli[i].key);
+    }
+
+    let sortedStimuli = stimuliArray.sort((a, b) => d3.ascending(a.toLowerCase(), b.toLowerCase()));
+    console.log(sortedStimuli);
+    return sortedStimuli;
 }
 
 // toggle button which selects all the data
