@@ -81,13 +81,15 @@ table {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-areas: "emptytitle" "submit";
+    margin: 0 8% 0 8%;
 }
 
 .emptytitle {
     grid-area: emptytitle;
-    height: 50px;
+    height: 65px;
     padding: 10px;
 }
+
 .title {
     height: 65px;
     width: 100vw;
@@ -154,7 +156,6 @@ table {
     grid-area: introduction;
     height: 400px;
     background-color: #804040;
-	margin-top: 15px;
 }
 
 .picture {
