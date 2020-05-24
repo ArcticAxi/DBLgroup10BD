@@ -93,7 +93,7 @@ table {
 .title {
     height: 65px;
     width: 100vw;
-    background-color: var(--main-blue-color);
+    background-color: var(--dark-blue-color);
     padding: 10px;
     position: fixed;
     margin: 0 -8% 0 -8%;
@@ -108,14 +108,6 @@ table {
     height: 60px;
 	width: 60px;
 }
-/* for the photo iFish*/
-.TITLE {
-	position: relative;
-	bottom: 5px;
-	background-color: #a0004f;
-	left: 140px;
-	height: 70px;
-}
 
 /*style for the home page*/
 .vizlink {
@@ -123,7 +115,6 @@ table {
 	top: 40px;
 	right: 8%;
     float: right;
-    background-color: var(--main-blue-color);
     height: 20px;
 	width: 100px;
 	margin-right: 20px;
@@ -133,7 +124,6 @@ table {
 	top: 40px;
 	right: 8%;
     float: right;
-    background-color: var(--main-blue-color);
     height: 10px;
 	width: 100px
 }
@@ -153,11 +143,7 @@ table {
 .introduction {
     grid-area: introduction;
     height: 400px;
-    background-color: #804040;
-}
-
-.picture {
-    background-color: #00a500;
+    background-color: var(--main-blue-color);
 }
 
 .picture1 {
@@ -177,7 +163,7 @@ table {
 }
 
 .information {
-    background-color: #008500;
+    background-color: var(--light-grey-color);
 }
 
 .information1 {
@@ -236,7 +222,7 @@ input[type = "file"] {
     display: none;
 }
 
-#fileButton, input[type = "button"], input[type = "submit"] {
+#fileButton, #imageButton, input[type = "button"], input[type = "submit"] {
     background-color: var(--main-blue-color);
     border: 1px solid var(--dark-grey-color); /* Was black before */
     color: white;
@@ -251,7 +237,7 @@ input[type = "file"] {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#fileButton:hover, input[type = "submit"]:hover, input[type = "button"] {
+#fileButton:hover, #imageButton:hover, input[type = "submit"]:hover, input[type = "button"] {
     background-color: var(--dark-blue-color); /* Was dark blue #0099ff before */
     color: white;
 }
