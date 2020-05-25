@@ -155,8 +155,16 @@ table {
     float: left;
 }
 
+.picture {
+    width: 98%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border: 3px solid var(--light-grey-color);
+}
+
 .picture1 {
-    grid-area: picture1;
+    grid-area: picture1; 
 }
 
 .picture2 {
