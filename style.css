@@ -71,8 +71,8 @@ table {
 .home {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto 3fr 2fr 1fr;
-    grid-template-areas: "emptytitle emptytitle emptytitle emptytitle" "introduction introduction introduction introduction" "picture1 picture2 picture3 picture4" "information1 information2 information3 information4";
+    grid-template-rows: auto 3fr 3fr;
+    grid-template-areas: "emptytitle emptytitle emptytitle emptytitle" "introduction introduction introduction introduction" "picture1 picture2 picture3 picture4";
     margin: 0 8% 0 8%;
 }
 /* style for the navigation bar*/
@@ -87,6 +87,7 @@ table {
 
 .visualizationpage {
     margin: 0 8% 0 8%;
+
 }
 
 .emptytitle {
@@ -103,8 +104,9 @@ table {
     position: fixed;
     margin: 0 -8% 0 -8%;
     z-index: 1000;
-}
 
+}
+ 
 .homelink {
 	position: relative;
 	left: 8%;
@@ -113,7 +115,15 @@ table {
     height: 60px;
 	width: 60px;
 }
-
+#hello {
+	grid-area: intro1;
+	width: 500px;
+	height: 30px;
+	text-align: center;
+	margin: 8% 0 0 5%;
+	font-size: 1.5em;
+	font-weight: bold;
+}	
 /*style for the home page*/
 .vizlink {
     position: relative;
@@ -134,37 +144,80 @@ table {
 }
 
 #photo_introduction{
-    grid-area: introduction;   
-    width: 590px;
-    height: 300px;
-    border: solid 3px;
-    border-color: var(--light-grey-color);
-    border-radius: 15px;
-    margin: 20px;
-    float: right;
+   grid-area: intro2;
+   margin: 6% 0 0 0;
+   width: 560px;
+   height: 290px;
+   border: solid 3px;
+   border-color: var(--light-grey-color);
+   padding: 5px;
+   border-radius: 15px;
 
 }	
+#intro_text{
+	grid-area: intro1;
+	text-align: left;
+	margin: 18% 10% 0 13%;
+	
+}
+#ending {
+	grid-area: intro1;
+	text-align: left;
+	margin: 45% 0 0 13%;
+}
 .introduction {
     grid-area: introduction;
     height: 400px;
-    background-color: var(--main-blue-color);
-}
-
-#intro_text {
-    margin: 10px;
-    float: left;
+    background-color:var(--main-blue-color); /* before HoneyDew;*/
+	display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "intro1 intro2";
+	border-bottom: 1px double black;
+	border-left: 3px solid black;
+	border-right: 1px double black;
+	
 }
 
 .picture {
-    width: 98%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    border: 3px solid var(--light-grey-color);
+  background-color: var(--light-grey-color);
+  border-right: 1px double black;
+	
+
+  /*background-color: var(--main-blue-color);*/
+}
+
+/*#intro_text {
+    margin: 10px;
+    float: left;
+}*/
+
+.picture,
+.picture > #image {
+  padding: 7px;
+  object-fit: cover;
 }
 
 .picture1 {
-    grid-area: picture1; 
+  grid-area: picture1;
+  border-right: 1px double black;
+  border-left: 3px solid black;
+  padding: 8px;
+ 
+}
+
+h3 {
+	text-align: center;
+	font-size: 18px;
+
+}
+.information
+{
+    background-color: var(--light-grey-color);
+}
+#text {
+	text-align: center;
+	padding: 15px;
 }
 
 .picture2 {
@@ -177,27 +230,14 @@ table {
 
 .picture4 {
     grid-area: picture4;
+	
 }
 
-.information {
-    background-color: var(--light-grey-color);
+
+.uploadbody {
+    margin-left: 40%;
 }
 
-.information1 {
-    grid-area: information1;
-}
-
-.information2 {
-    grid-area: information2;
-}
-
-.information3 {
-    grid-area: information3;
-}
-
-.information4 {
-    grid-area: information4;
-}
 
 /* other style for buttons and sliders*/
 /* set the CSS for the graph, temporarily copied this, free to change */
