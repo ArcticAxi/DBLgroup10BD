@@ -174,7 +174,7 @@ table {
     grid-template-rows: auto;
     grid-template-areas: "intro1 intro2";
 	border-bottom: 1px double black;
-	border-left: 3px solid black;
+	border-left: 1px solid black;
 	border-right: 1px double black;
 	
 }
@@ -201,7 +201,7 @@ table {
 .picture1 {
   grid-area: picture1;
   border-right: 1px double black;
-  border-left: 3px solid black;
+  border-left: 1px solid black;
   padding: 8px;
  
 }
