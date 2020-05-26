@@ -1,4 +1,7 @@
+//Brackets are added for the very convenient collapse option Visual Studio provides :)
+
 //heatmap variables
+{
 var flattenData = [];
 var timestamp_slider_heatmap = [];
 var heatmaps = [];
@@ -11,7 +14,10 @@ var radius_heatmap = radius_slider_heatmap.value * 4;
 
 var blur_slider_heatmap = document.getElementById("blur_slider_heatmap");
 var blur_heatmap = blur_slider_heatmap.value * 3;
+}
 
+//basic sliders
+{
 intensity_slider_heatmap.oninput = function () {
     intensity_heatmap = this.value;
     heatmaps.forEach(function(heat) {
@@ -35,6 +41,7 @@ blur_slider_heatmap.oninput = function () {
         heat.draw();
     });
 };
+}
 
 // nests the array by user
 function nestUsers(data) {
