@@ -134,8 +134,8 @@ function getMeta(content, name, url, callback) {
             return +d.MappedFixationPointY;
         });
 
-        maxWidth+= 100;
-        maxHeight+= 100;
+        maxWidth += 100;
+        maxHeight += 100;
 
         // it loads the visualization all the way to the left which cuts off circles and such
         callback(maxWidth, maxHeight, false)
@@ -146,7 +146,7 @@ function UrlExists(url) {
     var http = new XMLHttpRequest();
     http.open('HEAD', url, false);
     http.send();
-    return http.status!=404;
+    return http.status != 404;
 }
 
 // Converts the timestamps into format of "%M:%S:%L"

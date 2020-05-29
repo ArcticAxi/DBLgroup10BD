@@ -45,6 +45,43 @@
     };
 }
 
+// creates the slider for the heatmap based on the max timestamp value
+function createHeatmapTime(timestamp, id) {
+    var all_sliders = document.getElementById("all_heatmap_sliders");
+    var div = document.createElement('div');
+    div.id = "'timestamp_heatmap" + id + "'";
+    var par = document.createElement('p');
+    var par_node = document.createTextNode("Timestamp:");
+    par.appendChild(par_node);
+    div.appendChild(par);
+
+    var input = document.createElement('input');
+    input.type = 'range';
+    input.min = '0';
+    input.max = timestamp;
+    input.value = timestamp;
+    input.classList.add('slider');
+    input.classList.add('timestamp_slider_heatmap');
+    // id created this way so that when there are multiple maps it is possible to find corresponding checkbox
+    // using this id
+    input.id = "'timestamp_slider_heatmap." + id + "/" + id_num_add + "'";
+    div.appendChild(input);
+
+    all_sliders.appendChild(div);
+
+    // creates the checkbox for the slider
+    var checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = "'timestamp_slider_checkbox." + id + "/" + id_num_add + "'";
+    div.appendChild(checkbox);
+
+    // adds listener to the slider
+    input.addEventListener("input", timestamp_slider_input, false);
+    checkbox.addEventListener('input', timestamp_slider_checkbox, false);
+
+    timestamp_slider_heatmap.push(input);
+}
+
 // nests the array by user
 function nestUsers(data) {
     var users = d3.nest()
@@ -162,49 +199,12 @@ function timestamp_slider_checkbox(e) {
     heatmaps[idNum].draw();
 }
 
-// creates the slider for the heatmap based on the max timestamp value
-function createHeatmapTime(timestamp, id) {
-    var all_sliders = document.getElementById("all_heatmap_sliders");
-    var div = document.createElement('div');
-    div.id = "'timestamp_heatmap" + id + "'";
-    var par = document.createElement('p');
-    var par_node = document.createTextNode("Timestamp:");
-    par.appendChild(par_node);
-    div.appendChild(par);
-
-    var input = document.createElement('input');
-    input.type = 'range';
-    input.min = '0';
-    input.max = timestamp;
-    input.value = timestamp;
-    input.classList.add('slider');
-    input.classList.add('timestamp_slider_heatmap');
-    // id created this way so that when there are multiple maps it is possible to find corresponding checkbox
-    // using this id
-    input.id = "'timestamp_slider_heatmap." + id + "/" + id_num_add + "'";
-    div.appendChild(input);
-
-    all_sliders.appendChild(div);
-
-    // creates the checkbox for the slider
-    var checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.id = "'timestamp_slider_checkbox." + id + "/" + id_num_add + "'";
-    div.appendChild(checkbox);
-
-    // adds listener to the slider
-    input.addEventListener("input", timestamp_slider_input, false);
-    checkbox.addEventListener('input', timestamp_slider_checkbox, false);
-
-    timestamp_slider_heatmap.push(input);
-}
-
 function userSelectionHeatmap(users_array) {
     for (var i = 0; i < heatmaps.length; i++) {
         if (users_array.length == 0) {
             var userFiltered = data_stimuli[i];
         } else {
-            var userFiltered = data_stimuli[i].filter(function(d) {
+            var userFiltered = data_stimuli[i].filter(function (d) {
                 if (!users_array.includes(d.user)) {
                     return false;
                 }
@@ -272,5 +272,5 @@ function heatmap(content, name, width, height, idName) {
 }
 
 function addToIdNum() {
-    id_num_add+=1;
+    id_num_add += 1;
 }
