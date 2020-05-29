@@ -3,11 +3,6 @@
 var stimulus = "01_Antwerpen_S1.jpg";
 var gridSize = 100;
 
-function changeGrid(g){
-	var gridSize = document.getElementById("text1").value;
-	console.log(gridSize);
-	g.update();
-}	
 
 //==========================================================================
 // Add to svg
@@ -24,6 +19,10 @@ var g = svg.append("g")
             .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
 
+// Define the div for the tooltip
+var div = d3.select("body").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
 
 
 
@@ -47,18 +46,31 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
 // Count how many gazes at that coordinate
 //===========================================================================
 
-var array = [];							// make an array to store d.coordinates
+var arrayC = [];						// make an array to store d.coordinates
 data.forEach(function(d) {
-	array.push(d.coordinates)
+	arrayC.push(d.coordinates)
 });
 
 var duplicates = [];					// count how many duplicates in array
-array.forEach(function(i) {
+arrayC.forEach(function(i) {
 	duplicates[i] = (duplicates[i]||0) + 1;
 });
 
 data.forEach(function(d) {				// add column counts to data
 	d.counts = duplicates[d.coordinates]
+})
+
+data.forEach(function(d) {							// average duration
+	d.duration = d.FixationDuration;
+	data.forEach(function(e) {
+		if (d.coordinates == e.coordinates) {
+			d.duration = +d.duration + +e.FixationDuration;
+		}
+	})
+})
+
+data.forEach(function(d) {							// round average duration
+	d.duration = Math.round(d.duration/d.counts);
 })
 
 var coord = [...new Set(data.map(function(d) {		// coordinates as array called coord
@@ -70,7 +82,6 @@ var filtered = coord.map(function(d) {				// create array of objects without dup
 		return e.coordinates === d
 	})
 });
-
 
 
 
@@ -115,49 +126,28 @@ var filtered = coord.map(function(d) {				// create array of objects without dup
 //==========================================================================
 // Interaction with tooltip
 //==========================================================================
-	  
-    // Mouseover
-    .on("mouseover", function()
-	{
-		tooltip.style("display",null);
-	})
-	
-	// Mousemove
-    .on("mousemove", function(d)
-	{
-		var xPos = d3.mouse(this)[0] -15;
-		var yPos = d3.mouse(this)[1] -30;
-		tooltip.attr("transform", "translate(" + xPos + "," + yPos + ")");
-		tooltip.select("text").text("Fixations: " + d.counts + "")
-		// reduce opacity of all groups
-		d3.selectAll(".bubbles").style("opacity", .2)
-		// expect the one that is hovered
-		d3.selectAll(".bubbles:hover").style("opacity", 1)
-
-	})
-	
-	// Mouseout
-    .on("mouseout", function()
-	{
-		tooltip.style("display", "none")
-		d3.selectAll(".bubbles").style("opacity", .6);
-	});
 
 
-// Tooltip basics
-var tooltip = svg.append("g")
-	.attr("class", tooltip)
-	.style("display", "none");
-	
-tooltip.append("text")
-	.attr("x", 15)
-	.attr("dy", "1.2em")
-	.style("font-size", "1.25em")
-	.attr("font-weight", "bold");
+        .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div	.html("Fixations: " + d.counts + '<br>' + "Average duration: " + d.duration + "ms")
+				.style('left', (d3.mouse(this)[0] + 'px'))	
+				.style('top', (d3.mouse(this)[1] + 'px'));	
+            })					
+        .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
 })
-	
-	
-	
+
+
+
+
+
+
 	
 	
 	
@@ -209,6 +199,19 @@ array.forEach(function(i) {
 
 data.forEach(function(d) {				// add column counts to data
 	d.counts = duplicates[d.coordinates]
+})
+
+data.forEach(function(d) {							// average duration
+	d.duration = d.FixationDuration;
+	data.forEach(function(e) {
+		if (d.coordinates == e.coordinates) {
+			d.duration = +d.duration + +e.FixationDuration;
+		}
+	})
+})
+
+data.forEach(function(d) {							// round average duration
+	d.duration = Math.round(d.duration/d.counts);
 })
 
 var coord = [...new Set(data.map(function(d) {		// coordinates as array called coord
@@ -270,44 +273,19 @@ var filtered = coord.map(function(d) {				// create array of objects without dup
 // Interaction with tooltip
 //==========================================================================
 	  
-    // Mouseover
-    .on("mouseover", function()
-	{
-		tooltip.style("display",null);
-	})
-	
-	// Mousemove
-    .on("mousemove", function(d)
-	{
-		var xPos = d3.mouse(this)[0] -15;
-		var yPos = d3.mouse(this)[1] -30;
-		tooltip.attr("transform", "translate(" + xPos + "," + yPos + ")");
-		tooltip.select("text").text("Fixations: " + d.counts + "")
-		
-		
-		d3.selectAll(".bubbles").style("opacity", .2)			// reduce opacity of all groups
-		d3.selectAll(".bubbles:hover").style("opacity", 1)		// expect the one that is hovered
-
-	})
-	
-	// Mouseout
-    .on("mouseout", function()
-	{
-		tooltip.style("display", "none")
-		d3.selectAll(".bubbles").style("opacity", .6);
-	});
-
-
-// Tooltip basics
-var tooltip = svg.append("g")
-	.attr("class", tooltip)
-	.style("display", "none");
-	
-tooltip.append("text")
-	.attr("x", 15)
-	.attr("dy", "1.2em")
-	.style("font-size", "1.25em")
-	.attr("font-weight", "bold");
+        .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div	.html("Fixations: " + d.counts + '<br>' + "Average duration: " + d.duration + "ms")
+				.style('left', (d3.mouse(this)[0] + 'px'))	
+				.style('top', (d3.mouse(this)[1] + 'px'));	
+            })					
+        .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
 })
 }
 
