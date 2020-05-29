@@ -221,7 +221,6 @@ function groupingStimuli(data) {
     }
 
     let sortedStimuli = stimuliArray.sort((a, b) => d3.ascending(a.toLowerCase(), b.toLowerCase()));
-    console.log(sortedStimuli);
     return sortedStimuli;
 }
 
