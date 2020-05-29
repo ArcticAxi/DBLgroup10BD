@@ -189,7 +189,8 @@ function initialSetup(data, idName) {
             highlighted_users.push(value);
             button.style.backgroundColor = highlight_colour;
         }
-        redrawScanpath(buttonData)
+        redrawScanpath(buttonData);
+        userSelectionHeatmap(highlighted_users);
     }
 }
 
