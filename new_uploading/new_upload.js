@@ -1,7 +1,5 @@
 var initialRead;
-var fileLocation;
-
-const url = 'processUpload.php';
+var selected = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     const formUpload = document.querySelector('form.uploadData');
@@ -20,8 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     file.addEventListener('change', function () {
-        const files = document.querySelector('#dataset-input').files[0];
-        var filenameButton = files.name.substr(0, files.name.lastIndexOf('.'));
+        const file = document.querySelector('#dataset-input').files[0];
+        var filenameButton = file.name.substr(0, file.name.lastIndexOf('.'));
         document.getElementById('label_file').innerHTML = filenameButton || defaultLabelText;
     });
 
@@ -45,62 +43,30 @@ document.addEventListener("DOMContentLoaded", function () {
     formUpload.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        const files = document.querySelector('#dataset-input').files[0];
-        const formData = new FormData();
+        const file = document.querySelector('#dataset-input').files[0];
+        const reader = new FileReader();
 
-        formData.append('files[]', files);
+        reader.onload = function(){ loadCSV(reader.result) };
 
-        const images = document.querySelector('#stimuli-input').files;
-
-        for (let i = 0; i < images.length; i++) {
-            formData.append('images[]', images[i]);
-
+        if (file) {
+            reader.readAsDataURL(file);
         }
-
-        /* for (let i = 0; i < files.length; i++) {
-             let file = files[i];
-             formData.append('files[]', file);
-         }*/
-
-        // go to localhost/phpinfo.php, open folder containing file in 'Loaded Configuration File'
-        // change post_max_file and upload_max_filesize to larger numbers
-        fetch(url, {
-            method: 'POST',
-            body: formData,
-        }).then(response => {
-            var filename = files.name.substr(0, files.name.lastIndexOf('.'));
-            settingFilename(filename, 0);
-        });
-        //setDataFileName();
     });
 
     formSelection.addEventListener('submit', e => {
         e.preventDefault();
 
         stimuliNames(initialRead);
-        window.location.href = "/visualizations.html";
+
+        let visualizationsPHP = document.querySelector('#visualizationPHP');
+        if (selected.length > 0) {
+            visualizationsPHP.innerHTML = '';
+            $("#visualizationPHP").load('new_visualizations.php');
+        } else {
+            visualizationsPHP.innerHTML = '<h3> Please select a stimulus! </h3>';
+        }
     })
 });
-
-// checks which filename processUpload.php uploaded and stores it in localStorage
-var testingNames = 0;
-
-function settingFilename(filename, i) {
-    $.ajax({
-        url: "./uploads/" + filename + "_" + i + ".csv",
-        type: 'HEAD',
-        error: function () {
-            let current = i - 1;
-            localStorage.setItem("dataFilename", filename + "_" + current + ".csv");
-            testingNames = 0;
-            loadCSV();
-        },
-        success: function () {
-            testingNames++;
-            settingFilename(filename, testingNames);
-        }
-    });
-}
 
 // deletes existing checkboxes when uploading another file
 var checkboxesArray = [];
@@ -152,9 +118,8 @@ function createCheckboxes(dataset) {
 }
 
 // d3.tsv reads csv (commas) but with tabs from an URL, data is the result
-function loadCSV() {
-    fileLocation = "./uploads/" + localStorage.getItem("dataFilename");
-    d3.tsv(fileLocation).then(function (data) {
+function loadCSV(data) {
+    d3.tsv(data).then(function (data) {
         data.forEach(function (d) {
             var output = "";
             var input = d.StimuliName;
@@ -194,7 +159,7 @@ function sortByDateAscending(a, b) {
 // stores the stimuliNames in local storage
 function stimuliNames(data) {
     var checkboxes = document.getElementsByName('stimuli');
-    var selected = [];
+    selected = [];
 
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
@@ -202,7 +167,6 @@ function stimuliNames(data) {
             selected.push(checkboxes[i].id);
         }
     }
-    localStorage.setItem("selectedStimuli", JSON.stringify(selected));
 }
 
 // groupedByStimuli is an array of objects. each object has the
@@ -230,24 +194,4 @@ function selectAllData(source) {
     for (var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = source.checked;
     }
-}
-
-// unused but what if everything quits working and we need it anyway?
-function processData(allText) {
-    var allTextLines = allText.split(/\r\n|\n/);
-    var headers = allTextLines[0].split('\t');
-    var lines = [];
-
-    for (var i = 1; i < allTextLines.length; i++) {
-        var data = allTextLines[i].split('\t');
-        if (data.length == headers.length) {
-
-            var tarr = [];
-            for (var j = 0; j < headers.length; j++) {
-                tarr.push(headers[j] + ":" + data[j]);
-            }
-            lines.push(tarr);
-        }
-    }
-    //console.log(lines)
 }

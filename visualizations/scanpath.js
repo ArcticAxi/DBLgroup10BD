@@ -187,7 +187,6 @@ function initialSetup(data, idName) {
             highlighted_users.push(value);
             button.style.backgroundColor = highlight_colour;
         }
-
         for (iter=0; iter<=numberButtons; iter++){
             button_color = document.getElementById(value+'_'+iter.toString)
             if (button_color !== null) {
@@ -198,8 +197,8 @@ function initialSetup(data, idName) {
                 }
             }
         }
-
-        redrawScanpath(buttonData)
+        redrawScanpath(buttonData);
+        userSelectionHeatmap(highlighted_users);
     }
 }
 
