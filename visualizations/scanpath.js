@@ -80,7 +80,6 @@ function initialSetup(data, idName) {
         .attr("width", width)
         .attr("height", height);
 
-    //d3.tsv("/all_fixation_data_cleaned_up.csv").then(function (data) {
     data = data.filter(function (d) {
         return (d.StimuliName == stimulus);
     });
@@ -220,6 +219,7 @@ function drawScanpath(data) {
 
     users = arrayUsers;
 
+    data = equalizaTime(data, arrayUsers)
     //create the actual visualization
     createVis(data, arrayUsers);
 
@@ -332,6 +332,8 @@ function redrawScanpath(data) {
     
         //turns the set into an array
         arrayUsers = [...uniqueUsers];
+
+        equalizaTime
     
         //create the actual visualization
         redraw(temp_data, arrayUsers, temp_can);
@@ -416,4 +418,23 @@ function createUserButtons(users) {
         }
     }
     numberButtons += 1
+}
+
+function equalizaTime(data, users) {
+    test = data;
+    scanpathArray = [];
+    for(i in users) {
+        newData = test.filter(function(d){
+            return d.user == users[i]
+        })
+
+        minTime = newData[0].Timestamp;
+
+        for(stamp in newData){
+            newData[stamp].Timestamp = newData[stamp].Timestamp - minTime;
+        }
+
+        scanpathArray.push(...newData);
+    }
+    return scanpathArray;
 }
