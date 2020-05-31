@@ -187,13 +187,14 @@ function initialSetup(data, idName) {
             highlighted_users.push(value);
             button.style.backgroundColor = highlight_colour;
         }
-        for (iter=0; iter<=numberButtons; iter++){
-            button_color = document.getElementById(value+'_'+iter.toString)
-            if (button_color !== null) {
+        for (iter=0; iter<numberButtons; iter++){
+            identity = value+'_'+iter
+            button_color = document.getElementById(identity)
+            if (button_color !== null && button_color !== button) {
                 if (highlighted_users.indexOf(value) !== -1) {
-                    button.style.backgroundColor = dark_blue;
+                    button_color.style.backgroundColor = highlight_colour;
                 } else {
-                    button.style.backgroundColor = highlight_colour;
+                    button_color.style.backgroundColor = dark_blue;
                 }
             }
         }
