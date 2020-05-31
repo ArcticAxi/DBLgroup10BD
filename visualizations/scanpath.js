@@ -17,7 +17,6 @@
     var highlight_colour = "red";
 
 //fixation dot variables
-    var fixation_on = true;
     var base_fixation_radius = 3;
     var highlight_fixation_radius = 6;
     var base_fixation_opacity = 0.7;
@@ -45,7 +44,7 @@
     var highlighted_user_container = document.getElementById("highlighted_user")
 //data used by buttons and sliders
     var buttonData;
-    var buttonCounter = 0;
+    var numberButtons = 0;
     var sliderData;
     var numberScanpaths = -1;
 
@@ -110,7 +109,6 @@ function initialSetup(data, idName) {
 
     //creates buttons used to highlight users
     createUserButtons(arrayUsers);
-    buttonCounter += 1;
     //})                
 }
 
@@ -189,6 +187,18 @@ function initialSetup(data, idName) {
             highlighted_users.push(value);
             button.style.backgroundColor = highlight_colour;
         }
+
+        for (iter=0; iter<=numberButtons; iter++){
+            button_color = document.getElementById(value+'_'+iter.toString)
+            if (button_color !== null) {
+                if (highlighted_users.indexOf(value) !== -1) {
+                    button.style.backgroundColor = dark_blue;
+                } else {
+                    button.style.backgroundColor = highlight_colour;
+                }
+            }
+        }
+
         redrawScanpath(buttonData)
     }
 }
@@ -218,11 +228,11 @@ function drawScanpath(data) {
 //creates the actual visualization
 function createVis(data, users) {
 
-    //clears the canvas
-    canvas.selectAll("g").remove();
-
     //create group object            
-    var group = canvas.append("g");
+    var group = canvas.append("g")
+                        .attr("class", "paths");
+    var fixation = canvas.append("g")
+                        .attr("class", "fixations");
 
     //create line object
     var line = d3.line()
@@ -269,7 +279,7 @@ function createVis(data, users) {
             }
         });
 
-    group.selectAll("circle")
+    fixation.selectAll("circle")
         .data(data)
         .enter()
         .append("circle")
@@ -306,8 +316,7 @@ function createVis(data, users) {
 {
 //draw scanpath after interactions
 function redrawScanpath(data) {
-    j = 0
-    while(j<=numberScanpaths) {
+    for (j=0; j<=numberScanpaths; j++) {
         div = document.getElementById('scanpath_' + j)
         temp_stim = div.getAttribute('data-image')
         temp_can = d3.select(div)
@@ -326,29 +335,14 @@ function redrawScanpath(data) {
     
         //create the actual visualization
         redraw(temp_data, arrayUsers, temp_can);
-        j += 1;
     }
-
-    j = 0;
 };
 
 //redraws visualization
 function redraw(data, users, temp_can) {
     
-    //clears the canvas
-    temp_can.selectAll("g").remove();
-
-    //create group object            
-    var group = temp_can.append("g");
-
-    //create line object
-    var line = d3.line()
-        .x(function (d) {
-            return d.MappedFixationPointX
-        })
-        .y(function (d) {
-            return d.MappedFixationPointY
-        });
+    //select the paths
+    paths = temp_can.selectAll("g.paths")
 
     //turn the users into an array of objects containing the data of the users
     for (i in users) {
@@ -357,78 +351,69 @@ function redraw(data, users, temp_can) {
         });
     };
 
-    //add the scanpath to the canvas
-    group.selectAll("path")
-        .data([...users])
-        .enter()
-        .append("path")
-        .attr("d", line)
-        .attr("fill", "none")
-        .attr("stroke", function (d) {
-            if (highlighted_users.indexOf(d[0].user) !== -1) {
-                return highlight_colour
-            } else {
-                return base_colour
-            }
-        })
-        .attr("stroke-width", function (d) {
-            if (highlighted_users.indexOf(d[0].user) !== -1) {
-                return highlight_stroke_width
-            } else {
-                return base_stroke_width
-            }
-        })
-        .attr("stroke-opacity", function (d) {
-            if (highlighted_users.indexOf(d[0].user) !== -1) {
-                return highlight_stroke_opacity
-            } else {
-                return base_stroke_opacity
-            }
-        });
+    //transition the paths
+    paths.selectAll("path")
+            .transition()
+            .duration(0)
+            .attr("stroke", function (d) {
+                if (highlighted_users.indexOf(d[0].user) !== -1) {
+                    return highlight_colour
+                } else {
+                    return base_colour
+                }
+            })
+            .attr("stroke-width", function (d) {
+                if (highlighted_users.indexOf(d[0].user) !== -1) {
+                    return highlight_stroke_width
+                } else {
+                    return base_stroke_width
+                }
+            })
+            .attr("stroke-opacity", function (d) {
+                if (highlighted_users.indexOf(d[0].user) !== -1) {
+                    return highlight_stroke_opacity
+                } else {
+                    return base_stroke_opacity
+                }
+            }); 
 
-    group.selectAll("circle")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("opacity", function (d) {
-            if (highlighted_users.indexOf(d.user) !== -1) {
-                return highlight_fixation_opacity
-            } else {
-                return base_fixation_opacity
-            }
-        })
-        .attr("cx", function (d) {
-            return d.MappedFixationPointX
-        })
-        .attr("cy", function (d) {
-            return d.MappedFixationPointY
-        })
-        .attr("r", function (d) {
-            if (highlighted_users.indexOf(d.user) !== -1) {
-                return highlight_fixation_radius
-            } else {
-                return base_fixation_radius
-            }
-        })
-        .attr("fill", function (d) {
-            if (highlighted_users.indexOf(d.user) !== -1) {
-                return highlight_colour
-            } else {
-                return base_colour
-            }
-        });
+    temp_can.selectAll("circle")
+                .transition()
+                .duration(0)
+                .attr("fill", function (d) {
+                    if (highlighted_users.indexOf(d.user) !== -1) {
+                        return highlight_colour
+                    } else {
+                        return base_colour
+                    }
+                })
+                .attr("r", function (d) {
+                    if (highlighted_users.indexOf(d.user) !== -1) {
+                        return highlight_fixation_radius
+                    } else {
+                        return base_fixation_radius
+                    }
+                })
+                .attr("opacity", function (d) {
+                    if (highlighted_users.indexOf(d.user) !== -1) {
+                        return highlight_fixation_opacity
+                    } else {
+                        return base_fixation_opacity
+                    }
+                });  
 }
 }
 
-//Create buttons to select highlighted user
+//create buttons to select highlighted user
 function createUserButtons(users) {
     highlighted_user_container.innerHTML += '<p>' + stimulus + '</p>'
     for (user in users) {
-        highlighted_user_container.innerHTML += '<input type="button" id =' + users[user]
-            + ' value =' + users[user] + ' name="highlighted_users" onclick="highlightButton(this.value, this.id)">';
-
+        thisUser = users[user] + '_' + numberButtons.toString(10)
+        highlighted_user_container.innerHTML += '<input type="button" id ="' + thisUser + 
+                                                '" value =' + users[user] + ' name="highlighted_users" onclick="highlightButton(this.value, this.id)">';
         if (user % 4 == 3) {
             highlighted_user_container.innerHTML += "</br>";
         }
     }
+    numberButtons += 1
 }
