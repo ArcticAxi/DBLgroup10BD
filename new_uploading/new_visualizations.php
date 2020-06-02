@@ -49,6 +49,7 @@
     </div>
 
     <div class="buttoncontainer" id="highlighted_user">
+        <p> User selection here is linked to the heat map. </p>
         <p>Click on user to highlight</p>
         <p>Click again to undo</p>
     </div>
@@ -56,6 +57,7 @@
     <div class="visualization" id="scanpath">
     </div>
 
+    <p> The 'Gazes: x' should say 'Fixations: x'</p>
     <div class="visualization" id="bubblemap">
     </div>
 
@@ -72,13 +74,20 @@
             <p>Blur:</p>
             <input type="range" min="0" max="10" value="10" class="slider" id="blur_slider_heatmap">
         </div>
+        <p> Checking the checkbox next to the timestamp slider shows a 2-second interval of fixations around the selected timestamp. </p>
+        <p> When the checkbox is unchecked it shows the cumulative fixations upto the selected timestamp. </p>
     </div>
 
     <div class="visualization" id="heatmap">
     </div>
 
+    <div id="downloadButtons">
+
+    </div>
+
+    <script scr="../visualizations/html2canvas.js"></script>
     <script src="../visualizations/simpleheat.js"></script>
-    <script src="../visualizations/heatmap.js"></script>
+    <script src="../visualizations/new_heatmap.js"></script>
     <script src="../visualizations/bubblemap.js"></script>
     <script src="../visualizations/scanpath.js"></script>
     <script src="new_visualizations.js" charset="utf-8"></script>

@@ -1,5 +1,8 @@
+
+
 var initialRead;
 var selected = [];
+var checkboxes;
 
 document.addEventListener("DOMContentLoaded", function () {
     const formUpload = document.querySelector('form.uploadData');
@@ -18,24 +21,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     file.addEventListener('change', function () {
-        const file = document.querySelector('#dataset-input').files[0];
+        var file = document.querySelector('#dataset-input').files[0];
         var filenameButton = file.name.substr(0, file.name.lastIndexOf('.'));
         document.getElementById('label_file').innerHTML = filenameButton || defaultLabelText;
     });
 
-    imageButton.addEventListener('click', function() {
+    imageButton.addEventListener('click', function () {
         fileImages.click();
     });
 
-    fileImages.addEventListener('change', function() {
-       const filesImages = document.querySelector('#stimuli-input').files;
-       var imagename;
-       if (filesImages.length > 1) {
-           imagename = "Multiple images selected";
-       } else {
-           imagename = filesImages[0].name.substr(0, filesImages[0].name.lastIndexOf('.'));
-       }
-       document.getElementById('label_image').innerHTML = imagename || defaultLabelText;
+    fileImages.addEventListener('change', function () {
+        const filesImages = document.querySelector('#stimuli-input').files;
+        var imagename;
+        if (filesImages.length > 1) {
+            imagename = "Multiple images selected";
+        } else {
+            imagename = filesImages[0].name.substr(0, filesImages[0].name.lastIndexOf('.'));
+        }
+        document.getElementById('label_image').innerHTML = imagename || defaultLabelText;
     });
 
 // INTERNET EXPLORER GIVES A SYNTAX ERROR HERE, CHANGE THIS TO NORMAL
@@ -46,11 +49,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const file = document.querySelector('#dataset-input').files[0];
         const reader = new FileReader();
 
-        reader.onload = function(){ loadCSV(reader.result) };
+        reader.onload = function () {
+            // reads the file as .txt  in latin1
+            var tsvISO = d3.tsvParse(reader.result);
+            loadCSV(tsvISO)
+        };
 
-        if (file) {
-            reader.readAsDataURL(file);
-        }
+        //reader.readAsDataURL(file);
+        reader.readAsText(file, 'ISO-8859-1');
+
     });
 
     formSelection.addEventListener('submit', e => {
@@ -102,7 +109,7 @@ function createCheckboxes(dataset) {
 
         containerLabel.classList.add("containerLabel");
         containerLabel.name = "stimuliLabel";
-       // containerLabel.htmlFor = dataset[i].key;
+        // containerLabel.htmlFor = dataset[i].key;
 
         span.classList.add("checkmark");
 
@@ -118,37 +125,21 @@ function createCheckboxes(dataset) {
 }
 
 // d3.tsv reads csv (commas) but with tabs from an URL, data is the result
-function loadCSV(data) {
-    d3.tsv(data).then(function (data) {
-        data.forEach(function (d) {
-            var output = "";
-            var input = d.StimuliName;
-            for (var i = 0; i < d.StimuliName.length; i++) {
-                var charCode = input.charCodeAt(i);
-                if (charCode <= 127 || (charCode >= 161 && charCode <= 255)) {
-                    output += input.charAt(i);
-                } else {
-                    // seems like they are all '665533' which sucks because then I can't change it ;-;
-                    //console.log(charCode);
-                }
-            }
-            d.StimuliName = output;
-            d.Timestamp = +d.Timestamp;
-            d.FixationIndex = +d.FixationIndex;
-            d.FixationDuration = +d.FixationDuration;
-            d.MappedFixationPointX = +d.MappedFixationPointX;
-            d.MappedFixationPointY = +d.MappedFixationPointY;
-        });
-        data = data.sort(sortByDateAscending);
-        initialRead = data;
-        // create localStorage with initialRead
-        // max storage size is at least 5MB, however, initialRead probably greater than that
-        // might want to just re-read it in visualizations.js, probably the easiest I think maybe presumably
+function loadCSV(tsv) {
+    tsv.map(function(d) {
+        //replaces corrupted character, first is ü, second is ö
+        d.StimuliName = d.StimuliName.replace('\u00c3\u00bc', '\u00fc').replace('\u00c3\u00b6', '\u00f6');
+        d.Timestamp = +d.Timestamp;
+        d.FixationIndex = +d.FixationIndex;
+        d.FixationDuration = +d.FixationDuration;
+        d.MappedFixationPointX = +d.MappedFixationPointX;
+        d.MappedFixationPointY = +d.MappedFixationPointY;
+    });
 
-        // Nests the data based on StimuliName and creates checkboxes using the names
-        removePrevCheckboxes();
-        createCheckboxes(groupingStimuli(initialRead));
-    }, false);
+    tsv = tsv.sort(sortByDateAscending);
+    initialRead = tsv;
+    removePrevCheckboxes();
+    createCheckboxes(groupingStimuli(initialRead));
 }
 
 // sorts the timestamps
@@ -158,7 +149,7 @@ function sortByDateAscending(a, b) {
 
 // stores the stimuliNames in local storage
 function stimuliNames(data) {
-    var checkboxes = document.getElementsByName('stimuli');
+    checkboxes = document.getElementsByName('stimuli');
     selected = [];
 
     for (var i = 0; i < checkboxes.length; i++) {

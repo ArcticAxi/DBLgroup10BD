@@ -426,7 +426,7 @@ function equalizaTime(data, users) {
     for(i in users) {
         newData = test.filter(function(d){
             return d.user == users[i]
-        })
+        });
 
         minTime = newData[0].Timestamp;
 

@@ -8,8 +8,10 @@
 
     <script src="https://d3js.org/d3.v5.js" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+    <script type="module" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
 
-    <title>Upload Files</title>
+    <title> iFish - Visualizations</title>
     <link rel="icon" href="../photos_homepage/logosmall.svg">
 </head>
 
@@ -22,12 +24,12 @@
             <a href="../index.html"> <img src="../photos_homepage/logoiFish.png" height="70"> </a>
         </div>
 
-        <div class="vizlink">
+        <!--<div class="vizlink">
             <a href='../visualizations.html' style="color:black">Visualizations</a>
-        </div>
+        </div>!-->
 
         <div class="uploadlink">
-            <a href="../upload.html" style="color:black">Upload data</a>
+            <a href="new_upload.php" style="color:black">Upload data</a>
         </div>
 
     </div>
@@ -71,6 +73,6 @@
     <div class="visualizationpage" id="visualizationPHP">
     </div>
 
-    <script src="new_upload.js" charset="utf-8"></script>
+    <script src="new_upload.js" charset="ISO-8859-1"></script>
 </body>
 </html>

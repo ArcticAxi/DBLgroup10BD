@@ -2,14 +2,16 @@
 
 if (typeof module !== 'undefined') module.exports = simpleheat;
 
-function simpleheat(canvas) {
-    if (!(this instanceof simpleheat)) return new simpleheat(canvas);
+function simpleheat(canvas, stimuliName) {
+    if (!(this instanceof simpleheat)) return new simpleheat(canvas, stimuliName);
 
     this._canvas = canvas = typeof canvas === 'string' ? document.getElementById(canvas) : canvas;
 
     this._ctx = canvas.getContext('2d');
     this._width = canvas.width;
     this._height = canvas.height;
+
+    this._stimuliName = stimuliName;
 
     this._max = 1;
     this._data = [];
@@ -106,8 +108,10 @@ simpleheat.prototype = {
         // draw a grayscale heatmap by putting a blurred circle at each data point
         for (var i = 0, len = this._data.length, p; i < len; i++) {
             p = this._data[i];
+            ctx.beginPath();
             ctx.globalAlpha = Math.min(Math.max(p[2] / this._max, minOpacity === undefined ? 0.05 : minOpacity), 1);
             ctx.drawImage(this._circle, p[0] - this._r, p[1] - this._r);
+            ctx.closePath();
         }
 
         // colorize the heatmap, using opacity value of each pixel to get the right color from our gradient

@@ -147,7 +147,7 @@ table {
    grid-area: intro2;
    margin: 6% 0 0 0;
    width: 560px;
-   height: 290px;
+   height: 215px;
    border: solid 3px;
    border-color: var(--light-grey-color);
    padding: 5px;
@@ -426,14 +426,27 @@ input[type = "file"] {
     transform: rotate(45deg);
 }
 
-bubbles {
+.bubbles {
     stroke-width: 1px;
-    stroke: black;
-    fill: #cc4457;
+    stroke: var(--dark-blue-color);
+    fill: var(--main-blue-color);
     opacity: .6;
 }
 
 .bubbles:hover {
-    stroke: black;
+    stroke: var(--dark-blue-color);
     opacity: 1;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 150px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: #e9e9e9;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
 }

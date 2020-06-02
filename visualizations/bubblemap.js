@@ -128,5 +128,4 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
         .attr("dy", "1.2em")
         .style("font-size", "1.25em")
         .attr("font-weight", "bold");
-
 }
