@@ -152,6 +152,9 @@ function timestamp_slider_input(e) {
 
     // draws heatmap
     heatmaps[idNum].draw();
+
+    // draws scanpah
+    timerScanpath(idNum, filteredTimestamp);
 }
 
 function timestamp_slider_checkbox(e) {
@@ -197,6 +200,8 @@ function timestamp_slider_checkbox(e) {
 
     // draws heatmap
     heatmaps[idNum].draw();
+    console.log(idNum)
+    timerScanpath(idNum, filteredTimestamp)
 }
 
 function userSelectionHeatmap(users_array) {

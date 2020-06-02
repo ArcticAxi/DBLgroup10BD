@@ -317,9 +317,9 @@ function createVis(data, users) {
 //draw scanpath after interactions
 function redrawScanpath(data) {
     for (j=0; j<=numberScanpaths; j++) {
-        div = document.getElementById('scanpath_' + j)
-        temp_stim = div.getAttribute('data-image')
-        temp_can = d3.select(div)
+        var svg = document.getElementById('scanpath_' + j)
+        var temp_stim = svg.getAttribute('data-image')
+        var temp_can = d3.select(svg)
 
         temp_data = data.filter(function (d) {
             return (d.StimuliName == temp_stim);
@@ -328,12 +328,10 @@ function redrawScanpath(data) {
         var allUsers = temp_data.map(function (d) {
             return d.user
         });
-        uniqueUsers = new Set(allUsers);
+        var uniqueUsers = new Set(allUsers);
     
         //turns the set into an array
-        arrayUsers = [...uniqueUsers];
-
-        equalizaTime
+        var arrayUsers = [...uniqueUsers];
     
         //create the actual visualization
         redraw(temp_data, arrayUsers, temp_can);
@@ -403,6 +401,113 @@ function redraw(data, users, temp_can) {
                         return base_fixation_opacity
                     }
                 });  
+}
+}
+
+//timeslider draw (needs one specific map instead of all)
+{
+function timerScanpath(idNum, data) {
+    var svg_0 = document.getElementById("scanpath_" + idNum)
+    var svg = d3.select(svg_0)
+
+    var allUsers = data.map(function (d) {
+        return d.user
+    });
+    var uniqueUsers = new Set(allUsers);
+
+    //turns the set into an array
+    var  arrayUsers = [...uniqueUsers];
+
+    timerDraw(data, arrayUsers, svg)
+}
+
+function timerDraw(data, users, svg) {
+    
+    //clear svg
+    svg.selectAll("g").remove();
+
+    //create group object            
+    var group = svg.append("g")
+                        .attr("class", "paths");
+    var fixation = svg.append("g")
+                        .attr("class", "fixations");
+
+    //create line object
+    var line = d3.line()
+        .x(function (d) {
+            return d.MappedFixationPointX
+        })
+        .y(function (d) {
+            return d.MappedFixationPointY
+        });
+
+    //turn the users into an array of objects containing the data of the users
+    for (i in users) {
+        users[i] = data.filter(function (d) {
+            return d.user == users[i]
+        });
+    };
+
+    //add the scanpath to the canvas
+    group.selectAll("path")
+        .data([...users])
+        .enter()
+        .append("path")
+        .attr("d", line)
+        .attr("fill", "none")
+        .attr("stroke", function (d) {
+            if (highlighted_users.indexOf(d[0].user) !== -1) {
+                return highlight_colour
+            } else {
+                return base_colour
+            }
+        })
+        .attr("stroke-width", function (d) {
+            if (highlighted_users.indexOf(d[0].user) !== -1) {
+                return highlight_stroke_width
+            } else {
+                return base_stroke_width
+            }
+        })
+        .attr("stroke-opacity", function (d) {
+            if (highlighted_users.indexOf(d[0].user) !== -1) {
+                return highlight_stroke_opacity
+            } else {
+                return base_stroke_opacity
+            }
+        });
+
+    fixation.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("opacity", function (d) {
+            if (highlighted_users.indexOf(d.user) !== -1) {
+                return highlight_fixation_opacity
+            } else {
+                return base_fixation_opacity
+            }
+        })
+        .attr("cx", function (d) {
+            return d.MappedFixationPointX
+        })
+        .attr("cy", function (d) {
+            return d.MappedFixationPointY
+        })
+        .attr("r", function (d) {
+            if (highlighted_users.indexOf(d.user) !== -1) {
+                return highlight_fixation_radius
+            } else {
+                return base_fixation_radius
+            }
+        })
+        .attr("fill", function (d) {
+            if (highlighted_users.indexOf(d.user) !== -1) {
+                return highlight_colour
+            } else {
+                return base_colour
+            }
+        });
 }
 }
 
