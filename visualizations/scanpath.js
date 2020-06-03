@@ -65,7 +65,8 @@ function scanpath(content, name, sizeWidth, sizeHeight, sizeDecrease, idName) {
     buttonData = content;
     size_decrease = sizeDecrease;
     initialSetup(content, idName);
-    drawScanpath(content)
+    drawScanpath(content);
+    createDownloadButtonScanpath(name);
 }
 
 //creates an svg element and users array to work with
@@ -542,4 +543,60 @@ function equalizaTime(data, users) {
         scanpathArray.push(...newData);
     }
     return scanpathArray;
+}
+
+// creates download buttons for each individual visualization
+// should move the creation of these buttons to visualizations.js since these are essentially the same for each vis
+function createDownloadButtonScanpath(name) {
+    // creates button
+    var downloadButton = document.createElement('input');
+    downloadButton.type = 'button';
+    downloadButton.id = name + '.downloadButton_scanpath';
+    downloadButton.value = 'Download scanpath of ' + name;
+
+    // adds event listener which runs the actual download function
+    downloadButton.addEventListener("click", function () {
+        downloadScanpath(name)
+    });
+
+    // appends the newly created button to the div with all scanpath buttons
+    var downloadDiv = document.querySelector('#downloadButtonsScanpath');
+    downloadDiv.appendChild(downloadButton);
+}
+
+// IMAGE DOESN'T DISPLAY BEHIND SVG
+// HAPPENS BECAUSE IMAGE IS EXTERNAL RELATIVE TO THE SVG
+// FIX: ADD "<image href='path/to/image'(or callback containing image) width=width height=height/>"
+// the image becomes part of the svg, which means that it should then be downloaded behind the svg
+function downloadScanpath(name) {
+    // downloads the scanpath visualization
+
+    // hardcoded selection of the svg!! I did not know where to get the 0 from
+    var svg = document.getElementById("scanpath_0");
+
+    // I need to look into what XML does/is, but this gets some source of the svg
+    var serializer = new XMLSerializer();
+    var source = serializer.serializeToString(svg);
+
+    // as above, description said 'adds namespaces'
+    if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+        source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+    }
+    if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+        source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    }
+
+    //add xml declaration
+    source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+    //convert svg source to URI data scheme.
+    var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+
+    // actual bit which downloads the file passed in the url / URI data scheme
+    var link = document.createElement("a");
+    link.download = name.substring(0, name.lastIndexOf(".")) + "_scanpath";
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
