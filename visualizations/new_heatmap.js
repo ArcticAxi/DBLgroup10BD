@@ -269,23 +269,23 @@ function userSelectionHeatmap(users_array) {
     }
 }
 
-function createDownloadButton(name) {
+function createDownloadButtonHeatmap(name) {
     // <input type="button" id="fileButton" value="Download Heatmap">
     var downloadButton = document.createElement('input');
     downloadButton.type = 'button';
     downloadButton.id = name + '.downloadButton_heatmap';
-    downloadButton.value = 'Download ' + name;
+    downloadButton.value = 'Download heat map of ' + name;
 
     downloadButton.addEventListener("click", function() {
         downloadHeatmap(name)
     });
 
-    var downloadDiv = document.querySelector('#downloadButtons');
+    var downloadDiv = document.querySelector('#downloadButtonsHeatmap');
     downloadDiv.appendChild(downloadButton);
 }
 
 function new_heatmap(content, name, width, height, idName) {
-    createDownloadButton(name);
+    createDownloadButtonHeatmap(name);
 
     addToIdNum();
     names.push(name);

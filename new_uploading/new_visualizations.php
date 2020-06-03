@@ -82,7 +82,12 @@
     </div>
 
     <div id="downloadButtons">
-
+        <div id="downloadButtonsScanpath">
+        </div>
+        <div id="downloadButtonsBubblemap">
+        </div>
+        <div id="downloadButtonsHeatmap">
+        </div>
     </div>
 
     <script scr="../visualizations/html2canvas.js"></script>
