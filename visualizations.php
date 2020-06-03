@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <link rel="stylesheet" href="style.css">
-
-    <script src="https://d3js.org/d3.v5.js" charset="utf-8"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
-
-    <title>Visualizations</title>
-    <link rel="icon" href="photos_homepage/logosmall.svg">
-</head>
-
-<body>
-
-<div class="visualizationpage">
-    <div class="title">
-            
-                <div class="homelink">
-                    <a href="index.html"> <img src="photos_homepage/logoiFish.png" height="70"> </a>
-                </div>          
-                
-                <div class="vizlink">
-                    <a href='visualizations.html' style="color:black">Visualizations</a>
-                </div>
-                
-                <div class="uploadlink">
-                    <a href="upload.html" style="color:black">Upload data</a>
-                </div>
-                
-    </div>
-
-    <div class="emptytitle"></div>
-
-    <div class="slidecontainer">
+<div class="slidecontainer">
         <div class="left_elem" id="base_stroke_width">
             <p> Base Path Width: </p>
             <input type="range" min="1" max="10" value="1" class="slider" id="base_stroke_width_slider">
@@ -79,12 +43,13 @@
     </div>
 
     <div class="buttoncontainer" id = "base_colours">
-            <p>Select base path and fixation color:</p>
-            <input type="button" id = "dark_blue_base" value = "Blue" name="base_colour">
-            <input type="button" id = "black_base" value = "Black" name="base_colour">
+        <p>Select base path and fixation color:</p>
+        <input type="button" id = "dark_blue_base" value = "Blue" name="base_colour">
+        <input type="button" id = "black_base" value = "Black" name="base_colour">
     </div>
 
     <div class="buttoncontainer" id="highlighted_user">
+        <p> User selection here is linked to the heat map. </p>
         <p>Click on user to highlight</p>
         <p>Click again to undo</p>
     </div>
@@ -92,22 +57,9 @@
     <div class="visualization" id="scanpath">
     </div>
 
+    <p> The 'Gazes: x' should say 'Fixations: x'</p>
     <div class="visualization" id="bubblemap">
     </div>
-
-    <style>
-        .bubbles {
-            stroke-width: 1px;
-            stroke: black;
-            fill: #cc4457;
-            opacity: .6;
-        }
-
-        .bubbles:hover {
-            stroke: black;
-            opacity: 1;
-        }
-    </style>
 
     <div class="slidecontainer" id="all_heatmap_sliders">
         <div id="intensity_heatmap">
@@ -122,9 +74,20 @@
             <p>Blur:</p>
             <input type="range" min="0" max="10" value="10" class="slider" id="blur_slider_heatmap">
         </div>
+        <p> Checking the checkbox next to the timestamp slider shows a 2-second interval of fixations around the selected timestamp. </p>
+        <p> When the checkbox is unchecked it shows the cumulative fixations upto the selected timestamp. </p>
     </div>
 
     <div class="visualization" id="heatmap">
+    </div>
+
+    <div id="downloadButtons">
+        <div id="downloadButtonsScanpath">
+        </div>
+        <div id="downloadButtonsBubblemap">
+        </div>
+        <div id="downloadButtonsHeatmap">
+        </div>
     </div>
 
     <script src="visualizations/scanpath.js"></script>
@@ -133,6 +96,3 @@
     <script src="visualizations/bubblemap.js"></script>
     <script src="visualizations/visualizations.js" charset="utf-8"></script>
 
-</div>
-</body>
-</html>

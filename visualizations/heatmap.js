@@ -1,11 +1,15 @@
 //Brackets are added for the very convenient collapse option Visual Studio provides :)
+//old_heatmap variables
 
-//heatmap variables
 {
     var flatten_data = [];
     var timestamp_slider_heatmap = [];
     var heatmaps = [];
     var data_stimuli = [];
+    var names_heatmap = [];
+    var widths_heatmap = [];
+    var heights_heatmap = [];
+    var highlightedUsers_heatmap = [];
     var id_num_add = -1;
 
     var intensity_slider_heatmap = document.getElementById("intensity_slider_heatmap");
@@ -22,30 +26,48 @@
 {
     intensity_slider_heatmap.oninput = function () {
         intensity_heatmap = this.value;
-        heatmaps.forEach(function (heat) {
-            heat.max(intensity_heatmap);
-            heat.draw();
-        });
+        for (var i = 0; i <= id_num_add; i++) {
+            heatmaps[i].max(intensity_heatmap);
+            heatmaps[i].draw();
+        }
     };
 
     radius_slider_heatmap.oninput = function () {
         radius_heatmap = this.value * 4;
-        heatmaps.forEach(function (heat) {
-            heat.radius(radius_heatmap, blur_heatmap);
-            heat.draw();
-        });
+        for (var i = 0; i <= id_num_add; i++) {
+            heatmaps[i].radius(radius_heatmap, blur_heatmap);
+            heatmaps[i].draw();
+
+
+        }
     };
 
     blur_slider_heatmap.oninput = function () {
         blur_heatmap = this.value * 3;
-        heatmaps.forEach(function (heat) {
-            heat.radius(radius_heatmap, blur_heatmap);
-            heat.draw();
-        });
+
+        for (var i = 0; i <= id_num_add; i++) {
+            heatmaps[i].radius(radius_heatmap, blur_heatmap);
+            heatmaps[i].draw();
+        }
     };
 }
 
-// creates the slider for the heatmap based on the max timestamp value
+function addBackgroundImage (i) {
+    canvas = document.getElementById('canvas'+names_heatmap[i]);
+
+    ctx = canvas.getContext("2d");
+    ctx.globalAlpha = 1;
+    background = new Image();
+    background.src = '../stimuli/' + names_heatmap[i];
+
+    ctx.globalCompositeOperation="destination-over";
+
+    background.onload = function() {
+        ctx.drawImage(background,0,0, widths_heatmap[i], heights_heatmap[i]);
+    };
+}
+
+// creates the slider for the old_heatmap based on the max timestamp value
 function createHeatmapTime(timestamp, id) {
     var all_sliders = document.getElementById("all_heatmap_sliders");
     var div = document.createElement('div');
@@ -93,17 +115,22 @@ function nestUsers(data) {
 }
 
 function getTimestamps(data) {
+    flatten_data = [];
+
     for (var i = 0; i < data.length; i++) {
         var minTimestamp = d3.min(d3.values(data[i])[1], function (d) {
             return +d.Timestamp;
         });
+
         d3.values(data[i])[1].forEach(function (d) {
             d.Timestamp = d.Timestamp - minTimestamp;
         });
+
         for (var j = 0; j < d3.values(data[i])[1].length; j++) {
             flatten_data.push(d3.values(data[i])[1][j]);
         }
     }
+
     return flatten_data;
 }
 
@@ -114,21 +141,22 @@ function timestamp_slider_input(e) {
     timestamp_heatmap = parseInt(timestamp_heatmap);
 
     // gets the checkbox linked to the slider
-    id = this.id;
+    let id = this.id;
     id = id.substring(id.lastIndexOf('.') + 1, id.length - 1);
+    console.log(id);
     id = "'timestamp_slider_checkbox." + id + "'";
-    checkbox = document.getElementById(id);
+    var checkbox = document.getElementById(id);
 
-    // links slider to the heatmap
-    idNum = this.id;
+    // links slider to the old_heatmap
+    let idNum = this.id;
     idNum = id.substring(id.lastIndexOf('/') + 1, id.length - 1);
 
     var filteredTimestamp;
 
-    // when the checkbox is checked, it loads the heatmap between a (currently 2 sec) interval
+    // when the checkbox is checked, it loads the old_heatmap between a (currently 2 sec) interval
     if (checkbox.checked) {
         filteredTimestamp = data_stimuli[idNum].filter(function (d) {
-            // data is given in ms, so 1 second before and after heatmap is 1000ms
+            // data is given in ms, so 1 second before and after old_heatmap is 1000ms
             var max_timestamp = parseInt(timestamp_heatmap) + 1000;
             var min_timestamp = parseInt(timestamp_heatmap) - 1000;
             if (+d.Timestamp > min_timestamp && +d.Timestamp < max_timestamp) {
@@ -136,7 +164,7 @@ function timestamp_slider_input(e) {
             }
             return false;
         })
-        // if the checkbox is not checked, it loads the heatmap time cumulatively
+        // if the checkbox is not checked, it loads the old_heatmap time cumulatively
     } else {
         filteredTimestamp = data_stimuli[idNum].filter(function (d) {
             if (+d.Timestamp > timestamp_heatmap) {
@@ -145,37 +173,39 @@ function timestamp_slider_input(e) {
             return true;
         });
     }
-    // creates new data for the heatmap based on filter with timestamp
+
+    filteredTimestamp = timestampUsers(filteredTimestamp);
+
+    // creates new data for the old_heatmap based on filter with timestamp
     heatmaps[idNum].data(filteredTimestamp.map(function (d) {
         return [d.MappedFixationPointX, d.MappedFixationPointY, 1]
     }));
 
-    // draws heatmap
+    // draws old_heatmap
     heatmaps[idNum].draw();
 
-    // draws scanpah
+    // draws scanpath
     timerScanpath(idNum, filteredTimestamp);
 }
 
 function timestamp_slider_checkbox(e) {
     let checkboxBool = this.checked;
 
-    id = this.id;
+    let id = this.id;
     id = id.substring(id.lastIndexOf('.') + 1, id.length - 1);
     id = "'timestamp_slider_heatmap." + id + "'";
-    input = document.getElementById(id);
+    var input = document.getElementById(id);
 
-    // links slider to the heatmap
-    idNum = this.id;
+    // links slider to the old_heatmap
+    let idNum = this.id;
     idNum = id.substring(id.lastIndexOf('/') + 1, id.length - 1);
 
     var timestamp_heatmap = input.value;
     var filteredTimestamp;
 
-
     if (checkboxBool) {
         filteredTimestamp = data_stimuli[idNum].filter(function (d) {
-            // data is given in ms, so 1 second before and after heatmap is 1000ms
+            // data is given in ms, so 1 second before and after old_heatmap is 1000ms
             var max_timestamp = parseInt(timestamp_heatmap) + 1000;
             var min_timestamp = parseInt(timestamp_heatmap) - 1000;
             if (+d.Timestamp > min_timestamp && +d.Timestamp < max_timestamp) {
@@ -183,7 +213,7 @@ function timestamp_slider_checkbox(e) {
             }
             return false;
         })
-        // if the checkbox is not checked, it loads the heatmap time cumulatively
+        // if the checkbox is not checked, it loads the old_heatmap time cumulatively
     } else {
         filteredTimestamp = data_stimuli[idNum].filter(function (d) {
             if (+d.Timestamp > timestamp_heatmap) {
@@ -193,24 +223,44 @@ function timestamp_slider_checkbox(e) {
         });
     }
 
-    // creates new data for the heatmap based on filter with timestamp
+    filteredTimestamp = timestampUsers(filteredTimestamp);
+
+    // creates new data for the old_heatmap based on filter with timestamp
     heatmaps[idNum].data(filteredTimestamp.map(function (d) {
         return [d.MappedFixationPointX, d.MappedFixationPointY, 1]
     }));
 
-    // draws heatmap
+    // draws old_heatmap
     heatmaps[idNum].draw();
-    console.log(idNum)
-    timerScanpath(idNum, filteredTimestamp)
+
+    // draws scanpath
+    timerScanpath(idNum, filteredTimestamp);
+}
+
+function timestampUsers(filteredTimestamp) {
+    if (highlightedUsers_heatmap.length === 0) {
+        filteredTimestamp = filteredTimestamp;
+    } else {
+        filteredTimestamp = filteredTimestamp.filter(function (d) {
+            if (!users.includes(d.user)) {
+                return false;
+            }
+            return true;
+        });
+    }
+
+    return filteredTimestamp;
 }
 
 function userSelectionHeatmap(users_array) {
+    highlightedUsers_heatmap = users_array;
+
     for (var i = 0; i < heatmaps.length; i++) {
-        if (users_array.length == 0) {
+        if (users.length == 0) {
             var userFiltered = data_stimuli[i];
         } else {
             var userFiltered = data_stimuli[i].filter(function (d) {
-                if (!users_array.includes(d.user)) {
+                if (!users.includes(d.user)) {
                     return false;
                 }
                 return true;
@@ -224,12 +274,33 @@ function userSelectionHeatmap(users_array) {
     }
 }
 
-function heatmap(content, name, width, height, idName) {
-    addToIdNum();
-    var div = d3.select(idName);
-    canvasLayer = div.append('canvas').attr('id', 'canvas' + name).attr('class', 'heatmapCanvas').attr('width', width).attr('height', height);
+function createDownloadButtonHeatmap(name) {
+    // <input type="button" id="fileButton" value="Download Heatmap">
+    var downloadButton = document.createElement('input');
+    downloadButton.type = 'button';
+    downloadButton.id = name + '.downloadButton_heatmap';
+    downloadButton.value = 'Download heat map of ' + name;
 
-    var heat = simpleheat('canvas' + name);
+    downloadButton.addEventListener("click", function() {
+        downloadHeatmap(name)
+    });
+
+    var downloadDiv = document.querySelector('#downloadButtonsHeatmap');
+    downloadDiv.appendChild(downloadButton);
+}
+
+function heatmap(content, name, width, height, idName) {
+    createDownloadButtonHeatmap(name);
+
+    addToIdNum();
+    names_heatmap.push(name);
+    widths_heatmap.push(width);
+    heights_heatmap.push(height);
+
+    //var div = d3.select(idName);
+    //canvasLayer = div.append('canvas').attr('id', 'canvas1' + name).attr('class', 'heatmapCanvas').attr('width', width).attr('height', height);
+
+    var heat = simpleheat('canvas' + name, name);
     heatmaps.push(heat);
 
     var dataHeat = content.filter(function (d) {
@@ -240,13 +311,12 @@ function heatmap(content, name, width, height, idName) {
     });
 
     data_stimuli.push(dataHeat);
-    flatten_data = [];
 
     // passes the data into nestUsers which nests the array by users
     // getTimestamps then gets the minimum timestamp per user and subtracts it from all timestamps
     // nested array are annoying so to flatten it the user column is lost
     // I figure we don't need the user column anyway but i can always flatten the array in another way and add it back
-    var timestampsPerStimuli = getTimestamps(nestUsers(data));
+    var timestampsPerStimuli = getTimestamps(nestUsers(dataAll));
 
     // gets the total max. timestamp
     var maxTimestamp = d3.max(timestampsPerStimuli, function (d) {
@@ -272,8 +342,26 @@ function heatmap(content, name, width, height, idName) {
     // default uses 5 different colours I believe, doesn't seem like a good idea to mess with this
     //heat.gradient({0.4: '#0000FF', 0.65: '#00FF00', 1: '#FF0000'});
 
-    // draws the heatmap
+    // draws the old_heatmap
     heat.draw();
+}
+
+function downloadHeatmap(name) {
+    var div = '#a' + name.substring(0, name.lastIndexOf(".")) + "_heatmap";
+    div = document.querySelector(div);
+
+    html2canvas(div).then(function(canvas) {
+        var img = canvas.toDataURL();
+
+        //download popup
+        // call this entire function upon button click
+        var link = document.createElement("a");
+        link.download = name.substring(0, name.lastIndexOf(".")) + "_heatmap";
+        link.href = img;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
 }
 
 function addToIdNum() {

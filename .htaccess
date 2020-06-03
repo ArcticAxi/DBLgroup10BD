@@ -1,0 +1,19 @@
+RewriteEngine on
+
+# Don't apply the rule to directories
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Don't apply the rule to files
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Check if the file existst, then run rule
+RewriteCond %{REQUEST_FILENAME}.html -f
+
+# Show the page with the .html extension
+RewriteRule ^(.*)$  $1.html [NC,L]
+
+# Same as above but with php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$  $1.php [NC,L]

@@ -8,10 +8,8 @@
 
     <script src="https://d3js.org/d3.v5.js" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
-    <script type="module" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
-    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
 
-    <title> iFish - Visualizations</title>
+    <title>Upload Files</title>
     <link rel="icon" href="../photos_homepage/logosmall.svg">
 </head>
 
@@ -19,40 +17,45 @@
 
 <div class="upload">
     <div class="title">
-
-        <div class="homelink">
-            <a href="../index.html"> <img src="../photos_homepage/logoiFish.png" height="70"> </a>
-        </div>
-
-        <!--<div class="vizlink">
-            <a href='../visualizations.html' style="color:black">Visualizations</a>
-        </div>!-->
-
-        <div class="uploadlink">
-            <a href="new_upload.php" style="color:black">Upload data</a>
-        </div>
-
+            
+                <div class="homelink">
+                    <a href="../index.html"> <img src="../photos_homepage/logoiFish.png" height="70"> </a>
+                </div>          
+                
+                <div class="vizlink">
+                    <a href='old_visualizations.html' style="color:black">Visualizations</a>
+                </div>
+                
+                <div class="uploadlink">
+                    <a href="old_upload.html" style="color:black">Upload data</a>
+                </div>
+                
     </div>
 
     <div class="emptytitle"></div>
 
     <div class="submitlink">
         <form class="uploadData" method="post" enctype="multipart/form-data">
-            <div>
+            <div> 
                 <input type="button" id="fileButton" value="Upload Data">
                 <input type="file" id="dataset-input" name="name"/>
                 <label for="dataset-input" id="label_file"> No file selected</label>
             </div>
 
             <div>
-                <input type="button" id="imageButton" value="Upload Stimuli Images">
-                <input type="file" id="stimuli-input"/>
-                <label for="stimuli-input" id="label_image"> No file selected</label>
+                
             </div>
 
+            <div>
+               <input type="button" id="imageButton" value="Upload Stimuli Images">
+                <input type="file" id="stimuli-input"/>
+                <label for="stimuli-input" id="label_image"> No file selected</label> 
+            </div>
+            
             <input type="submit" value="Submit" name="submit"/>
         </form>
 
+        <script src="old_upload.js" charset="utf-8"></script>
     </div>
 
     <div class="selectingdata">
@@ -64,15 +67,10 @@
             </label>
             <div id="formSelectionData" class="scroll">
             </div>
-            <input type="submit" value="Confirm Selection" name="submit-selection">
+            <input type="submit" value="Confirm Selection">
         </form>
 
-     </div>
-</div>
-
-    <div class="visualizationpage" id="visualizationPHP">
     </div>
 
-    <script src="new_upload.js" charset="ISO-8859-1"></script>
 </body>
 </html>

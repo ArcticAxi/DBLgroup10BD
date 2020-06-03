@@ -29,7 +29,7 @@ Interacting with the visualizations
 		2. There are a couple of sliders to regulate the same attributes of the highlighted variant.
 		3. There are buttons to select which users are highlighted, clicking once will highlight the user and clicking a second time will undo the selection.
 	13. The bubble map visualization does not have its own sliders yet, but does show how many fixations are represented by a bubble, when hovering over it with the cursor.
-	14. The heatmap visualization offers some sliders to customize it's layout and filter the data shown based on timestamps.
+	14. The old_heatmap visualization offers some sliders to customize it's layout and filter the data shown based on timestamps.
 		1. The intensity slider changes at which concentration a part of the heat map becomes another color. Sliding it to the left sets a lower concentration limit to change colour and to the right a higher limit. 
 		2. The blur and radius sliders work similarly to the scanpath sliders.
 		3. When the checkbox next to the timestamp slider is unchecked, the slider filters the data shown upto the selected timestamp. When the checkbox is checked, it shows the data one second before and one second after the selected timestamp.

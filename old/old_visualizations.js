@@ -24,7 +24,7 @@ function loadCSV() {
         createVisualizations(data)
         // create localStorage with initialRead
         // max storage size is at least 5MB, however, initialRead probably greater than that
-        // might want to just re-read it in visualizations.js, probably the easiest I think maybe presumably
+        // might want to just re-read it in old_visualizations.js, probably the easiest I think maybe presumably
     }, false);
 }
 
@@ -44,7 +44,7 @@ function createVisualizations(data) {
         stimuliScanpath.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_scanpath";
 
         var bubblemapImage = document.querySelector('#bubblemap');
-        var heatmapImage = document.querySelector('#heatmap');
+        var heatmapImage = document.querySelector('#old_heatmap');
         var scanpathImage = document.querySelector('#scanpath');
 
         bubblemapImage.appendChild(stimuliBubblemap);
@@ -116,7 +116,7 @@ function loadingImage(content, name) {
             heatmapImage.appendChild(heatmapCanvas);
 
             bubbleMap(content, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap);
-            heatmap(content, name, sizeWidth, sizeHeight, "#HELPME");
+            old_heatmap(content, name, sizeWidth, sizeHeight, "#HELPME");
             scanpath(content, name, sizeWidth, sizeHeight, sizeDecrease, idNameScanpath);
         });
 

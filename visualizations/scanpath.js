@@ -8,7 +8,7 @@
     var main_blue = getComputedStyle(document.documentElement).getPropertyValue('--main-blue-color');
 
 //path variables
-    var highlighted_users = []
+    var highlighted_users = [];
     var base_stroke_width = 1;
     var highlight_stroke_width = 5;
     var base_stroke_opacity = 0.5;
@@ -53,24 +53,22 @@
 
 //passed variables
     var stimulus = "22_Venedig_S2.jpg"
-    var size_decrease = 2;
 }
 
-//to be called by visualizations.js
+//to be called by old_visualizations.js
 //creates scanpath with given variables
-function scanpath(content, name, sizeWidth, sizeHeight, sizeDecrease, idName) {
+function scanpath(content, name, sizeWidth, sizeHeight, idName) {
     stimulus = name;
     height = sizeHeight;
     width = sizeWidth;
     buttonData = content;
-    size_decrease = sizeDecrease;
     initialSetup(content, idName);
     drawScanpath(content);
     createDownloadButtonScanpath(name);
 }
 
 //creates an svg element and users array to work with
-function initialSetup(data, idName) {
+function initialSetup(data_scanpath, idName) {
     numberScanpaths += 1;
     //create canvas
     canvas = d3.select(idName)
@@ -81,12 +79,12 @@ function initialSetup(data, idName) {
         .attr("width", width)
         .attr("height", height);
 
-    data = data.filter(function (d) {
+    data_scanpath = data_scanpath.filter(function (d) {
         return (d.StimuliName == stimulus);
     });
 
     //creates a set containing all unique users
-    var allUsers = data.map(function (d) {
+    var allUsers = data_scanpath.map(function (d) {
         return d.user
     });
     uniqueUsers = new Set(allUsers);
@@ -204,13 +202,13 @@ function initialSetup(data, idName) {
 }
 
 //draw the scanpath visualisation
-function drawScanpath(data) {
-    data = data.filter(function (d) {
+function drawScanpath(data_scanpath) {
+    data_scanpath = data_scanpath.filter(function (d) {
         return (d.StimuliName == stimulus);
     });
 
     //creates a set containing all unique users
-    var allUsers = data.map(function (d) {
+    var allUsers = data_scanpath.map(function (d) {
         return d.user
     });
     uniqueUsers = new Set(allUsers);
@@ -220,14 +218,14 @@ function drawScanpath(data) {
 
     users = arrayUsers;
 
-    data = equalizaTime(data, arrayUsers)
+    data_scanpath = equalizaTime(data_scanpath, arrayUsers)
     //create the actual visualization
-    createVis(data, arrayUsers);
+    createVis(data_scanpath, arrayUsers);
 
 };
 
 //creates the actual visualization
-function createVis(data, users) {
+function createVis(data_scanpath, users) {
 
     //create group object            
     var group = canvas.append("g")
@@ -246,7 +244,7 @@ function createVis(data, users) {
 
     //turn the users into an array of objects containing the data of the users
     for (i in users) {
-        users[i] = data.filter(function (d) {
+        users[i] = data_scanpath.filter(function (d) {
             return d.user == users[i]
         });
     };
@@ -281,7 +279,7 @@ function createVis(data, users) {
         });
 
     fixation.selectAll("circle")
-        .data(data)
+        .data(data_scanpath)
         .enter()
         .append("circle")
         .attr("opacity", function (d) {
@@ -316,13 +314,13 @@ function createVis(data, users) {
 //interactions draw
 {
 //draw scanpath after interactions
-function redrawScanpath(data) {
+function redrawScanpath(data_scanpath) {
     for (j=0; j<=numberScanpaths; j++) {
         var svg = document.getElementById('scanpath_' + j)
         var temp_stim = svg.getAttribute('data-image')
         var temp_can = d3.select(svg)
 
-        temp_data = data.filter(function (d) {
+        temp_data = data_scanpath.filter(function (d) {
             return (d.StimuliName == temp_stim);
         });
 
@@ -340,14 +338,14 @@ function redrawScanpath(data) {
 };
 
 //redraws visualization
-function redraw(data, users, temp_can) {
+function redraw(data_scanpath, users, temp_can) {
     
     //select the paths
     paths = temp_can.selectAll("g.paths")
 
     //turn the users into an array of objects containing the data of the users
     for (i in users) {
-        users[i] = data.filter(function (d) {
+        users[i] = data_scanpath.filter(function (d) {
             return d.user == users[i]
         });
     };
@@ -407,11 +405,11 @@ function redraw(data, users, temp_can) {
 
 //timeslider draw (needs one specific map instead of all)
 {
-function timerScanpath(idNum, data) {
+function timerScanpath(idNum, data_scanpath) {
     var svg_0 = document.getElementById("scanpath_" + idNum)
     var svg = d3.select(svg_0)
 
-    var allUsers = data.map(function (d) {
+    var allUsers = data_scanpath.map(function (d) {
         return d.user
     });
     var uniqueUsers = new Set(allUsers);
@@ -419,10 +417,10 @@ function timerScanpath(idNum, data) {
     //turns the set into an array
     var  arrayUsers = [...uniqueUsers];
 
-    timerDraw(data, arrayUsers, svg)
+    timerDraw(data_scanpath, arrayUsers, svg)
 }
 
-function timerDraw(data, users, svg) {
+function timerDraw(data_scanpath, users, svg) {
     
     //clear svg
     svg.selectAll("g").remove();
@@ -444,7 +442,7 @@ function timerDraw(data, users, svg) {
 
     //turn the users into an array of objects containing the data of the users
     for (i in users) {
-        users[i] = data.filter(function (d) {
+        users[i] = data_scanpath.filter(function (d) {
             return d.user == users[i]
         });
     };
@@ -526,8 +524,8 @@ function createUserButtons(users) {
     numberButtons += 1
 }
 
-function equalizaTime(data, users) {
-    test = data;
+function equalizaTime(data_scanpath, users) {
+    test = data_scanpath;
     scanpathArray = [];
     for(i in users) {
         newData = test.filter(function(d){
@@ -546,7 +544,7 @@ function equalizaTime(data, users) {
 }
 
 // creates download buttons for each individual visualization
-// should move the creation of these buttons to visualizations.js since these are essentially the same for each vis
+// should move the creation of these buttons to old_visualizations.js since these are essentially the same for each vis
 function createDownloadButtonScanpath(name) {
     // creates button
     var downloadButton = document.createElement('input');

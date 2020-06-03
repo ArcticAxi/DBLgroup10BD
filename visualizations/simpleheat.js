@@ -77,7 +77,7 @@ simpleheat.prototype = {
     },
 
     gradient: function (grad) {
-        // create a 256x1 gradient that we'll use to turn a grayscale heatmap into a colored one
+        // create a 256x1 gradient that we'll use to turn a grayscale old_heatmap into a colored one
         var canvas = this._createCanvas(),
             ctx = canvas.getContext('2d'),
             gradient = ctx.createLinearGradient(0, 0, 0, 256);
@@ -105,7 +105,7 @@ simpleheat.prototype = {
 
         ctx.clearRect(0, 0, this._width, this._height);
 
-        // draw a grayscale heatmap by putting a blurred circle at each data point
+        // draw a grayscale old_heatmap by putting a blurred circle at each data point
         for (var i = 0, len = this._data.length, p; i < len; i++) {
             p = this._data[i];
             ctx.beginPath();
@@ -114,7 +114,7 @@ simpleheat.prototype = {
             ctx.closePath();
         }
 
-        // colorize the heatmap, using opacity value of each pixel to get the right color from our gradient
+        // colorize the old_heatmap, using opacity value of each pixel to get the right color from our gradient
         var colored = ctx.getImageData(0, 0, this._width, this._height);
         this._colorize(colored.data, this._grad);
         ctx.putImageData(colored, 0, 0);

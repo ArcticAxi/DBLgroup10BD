@@ -1,5 +1,10 @@
 function bubbleMap(content, name, width, height, sizeDecrease, idName) {
+    var array_bubblemap = [];							// make an array to store d.coordinates
+    var duplicates = [];					// count how many duplicates in array
+
     // create svg
+    d3.select("svg").remove();
+
     var svg = d3.select(idName)
         .append("svg")
         .attr("width", width)
@@ -8,7 +13,7 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
 
     // read the data
-    data = content.filter(function (d) {
+    var data_bubblemap = content.filter(function (d) {
         if (d.StimuliName !== name) {
             return false;
         }
@@ -16,7 +21,7 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
         return true;
     });
 
-    data.forEach(function (d) {
+    data_bubblemap.forEach(function (d) {
         d.MappedFixationPointX = d.MappedFixationPointX / sizeDecrease;
         d.MappedFixationPointY = d.MappedFixationPointY / sizeDecrease;
         d.averageX = Math.round(d.MappedFixationPointX / (100 / sizeDecrease)) * 100 / sizeDecrease;
@@ -27,26 +32,24 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     //==========================================================================
     // Count how many gazes at that coordinate
     //===========================================================================
-    var array = [];							// make an array to store d.coordinates
-    data.forEach(function (d) {
-        array.push(d.coordinates)
+    data_bubblemap.forEach(function (d) {
+        array_bubblemap.push(d.coordinates)
     });
 
-    var duplicates = [];					// count how many duplicates in array
-    array.forEach(function (i) {
+    array_bubblemap.forEach(function (i) {
         duplicates[i] = (duplicates[i] || 0) + 1;
     });
 
-    data.forEach(function (d) {				// add column counts to data
+    data_bubblemap.forEach(function (d) {				// add column counts to data
         d.counts = duplicates[d.coordinates]
     });
 
-    var coord = [...new Set(data.map(function (d) {		// coordinates as array called coord
+    var coord_bubblemap = [...new Set(data_bubblemap.map(function (d) {		// coordinates as array called coord
         return d.coordinates
     }))];
 
-    var filtered = coord.map(function (d) {				// create array of objects without duplicates (coordinates)
-        return data.find(function (e) {
+    var filtered_bubblemap = coord_bubblemap.map(function (d) {				// create array of objects without duplicates (coordinates)
+        return data_bubblemap.find(function (e) {
             return e.coordinates === d
         })
     });
@@ -75,7 +78,7 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     // Add dots
     svg.append('g')
         .selectAll("dot")
-        .data(filtered)
+        .data(filtered_bubblemap)
         .enter()
         .append("circle")
         .attr("class", function (d) {
