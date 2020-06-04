@@ -226,7 +226,6 @@ function drawScanpath(data_scanpath) {
 
 //creates the actual visualization
 function createVis(data_scanpath, users) {
-
     //create group object            
     var group = canvas.append("g")
                         .attr("class", "paths");
@@ -549,12 +548,12 @@ function createDownloadButtonScanpath(name) {
     // creates button
     var downloadButton = document.createElement('input');
     downloadButton.type = 'button';
-    downloadButton.id = name + '.downloadButton_scanpath';
+    downloadButton.id = name + '.downloadButton_scanpath' + '/' + numberScanpaths;
     downloadButton.value = 'Download scanpath of ' + name;
 
     // adds event listener which runs the actual download function
     downloadButton.addEventListener("click", function () {
-        downloadScanpath(name)
+        downloadScanpath(downloadButton.id)
     });
 
     // appends the newly created button to the div with all scanpath buttons
@@ -566,11 +565,19 @@ function createDownloadButtonScanpath(name) {
 // HAPPENS BECAUSE IMAGE IS EXTERNAL RELATIVE TO THE SVG
 // FIX: ADD "<image href='path/to/image'(or callback containing image) width=width height=height/>"
 // the image becomes part of the svg, which means that it should then be downloaded behind the svg
+// downloads the scanpath visualization
 function downloadScanpath(name) {
-    // downloads the scanpath visualization
+    var num_of_scanpath = name.substring(name.indexOf('/') +1 , name.length);
 
-    // hardcoded selection of the svg!! I did not know where to get the 0 from
-    var svg = document.getElementById("scanpath_0");
+    // draws image over all the other elements
+    d3.select('#scanpath_' + num_of_scanpath)
+        .append("svg:image")
+        .attr('id', 'backgroundImageScanpathDownload')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('xlink:href', "../stimuli/" + stimulus);
+
+    var svg = document.getElementById("scanpath_" + num_of_scanpath);
 
     // I need to look into what XML does/is, but this gets some source of the svg
     var serializer = new XMLSerializer();
@@ -590,11 +597,14 @@ function downloadScanpath(name) {
     //convert svg source to URI data scheme.
     var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
+    // doesn't load the image attribute but just 'no image thumbnial'-thing
     // actual bit which downloads the file passed in the url / URI data scheme
     var link = document.createElement("a");
-    link.download = name.substring(0, name.lastIndexOf(".")) + "_scanpath";
+    link.download = name.substring(0, name.indexOf(".")) + "_scanpath" + '.svg';
     link.href = url;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    d3.select('#scanpath_' + num_of_scanpath).select('#backgroundImageScanpathDownload').remove();
 }

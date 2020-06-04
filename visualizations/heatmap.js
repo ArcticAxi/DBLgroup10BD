@@ -302,9 +302,7 @@ function heatmap(content, name, width, height, idName) {
     var heat = simpleheat('canvas' + name, name);
     heatmaps.push(heat);
 
-    let dataHeat = JSON.parse(JSON.stringify(content));
-
-    dataHeat = dataHeat.filter(function (d) {
+    var dataHeat = content.filter(function (d) {
         if (d.StimuliName !== name) {
             return false;
         }
@@ -348,20 +346,26 @@ function heatmap(content, name, width, height, idName) {
 }
 
 function downloadHeatmap(name) {
-    var div = '#a' + name.substring(0, name.lastIndexOf(".")) + "_heatmap";
-    div = document.querySelector(div);
+    var div = 'a' + name.substring(0, name.lastIndexOf(".")) + "_heatmap";
+    div = document.getElementById(div);
+    //divWidth = div.style.backgroundSize.substring(0, div.style.backgroundSize.indexOf(' ') -2);
+    //divHeight = div.style.backgroundSize.substring(div.style.backgroundSize.indexOf(' ') + 1, div.style.backgroundSize.length-2);
 
+    window.scrollTo(0,0);
     html2canvas(div).then(function(canvas) {
         var img = canvas.toDataURL();
+        //document.body.appendChild(canvas);
 
         //download popup
         // call this entire function upon button click
         var link = document.createElement("a");
         link.download = name.substring(0, name.lastIndexOf(".")) + "_heatmap";
         link.href = img;
+
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
     });
 }
 
