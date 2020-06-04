@@ -61,9 +61,9 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName) {
     stimulus = name;
     height = sizeHeight;
     width = sizeWidth;
-    buttonData = content;
-    initialSetup(content, idName);
-    drawScanpath(content);
+    buttonData = JSON.parse(JSON.stringify(content));
+    initialSetup(buttonData, idName);
+    drawScanpath(buttonData);
     createDownloadButtonScanpath(name);
 }
 
@@ -477,7 +477,7 @@ function timerDraw(data_scanpath, users, svg) {
         });
 
     fixation.selectAll("circle")
-        .data(data)
+        .data(data_scanpath)
         .enter()
         .append("circle")
         .attr("opacity", function (d) {

@@ -91,9 +91,16 @@ function loadingImage(content, name) {
             heatmapImage.style.backgroundSize = background_size;
             scanpathImage.style.backgroundSize = background_size;
 
-            bubbleMap(content, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap);
-            heatmap(content, name, sizeWidth, sizeHeight, idNameHeatmap);
-            scanpath(content, name, sizeWidth, sizeHeight, idNameScanpath);
+            let copyContent = JSON.parse(JSON.stringify(content));
+
+            copyContent.forEach(function (d) {
+                d.MappedFixationPointX = d.MappedFixationPointX / sizeDecrease;
+                d.MappedFixationPointY = d.MappedFixationPointY / sizeDecrease;
+            });
+
+            bubbleMap(copyContent, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap);
+            heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
+            scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath);
         });
 
 }

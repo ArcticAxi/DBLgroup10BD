@@ -11,8 +11,10 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
         .append('g');
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
 
+    var data_bubblemap = JSON.parse(JSON.stringify(content));
+
     // read the data
-    var data_bubblemap = content.filter(function (d) {
+    data_bubblemap = data_bubblemap.filter(function (d) {
         if (d.StimuliName !== name) {
             return false;
         }
@@ -21,8 +23,6 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     });
 
     data_bubblemap.forEach(function (d) {
-        d.MappedFixationPointX = d.MappedFixationPointX / sizeDecrease;
-        d.MappedFixationPointY = d.MappedFixationPointY / sizeDecrease;
         d.averageX = Math.round(d.MappedFixationPointX / (100 / sizeDecrease)) * 100 / sizeDecrease;
         d.averageY = Math.round(d.MappedFixationPointY / (100 / sizeDecrease)) * 100 / sizeDecrease;
         d.coordinates = d.averageX.toString() + " " + d.averageY.toString()

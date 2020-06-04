@@ -200,7 +200,6 @@ function timestamp_slider_checkbox(e) {
 
     // draws old_heatmap
     heatmaps[idNum].draw();
-    console.log(idNum)
     timerScanpath(idNum, filteredTimestamp)
 }
 

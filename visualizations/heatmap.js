@@ -143,7 +143,6 @@ function timestamp_slider_input(e) {
     // gets the checkbox linked to the slider
     let id = this.id;
     id = id.substring(id.lastIndexOf('.') + 1, id.length - 1);
-    console.log(id);
     id = "'timestamp_slider_checkbox." + id + "'";
     var checkbox = document.getElementById(id);
 
@@ -303,7 +302,9 @@ function heatmap(content, name, width, height, idName) {
     var heat = simpleheat('canvas' + name, name);
     heatmaps.push(heat);
 
-    var dataHeat = content.filter(function (d) {
+    let dataHeat = JSON.parse(JSON.stringify(content));
+
+    dataHeat = dataHeat.filter(function (d) {
         if (d.StimuliName !== name) {
             return false;
         }
