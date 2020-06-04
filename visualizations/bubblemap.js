@@ -3,7 +3,6 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     var duplicates = [];					// count how many duplicates in array
 
     // create svg
-    d3.select("svg").remove();
 
     var svg = d3.select(idName)
         .append("svg")
