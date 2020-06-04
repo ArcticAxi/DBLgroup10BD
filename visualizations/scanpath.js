@@ -55,7 +55,6 @@
     var stimulus = "22_Venedig_S2.jpg"
 }
 
-//to be called by old_visualizations.js
 //creates scanpath with given variables
 function scanpath(content, name, sizeWidth, sizeHeight, idName) {
     stimulus = name;
@@ -218,7 +217,6 @@ function drawScanpath(data_scanpath) {
 
     users = arrayUsers;
 
-    data_scanpath = equalizaTime(data_scanpath, arrayUsers)
     //create the actual visualization
     createVis(data_scanpath, arrayUsers);
 
@@ -521,25 +519,6 @@ function createUserButtons(users) {
         }
     }
     numberButtons += 1
-}
-
-function equalizaTime(data_scanpath, users) {
-    test = data_scanpath;
-    scanpathArray = [];
-    for(i in users) {
-        newData = test.filter(function(d){
-            return d.user == users[i]
-        });
-
-        minTime = newData[0].Timestamp;
-
-        for(stamp in newData){
-            newData[stamp].Timestamp = newData[stamp].Timestamp - minTime;
-        }
-
-        scanpathArray.push(...newData);
-    }
-    return scanpathArray;
 }
 
 // creates download buttons for each individual visualization
