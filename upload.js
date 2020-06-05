@@ -1,8 +1,7 @@
-
-
 var initialRead;
 var selected = [];
 var checkboxes;
+var json;
 
 document.addEventListener("DOMContentLoaded", function () {
     const formUpload = document.querySelector('form.uploadData');
@@ -60,19 +59,27 @@ document.addEventListener("DOMContentLoaded", function () {
     formUpload.addEventListener('submit', function (e) {
         e.preventDefault();
 
+        //select files to read
         const file = document.querySelector('#dataset-input').files[0];
+        const jason = document.querySelector('#json-input').files[0];
+        
         const reader = new FileReader();
+        const reader2 = new FileReader();
 
+        //defines how the readers should handle the files
         reader.onload = function () {
-            // reads the file as .txt  in latin1
+            // reads the file as .txt in latin1
             var tsvISO = d3.tsvParse(reader.result);
             loadCSV(tsvISO)
         };
 
-        //reader.readAsDataURL(file);
-        reader.readAsText(file, 'ISO-8859-1');
+        reader2.onload = function () {
+            json = JSON.parse(reader2.result)
+        }
 
-        // note to tobias: add functions to load the settings somewhere in here
+        //reads the files and processes them in the way defined in the onload functions 
+        reader.readAsText(file, 'ISO-8859-1');
+        reader2.readAsText(jason)
     });
 
     formSelection.addEventListener('submit', e => {

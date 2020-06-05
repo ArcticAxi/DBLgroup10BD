@@ -1,4 +1,4 @@
-function bubbleMap(content, name, width, height, sizeDecrease, idName) {
+function bubbleMap(content, name, width, height, sizeDecrease, idName, vars) {
     var array_bubblemap = [];							// make an array to store d.coordinates
     var duplicates = [];					// count how many duplicates in array
 

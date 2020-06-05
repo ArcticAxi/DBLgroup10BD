@@ -288,7 +288,7 @@ function createDownloadButtonHeatmap(name) {
     downloadDiv.appendChild(downloadButton);
 }
 
-function heatmap(content, name, width, height, idName) {
+function heatmap(content, name, width, height, idName, vars) {
     createDownloadButtonHeatmap(name);
 
     addToIdNum();

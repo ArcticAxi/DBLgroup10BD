@@ -56,7 +56,8 @@
 }
 
 //creates scanpath with given variables
-function scanpath(content, name, sizeWidth, sizeHeight, idName) {
+function scanpath(content, name, sizeWidth, sizeHeight, idName, vars) {
+    updateVars(vars)
     stimulus = name;
     height = sizeHeight;
     width = sizeWidth;
@@ -586,4 +587,30 @@ function downloadScanpath(name) {
     document.body.removeChild(link);
 
     d3.select('#scanpath_' + num_of_scanpath).select('#backgroundImageScanpathDownload').remove();
+}
+
+//sets the vars to those in the provided json file
+function updateVars(variables) {
+    base_stroke_width = variables.base_stroke_width
+    base_stroke_width_slider.value = variables.base_stroke_width
+
+    highlight_stroke_width = variables.highlight_stroke_width
+    highlight_stroke_width_slider.value = variables.highlight_stroke_width
+
+    base_stroke_opacity = variables.base_stroke_opacity
+    base_stroke_width_slider.value = variables.base_stroke_opacity
+
+    highlight_stroke_opacity = variables.highlight_stroke_opacity
+    highlight_stroke_opacity_slider.setAttribute("value", variables.highlight_stroke_opacity)
+
+    base_fixation_radius = variables.base_fixation_radius
+    base_fixation_radius_slider.value = variables.base_fixation_radius
+
+    console.log(document.getElementById("base_fixation_radius_slider").value)
+
+    highlight_fixation_radius = variables.highlight_fixation_radius
+    highlight_fixation_radius_slider.value = variables.highlight_fixation_radius
+
+    base_fixation_opacity = variables.base_fixation_opacity
+    base_fixation_opacity_slider.values = variables.base_fixation_opacity
 }
