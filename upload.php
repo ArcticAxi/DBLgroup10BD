@@ -46,7 +46,7 @@
 
             <div>
                 <input type="button" id="imageButton" value="Upload Stimuli Images">
-                <input type="file" id="stimuli-input"/>
+                <input type="file" id="stimuli-input" multiple/>
                 <label for="stimuli-input" id="label_image"> No file selected</label>
             </div>
 
