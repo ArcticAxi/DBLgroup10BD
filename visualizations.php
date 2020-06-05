@@ -57,10 +57,13 @@
     <div class="visualization" id="scanpath">
     </div>
 
-    <div class="inputcontainer" id = "grid_size">
-		<input id="text1" placeholder="Enter grid size">
-		<button onclick="change()" id="btn1">Apply this grid size</button>
-	</div>
+// Dont move the slider, everything will break...
+    <div class="slidecontainer">
+        <div id="grid_size">
+            <p> Change grid size: </p>
+            <input type="range" min="1" max="500" value="100" class="slider" id="grid_size_slider">
+        </div>
+    </div>
 	
     <div class="visualization" id="bubblemap">
     </div>

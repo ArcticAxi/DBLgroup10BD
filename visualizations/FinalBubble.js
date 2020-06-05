@@ -2,6 +2,7 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     var array_bubblemap = [];							// make an array to store d.coordinates
     var duplicates = [];					// count how many duplicates in array
     var gridSize = 100;
+	var grid_size_slider = document.getElementById("grid_size_slider");
 
 
     // create svg
@@ -149,11 +150,9 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
 //=========================================================================
 //=========================================================================
 
-
-function change(){	
-	var gridSize = document.getElementById("text1").value;
-   
-   
+    grid_size_slider.oninput = function () {
+        gridSize = this.value;
+          
    
     // read the data
     data_bubblemap = data_bubblemap.filter(function (d) {
@@ -232,8 +231,6 @@ function change(){
     
 	// Remove previous dots
 	d3.select("g").remove("*");
-	d3.select("g").remove("*");
-	
 	
 	// Add dots
     svg.append('g')
@@ -258,10 +255,10 @@ function change(){
         // Interaction with tooltip
         //==========================================================================
     
-        .on("mouseover", function(d) {		
+        .on("mouseover", function(d) {
             div.transition()		
                 .duration(200)		
-                .style("opacity", 1);		
+                .style("opacity", 1);			
             div	.html("Fixations: " + d.counts + '<br>' + "Average duration: " + d.duration + "ms")
                 .style("left", (d3.event.pageX) + "px")		
                 .style("top", (d3.event.pageY - 28) + "px");	
@@ -271,5 +268,6 @@ function change(){
                 .duration(500)		
                 .style("opacity", 0);	
         });
+
 } }; 
  
