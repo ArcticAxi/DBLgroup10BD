@@ -193,7 +193,7 @@ table {
 }*/
 
 .picture,
-.picture > #image {
+.picture > .image {
   padding: 7px;
   object-fit: cover;
 }
@@ -215,7 +215,7 @@ h3 {
 {
     background-color: var(--light-grey-color);
 }
-#text {
+.text {
 	text-align: center;
 	padding: 15px;
 }
