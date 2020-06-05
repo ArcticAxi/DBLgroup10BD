@@ -8,13 +8,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const formUpload = document.querySelector('form.uploadData');
     const formSelection = document.querySelector('form.selectionData');
 
+    const defaultLabelText = "No file selected";
     //changing default buttons
     var fileButton = document.getElementById('fileButton');
     var file = document.getElementById('dataset-input');
-    const defaultLabelText = "No file selected";
 
     var imageButton = document.getElementById('imageButton');
     var fileImages = document.getElementById('stimuli-input');
+
+    var jsonButton = document.getElementById('JSONButton');
+    var fileJson = document.getElementById('json-input');
 
     fileButton.addEventListener('click', function () {
         file.click();
@@ -41,6 +44,17 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('label_image').innerHTML = imagename || defaultLabelText;
     });
 
+    jsonButton.addEventListener('click', function () {
+        fileJson.click();
+    });
+
+    fileJson.addEventListener('change', function() {
+       var fileJson = document.querySelector('#json-input').files[0];
+       var jsonName = fileJson.name;
+       document.getElementById('label_json').innerHTML = jsonName || defaultLabelText;
+    });
+
+
 // INTERNET EXPLORER GIVES A SYNTAX ERROR HERE, CHANGE THIS TO NORMAL
 // FUNCTION/EVENT CALL SO THAT THERE IS HOPE FOR INTERNET EXPLORER
     formUpload.addEventListener('submit', function (e) {
@@ -58,6 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //reader.readAsDataURL(file);
         reader.readAsText(file, 'ISO-8859-1');
 
+        // note to tobias: add functions to load the settings somewhere in here
     });
 
     formSelection.addEventListener('submit', e => {
