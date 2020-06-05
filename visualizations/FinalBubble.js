@@ -3,6 +3,7 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     var duplicates = [];					// count how many duplicates in array
     var gridSize = 100;
 
+
     // create svg
 
     var svg = d3.select(idName)
@@ -11,6 +12,10 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
         .attr("height", height)
         .append('g');
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
+	
+		var div = d3.select("body").append("div")	// Define the div for the tooltip
+		.attr("class", "tooltip")				
+		.style("opacity", 0);
 
     var data_bubblemap = JSON.parse(JSON.stringify(content));
 
@@ -111,13 +116,13 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
         // Interaction with tooltip
         //==========================================================================
     
-        .on("mouseover", function(d) {		
+        .on("mouseover", function(d) {
             div.transition()		
                 .duration(200)		
-                .style("opacity", .9);		
+                .style("opacity", 1);			
             div	.html("Fixations: " + d.counts + '<br>' + "Average duration: " + d.duration + "ms")
-				.style('left', (d3.mouse(this)[0] + 'px'))	
-				.style('top', (d3.mouse(this)[1] + 'px'));	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
             })					
         .on("mouseout", function(d) {		
             div.transition()		
@@ -256,10 +261,10 @@ function change(){
         .on("mouseover", function(d) {		
             div.transition()		
                 .duration(200)		
-                .style("opacity", .9);		
+                .style("opacity", 1);		
             div	.html("Fixations: " + d.counts + '<br>' + "Average duration: " + d.duration + "ms")
-				.style('left', (d3.mouse(this)[0] + 'px'))	
-				.style('top', (d3.mouse(this)[1] + 'px'));	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
             })					
         .on("mouseout", function(d) {		
             div.transition()		

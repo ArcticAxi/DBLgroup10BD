@@ -57,7 +57,11 @@
     <div class="visualization" id="scanpath">
     </div>
 
-    <p> The 'Gazes: x' should say 'Fixations: x'</p>
+    <div class="inputcontainer" id = "grid_size">
+		<input id="text1" placeholder="Enter grid size">
+		<button onclick="change()" id="btn1">Apply this grid size</button>
+	</div>
+	
     <div class="visualization" id="bubblemap">
     </div>
 
@@ -93,6 +97,6 @@
     <script src="visualizations/scanpath.js"></script>
     <script src="visualizations/simpleheat.js"></script>
     <script src="visualizations/heatmap.js"></script>
-    <script src="visualizations/bubblemap.js"></script>
+    <script src="visualizations/FinalBubble.js"></script>
     <script src="visualizations/visualizations.js" charset="utf-8"></script>
 

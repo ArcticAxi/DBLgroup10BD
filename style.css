@@ -427,26 +427,26 @@ input[type = "file"] {
 }
 
 .bubbles {
-    stroke-width: 1px;
-    stroke: var(--dark-blue-color);
-    fill: var(--main-blue-color);
-    opacity: .6;
+  stroke-width: 1px;
+  stroke: black;
+  fill: #7cc4f4;
+  opacity: .6;
 }
 
 .bubbles:hover {
-    stroke: var(--dark-blue-color);
-    opacity: 1;
+  stroke: black;
+  opacity: 1;
 }
 
-div.tooltip {
-    position: absolute;
-    text-align: center;
-    width: 150px;
-    height: 28px;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: #e9e9e9;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
+div.tooltip {	
+    position: absolute;			
+    text-align: center;			
+    width: 150px;					
+    height: 28px;					
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: #e9e9e9;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
 }
