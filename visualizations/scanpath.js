@@ -618,6 +618,9 @@ function updateVars(variables) {
     base_fixation_opacity = variables.base_fixation_opacity;
     base_fixation_opacity_slider.values = variables.base_fixation_opacity;
 
+    highlight_fixation_opacity = variables.highlight_fixation_opacity;
+    highlight_fixation_opacity_slider.values = variables.highlight_fixation_opacity;
+
     highlighted_users = variables.highlighted_users;
 
     if (variables.base_colour == "black"){

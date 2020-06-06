@@ -1,4 +1,5 @@
 var dataAll;
+var downloadVarsButton = document.getElementById('downloadVarsButton')
 
 function sortByDateAscending(a, b) {
     return a.Timestamp - b.Timestamp;
@@ -159,4 +160,34 @@ function UrlExists(url) {
     http.open('HEAD', url, false);
     http.send();
     return http.status != 404;
+}
+
+downloadVarsButton.onclick = function() {
+    //updates vars of scanpath in the json object
+    json.scanpath.base_stroke_width = parseInt(base_stroke_width_slider.value);
+    json.scanpath.highlight_stroke_width = parseInt(highlight_stroke_width_slider.value);
+    json.scanpath.base_stroke_opacity = parseInt(base_stroke_opacity_slider.value);
+    json.scanpath.highlight_stroke_opacity = parseInt(highlight_stroke_opacity_slider.value);
+
+    json.scanpath.base_fixation_radius = parseInt(base_fixation_radius_slider.value);
+    json.scanpath.highlight_fixation_radius = parseInt(highlight_fixation_radius_slider.value);
+    json.scanpath.base_fixation_opacity = parseInt(base_fixation_opacity_slider.value);
+    json.scanpath.highlight_fixation_opacity = parseInt(highlight_fixation_opacity_slider.value);
+
+    json.scanpath.highlighted_users = highlighted_users;
+
+    if (base_colour == "black"){
+        json.scanpath.base_colour = "black";
+    } else {
+        //does not matter what this is changed to here (as long as it is not black) 
+        //but using blue makes this look like it actually does something when loaded
+        json.scanpath.base_colour = "blue";
+    }
+
+    //bit that does the actual downloading, directly copied from StackOverflow, cause why not
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json));
+    var downloadThing = document.getElementById('downloadVarsElement');
+    downloadThing.setAttribute("href",     dataStr     );
+    downloadThing.setAttribute("download", "variables.json");
+    downloadThing.click();
 }

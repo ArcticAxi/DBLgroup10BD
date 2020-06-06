@@ -89,6 +89,10 @@
     </div>
 
     <div id="downloadButtons">
+        <div id="downloadVariables">
+            <input type="button" id="downloadVarsButton" value="Download variables file">
+            <a id="downloadVarsElement" style="display:none"></a>
+        </div>
         <div id="downloadButtonsScanpath">
         </div>
         <div id="downloadButtonsBubblemap">
