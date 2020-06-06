@@ -79,7 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         //reads the files and processes them in the way defined in the onload functions 
         reader.readAsText(file, 'ISO-8859-1');
-        reader2.readAsText(jason)
+        if (jason !== undefined){
+            reader2.readAsText(jason)
+        }
     });
 
     formSelection.addEventListener('submit', e => {
