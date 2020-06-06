@@ -98,7 +98,8 @@ function loadingImage(content, name) {
                 d.MappedFixationPointY = d.MappedFixationPointY / sizeDecrease;
             });
 
-            //takes the variable settings for specific visualizations from json
+            if (typeof json == "object"){
+                //takes the variable settings for specific visualizations from json
             var scanpathVars = json.scanpath;
             var bubblemapVars = json.bubblemap;
             var heatmapVars = json.heatmap;
@@ -106,6 +107,11 @@ function loadingImage(content, name) {
             scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, scanpathVars);
             bubbleMap(copyContent, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap, bubblemapVars);
             heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap, heatmapVars);
+            } else {
+            scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath);
+            bubbleMap(copyContent, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap);
+            heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
+            }
         });
 
 }

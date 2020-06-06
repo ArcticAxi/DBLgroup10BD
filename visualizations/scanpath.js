@@ -57,7 +57,10 @@
 
 //creates scanpath with given variables
 function scanpath(content, name, sizeWidth, sizeHeight, idName, vars) {
-    updateVars(vars)
+    var check = typeof vars
+    if (check == 'object'){
+        updateVars(vars)
+    }
     stimulus = name;
     height = sizeHeight;
     width = sizeWidth;
@@ -518,6 +521,9 @@ function createUserButtons(users) {
         if (user % 4 == 3) {
             highlighted_user_container.innerHTML += "</br>";
         }
+        if (highlighted_users.indexOf(users[user]) != -1) {
+            document.getElementById(thisUser).style.backgroundColor = highlight_colour;
+        }
     }
     numberButtons += 1
 }
@@ -591,26 +597,46 @@ function downloadScanpath(name) {
 
 //sets the vars to those in the provided json file
 function updateVars(variables) {
-    base_stroke_width = variables.base_stroke_width
-    base_stroke_width_slider.value = variables.base_stroke_width
+    base_stroke_width = variables.base_stroke_width;
+    base_stroke_width_slider.value = variables.base_stroke_width;
 
-    highlight_stroke_width = variables.highlight_stroke_width
-    highlight_stroke_width_slider.value = variables.highlight_stroke_width
+    highlight_stroke_width = variables.highlight_stroke_width;
+    highlight_stroke_width_slider.value = variables.highlight_stroke_width;
 
-    base_stroke_opacity = variables.base_stroke_opacity
-    base_stroke_width_slider.value = variables.base_stroke_opacity
+    base_stroke_opacity = variables.base_stroke_opacity;
+    base_stroke_opacity_slider.value = variables.base_stroke_opacity;
 
-    highlight_stroke_opacity = variables.highlight_stroke_opacity
-    highlight_stroke_opacity_slider.setAttribute("value", variables.highlight_stroke_opacity)
+    highlight_stroke_opacity = variables.highlight_stroke_opacity;
+    highlight_stroke_opacity_slider.value = variables.highlight_stroke_opacity;
 
-    base_fixation_radius = variables.base_fixation_radius
-    base_fixation_radius_slider.value = variables.base_fixation_radius
+    base_fixation_radius = variables.base_fixation_radius;
+    base_fixation_radius_slider.value = variables.base_fixation_radius;
 
-    console.log(document.getElementById("base_fixation_radius_slider").value)
+    highlight_fixation_radius = variables.highlight_fixation_radius;
+    highlight_fixation_radius_slider.value = variables.highlight_fixation_radius;
 
-    highlight_fixation_radius = variables.highlight_fixation_radius
-    highlight_fixation_radius_slider.value = variables.highlight_fixation_radius
+    base_fixation_opacity = variables.base_fixation_opacity;
+    base_fixation_opacity_slider.values = variables.base_fixation_opacity;
 
-    base_fixation_opacity = variables.base_fixation_opacity
-    base_fixation_opacity_slider.values = variables.base_fixation_opacity
+    highlighted_users = variables.highlighted_users;
+
+    if (variables.base_colour == "black"){
+        base_colour = variables.base_colour;
+    }
+}
+
+function updateButtons() {
+    for(x in highlighted_users) {
+        var value = highlighted_users[x]
+        for (i=0; i<numberButtons; i++){
+            var identity = value+'_'+i
+            var button_color = document.getElementById(identity)
+            if (button_color !== null && button_color !== button) {
+                if (highlighted_users.indexOf(value) !== -1) {
+                    button_color.style.backgroundColor = highlight_colour;
+                } else {
+                    button_color.style.backgroundColor = dark_blue;
+                }
+            }
+}}
 }
