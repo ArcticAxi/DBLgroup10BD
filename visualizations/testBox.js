@@ -19,6 +19,13 @@ var svg = d3.select("#my_dataviz")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
+// create a tooltip
+  var tooltip = d3.select("#my_dataviz")
+    .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("font-size", "16px")
+
 
 
 // Read the data and compute summary statistics for each specie
@@ -28,7 +35,7 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
 		
 	});
 	
-	data.forEach(function(d) {							// average duration
+	data.forEach(function(d) {							// calculates total duration per user
 		d.totalDuration = d.FixationDuration;
 		data.forEach(function(e) {
 			if (d.user == e.user && d.StimuliName == e.StimuliName) {
@@ -38,7 +45,7 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
 		d.stimuliUser = d.StimuliName.toString() + " " + d.user.toString()
 	})
 
-	var dubbles = [...new Set(data.map(function(d) {		// coordinates as array called coord
+	var dubbles = [...new Set(data.map(function(d) {		// collecting all dubble entries
 		return d.stimuliUser;
 	}))]
 
@@ -47,22 +54,30 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
 			return e.stimuliUser === d
 		})
 	});
-	console.log(noDubbles)
 
+  var highlighted_users = []
+  selectedUsersDraw = noDubbles.filter(function(d) {
+    if (highlighted_users.length == 0) {
+      return noDubbles;
+    } else {
+      return highlighted_users.includes(d.user);
+    }
+    
+  })
 
   // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
   var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
     .key(function(d) { return d.StimuliName;})
     .rollup(function(d) {
-      q1 = d3.quantile(d.map(function(g) { return g.noDubbles;}).sort(d3.ascending),.25)
-      median = d3.quantile(d.map(function(g) { return g.noDubbles;}).sort(d3.ascending),.5)
-      q3 = d3.quantile(d.map(function(g) { return g.noDubbles;}).sort(d3.ascending),.75)
+      q1 = d3.quantile(d.map(function(g) { return g.totalDuration;}).sort(d3.ascending),.25)
+      median = d3.quantile(d.map(function(g) { return g.totalDuration;}).sort(d3.ascending),.5)
+      q3 = d3.quantile(d.map(function(g) { return g.totalDuration;}).sort(d3.ascending),.75)
       interQuantileRange = q3 - q1
       min = q1 - 1.5 * interQuantileRange
       max = q3 + 1.5 * interQuantileRange
       return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
     })
-    .entries(data)
+    .entries(noDubbles)
 
 
 
@@ -80,7 +95,7 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
   // Show the X scale
   var max = d3.max(data, function(d) { return d.totalDuration; } );
   var x = d3.scaleLinear()
-    .domain([4,max])
+    .domain([4,max+1000])
     .range([0, width])
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
@@ -94,11 +109,11 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
       .attr("text-anchor", "end")
       .attr("x", width)
       .attr("y", height + margin.top + 30)
-      .text("Duration");
+      .text("Duration (ms)");
 
 
 
-  // Show the main vertical line
+  // Show the main horizontal line
   svg
     .selectAll("vertLines")
     .data(sumstat)
@@ -124,8 +139,7 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
         .attr("y", function(d) { return y(d.key); })
         .attr("height", y.bandwidth() )
         .attr("stroke", "black")
-        .style("fill", "#69b3a2")
-        .style("opacity", 0.3)
+        .style("fill", "#7cc4f4")
 
 
 
@@ -136,10 +150,70 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
     .enter()
     .append("line")
       .attr("y1", function(d){return(y(d.key))})
-      .attr("y2", function(d){return(y(d.key) + y.bandwidth()/2)})
+      .attr("y2", function(d){return(y(d.key) + y.bandwidth())})
       .attr("x1", function(d){return(x(d.value.median))})
       .attr("x2", function(d){return(x(d.value.median))})
       .attr("stroke", "black")
       .style("width", 80)
+
+  //adding the minmum and maximum lines
+  svg
+    .selectAll("endLines")
+    .data(sumstat)
+    .enter()
+    .append("line")
+      .attr("y1", function(d){return(y(d.key) + y.bandwidth()/4)})
+      .attr("y2", function(d){return(y(d.key) + 3*(y.bandwidth()/4))})
+      .attr("x1", function(d){return(x(d.value.min))})
+      .attr("x2", function(d){return(x(d.value.min))})
+      .attr("stroke", "black")
+      .style("width", 80)
+ 
+  svg
+    .selectAll("endLines")
+    .data(sumstat)
+    .enter()
+    .append("line")
+      .attr("y1", function(d){return(y(d.key) + y.bandwidth()/4)})
+      .attr("y2", function(d){return(y(d.key) + 3*(y.bandwidth()/4))})
+      .attr("x1", function(d){return(x(d.value.max))})
+      .attr("x2", function(d){return(x(d.value.max))})
+      .attr("stroke", "black")
+      .style("width", 80)
+
+  // Add individual points with jitter
+  var jitterWidth = 50
+  svg
+    .selectAll("indPoints")
+    .data(selectedUsersDraw)
+    .enter()
+    .append("circle")
+      .attr("cx", function(d){ return(x(d.totalDuration))})
+      .attr("cy", function(d){ return(9*(y.bandwidth()/8) - jitterWidth/2 + Math.random()*jitterWidth )})
+      .attr("r", 5)
+      .style("fill", "#4477BD")
+      .attr("stroke", "black")
+      .on("mouseover", function(d) {
+          tooltip
+            .transition()
+            .duration(200)
+            .style("opacity", 1)
+          tooltip
+              .html("<span>" + "User: " + d.user + '<br>'  + "Total Duration: " + d.totalDuration + " ms </span>")
+              .style("left", (d3.mouse(this)[0]+30) + "px")
+              .style("top", (d3.mouse(this)[1]+30) + "px")
+      })
+      .on("mouseleave", function(d) {
+          tooltip
+            .transition()
+            .duration(200)
+            .style("opacity", 0)
+        })
+
+
+   
+  
+
+
 
 })
