@@ -85,6 +85,12 @@
         <p> When the checkbox is unchecked it shows the cumulative fixations upto the selected timestamp. </p>
     </div>
 
+    <div class="buttoncontainer" id="heatmap_rainbow">
+        <p> Click this button to turn the heatmap colors to those of a rainbow. </p>
+        <p> For optimal effect, please lower the intensity and radius. </p>
+        <input type="button" id="rainbow_button" value="Toggle Rainbow">
+    </div>
+
     <div class="visualization" id="heatmap">
     </div>
 

@@ -101,6 +101,12 @@ simpleheat.prototype = {
         if (!this._circle) this.radius(this.defaultRadius);
         if (!this._grad) this.gradient(this.defaultGradient);
 
+        if (rainbow) {
+            this.gradient({0.48: '#86007D', 0.55: '#0000F9', 0.60 : '#008018', 0.7 : '#FFFF41', 0.75 : '#FFA52C', 1: '#FF0018'});
+        } else {
+            this.gradient(this.defaultGradient);
+        }
+
         var ctx = this._ctx;
 
         ctx.clearRect(0, 0, this._width, this._height);

@@ -1,6 +1,5 @@
 //Brackets are added for the very convenient collapse option Visual Studio provides :)
 //old_heatmap variables
-
 {
     var flatten_data = [];
     var timestamp_slider_heatmap = [];
@@ -20,9 +19,12 @@
 
     var blur_slider_heatmap = document.getElementById("blur_slider_heatmap");
     var blur_heatmap = blur_slider_heatmap.value * 3;
+
+    var rainbowButton = document.getElementById('rainbow_button')
+    var rainbow = false
 }
 
-//basic sliders
+//basic sliders and button
 {
     intensity_slider_heatmap.oninput = function () {
         intensity_heatmap = this.value;
@@ -50,6 +52,18 @@
             heatmaps[i].draw();
         }
     };
+
+    rainbowButton.onclick = function () {
+        if (rainbow) {
+            rainbow = false;
+        } else {
+            rainbow = true;
+        }
+
+        for (var i = 0; i <= id_num_add; i++) {
+            heatmaps[i].draw();
+        }
+    }
 }
 
 function addBackgroundImage (i) {
@@ -339,7 +353,10 @@ function heatmap(content, name, width, height, idName, vars) {
     // optionally customize gradient colors, e.g. below
     // (would be nicer if d3 color scale worked here)
     // default uses 5 different colours I believe, doesn't seem like a good idea to mess with this
-    //heat.gradient({0.4: '#0000FF', 0.65: '#00FF00', 1: '#FF0000'});
+    if (rainbow) {
+        console.log("It's go time!")
+        heat.gradient({0.48: '#86007D', 0.55: '#0000F9', 0.60 : '#008018', 0.7 : '#FFFF41', 0.75 : '#FFA52C', 1: '#FF0018'});
+    }
 
     // draws the old_heatmap
     heat.draw();
