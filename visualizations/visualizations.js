@@ -1,5 +1,21 @@
 var dataAll;
 var downloadVarsButton = document.getElementById('downloadVarsButton')
+var basicJSON = {
+                    "scanpath" : {
+                            "base_stroke_width" : 1,
+                            "highlight_stroke_width" : 3,
+                            "base_stroke_opacity" : 7,
+                            "highlight_stroke_opacity" : 10,
+                            "base_fixation_radius" : 3,
+                            "highlight_fixation_radius" : 6,
+                            "base_fixation_opacity" : 8,
+                            "highlight_fixation_opacity" : 10,
+                            "highlighted_users" : ["p5"],
+                            "base_colour" : "something else"
+                            },
+                    "bubblemap" : {},
+                    "heatmap" : {}
+                }
 
 function sortByDateAscending(a, b) {
     return a.Timestamp - b.Timestamp;
@@ -163,6 +179,18 @@ function UrlExists(url) {
 }
 
 downloadVarsButton.onclick = function() {
+    //makes sure that json is defined and an object and uses basicJSON if it is not
+    if (typeof json != 'object') {
+        json = basicJSON;
+    }
+
+    //makes sure json is the object we want it to be and uses basicJSON if it is not
+    if (typeof json == 'object') {
+        if (typeof json.scanpath == 'object') {
+            json = basicJSON;
+        }
+    }
+
     //updates vars of scanpath in the json object
     json.scanpath.base_stroke_width = parseInt(base_stroke_width_slider.value);
     json.scanpath.highlight_stroke_width = parseInt(highlight_stroke_width_slider.value);
