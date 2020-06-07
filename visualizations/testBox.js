@@ -55,12 +55,12 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
 		})
 	});
 
-  var selectedUsers = []
+  var highlighted_users = []
   selectedUsersDraw = noDubbles.filter(function(d) {
-    if (selectedUsers.length == 0) {
+    if (highlighted_users.length == 0) {
       return noDubbles;
     } else {
-      return selectedUsers.includes(d.user);
+      return highlighted_users.includes(d.user);
     }
     
   })

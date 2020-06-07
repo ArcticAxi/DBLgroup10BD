@@ -88,6 +88,8 @@
     <div class="visualization" id="heatmap">
     </div>
 
+    
+
     <div id="downloadButtons">
         <div id="downloadVariables">
             <input type="button" id="downloadVarsButton" value="Download variables file">
