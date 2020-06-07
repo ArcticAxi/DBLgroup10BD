@@ -57,9 +57,12 @@
 
 //creates scanpath with given variables
 function scanpath(content, name, sizeWidth, sizeHeight, idName, vars) {
-    var check = typeof vars
-    if (check == 'object'){
-        updateVars(vars)
+    //checks if vars is a valid input
+    if (typeof vars == 'object'){
+        if (typeof vars.base_stroke_width == 'number') {
+            updateVars(vars);
+        }
+        
     }
     stimulus = name;
     height = sizeHeight;
