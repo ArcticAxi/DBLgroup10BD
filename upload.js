@@ -176,15 +176,9 @@ function loadCSV(tsv) {
         d.MappedFixationPointY = +d.MappedFixationPointY;
     });
 
-    tsv = tsv.sort(sortByDateAscending);
     initialRead = tsv;
     removePrevCheckboxes();
     createCheckboxes(groupingStimuli(initialRead));
-}
-
-// sorts the timestamps
-function sortByDateAscending(a, b) {
-    return a.Timestamp - b.Timestamp;
 }
 
 // stores the stimuliNames in local storage
