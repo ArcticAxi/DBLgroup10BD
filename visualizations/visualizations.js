@@ -24,12 +24,15 @@ function sortByDateAscending(a, b) {
 dataAll = initialRead.sort(sortByDateAscending);
 
 for (var i = 0; i < selected.length; i++) {
+    let specificStimuliName = selected[i].substr(0, selected[i].lastIndexOf('.'));
     var stimuliBubblemap = document.createElement('div');
-    stimuliBubblemap.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_bubblemap";
+    stimuliBubblemap.id = "a" + specificStimuliName + "_bubblemap";
+
     var stimuliHeatmap = document.createElement('div');
-    stimuliHeatmap.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_heatmap";
+    stimuliHeatmap.id = "a" + specificStimuliName + "_heatmap";
+
     var stimuliScanpath = document.createElement('div');
-    stimuliScanpath.id = "a" + selected[i].substr(0, selected[i].lastIndexOf('.')) + "_scanpath";
+    stimuliScanpath.id = "a" + specificStimuliName + "_scanpath";
 
     var bubblemapImage = document.querySelector('#bubblemap');
     var heatmapImage = document.querySelector('#heatmap');
@@ -48,8 +51,14 @@ function loadingImage(content, name) {
     // turning this opacity down also turns down the opacity of the plot
     // heatmapImage.style.opacity = '0.5';
 
+    let imageDataURI;
+    if (imageNames.includes(name)) {
+        let matchingName = imageNames.indexOf(name);
+        imageDataURI = imageURLS[matchingName];
+    }
+
     getMeta(content, name,
-        "../stimuli/" + name,
+        imageDataURI,
         function (width, height, hasImage) {
             let sizeDecrease = 2;
             let sizeWidth = width / sizeDecrease;
@@ -64,7 +73,7 @@ function loadingImage(content, name) {
             var scanpathImage = document.querySelector(idNameScanpath);
 
             if (hasImage) {
-                var stimuliLocationURL = "url(" + "'" + "../stimuli/" + name + "')";
+                var stimuliLocationURL = "url(" + imageDataURI + ")";
 
                 bubblemapImage.style.backgroundImage = stimuliLocationURL;
                 bubblemapImage.style.backgroundRepeat = 'no-repeat';
@@ -76,7 +85,7 @@ function loadingImage(content, name) {
                 scanpathImage.style.backgroundRepeat = 'no-repeat';
             }
 
-            var heatmapCanvas = document.createElement('canvas');
+           /* var heatmapCanvas = document.createElement('canvas');
 
             heatmapCanvas.id = 'canvas' + name;
             heatmapCanvas.classList.add('heatmapCanvas');
@@ -94,7 +103,7 @@ function loadingImage(content, name) {
                 ctx.drawImage(background, 0, 0, sizeWidth, sizeHeight);
             };
 
-            heatmapImage.appendChild(heatmapCanvas);
+            heatmapImage.appendChild(heatmapCanvas);*/
 
             bubblemapImage.style.width = sizeWidth + "px";
             bubblemapImage.style.height = sizeHeight + "px";
@@ -134,9 +143,9 @@ function loadingImage(content, name) {
 }
 
 function getMeta(content, name, url, callback) {
-    var imageExists = UrlExists(url);
+    //var imageExists = UrlExists(url);
     // if an image exists, load width and height of the image into visualizations
-    if (imageExists) {
+    if (url !== undefined) {
         var img = new Image();
         img.src = url;
         img.onload = function () {

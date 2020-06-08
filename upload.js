@@ -3,6 +3,9 @@ var selected = [];
 var checkboxes;
 var json;
 
+var imageURLS = [];
+var imageNames = [];
+
 document.addEventListener("DOMContentLoaded", function () {
     const formUpload = document.querySelector('form.uploadData');
     const formSelection = document.querySelector('form.selectionData');
@@ -53,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
        document.getElementById('label_json').innerHTML = jsonName || defaultLabelText;
     });
 
-
 // INTERNET EXPLORER GIVES A SYNTAX ERROR HERE, CHANGE THIS TO NORMAL
 // FUNCTION/EVENT CALL SO THAT THERE IS HOPE FOR INTERNET EXPLORER
     formUpload.addEventListener('submit', function (e) {
@@ -62,9 +64,23 @@ document.addEventListener("DOMContentLoaded", function () {
         //select files to read
         const file = document.querySelector('#dataset-input').files[0];
         const jason = document.querySelector('#json-input').files[0];
+        const imagesFile = document.querySelector('#stimuli-input').files;
         
         const reader = new FileReader();
-        const reader2 = new FileReader();
+        const readerjson = new FileReader();
+
+        for (var i = 0; i < imagesFile.length; i++) {
+            const imageReader = new FileReader;
+            imageReader.onload = function (readerImg) {
+                imageURLS.push(imageReader.result);
+                imageNames.push(readerImg.target.fileName);
+            };
+
+            if (imagesFile !== undefined) {
+                imageReader.fileName = imagesFile[i].name;
+                imageReader.readAsDataURL(imagesFile[i]);
+            }
+        }
 
         //defines how the readers should handle the files
         reader.onload = function () {
@@ -73,14 +89,14 @@ document.addEventListener("DOMContentLoaded", function () {
             loadCSV(tsvISO)
         };
 
-        reader2.onload = function () {
-            json = JSON.parse(reader2.result)
-        }
+        readerjson.onload = function () {
+            json = JSON.parse(readerjson.result)
+        };
 
         //reads the files and processes them in the way defined in the onload functions 
         reader.readAsText(file, 'ISO-8859-1');
         if (jason !== undefined){
-            reader2.readAsText(jason)
+            readerjson.readAsText(jason)
         }
     });
 
