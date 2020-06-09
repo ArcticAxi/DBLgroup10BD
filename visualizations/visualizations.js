@@ -70,10 +70,12 @@ function loadingImage(content, name) {
             let idNameBubblemap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_bubblemap";
             let idNameHeatmap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_heatmap";
             let idNameScanpath = "#a" + name.substr(0, name.lastIndexOf('.')) + "_scanpath";
+            let idNameBoxplot = "#a" + name.substr(0, name.lastIndexOf('.')) + "_boxplot";
 
             var bubblemapImage = document.querySelector(idNameBubblemap);
             var heatmapImage = document.querySelector(idNameHeatmap);
             var scanpathImage = document.querySelector(idNameScanpath);
+            var boxplotImage = document.querySelector(idNameBoxplot);
 
             if (hasImage) {
                 var stimuliLocationURL = "url(" + imageDataURI + ")";
