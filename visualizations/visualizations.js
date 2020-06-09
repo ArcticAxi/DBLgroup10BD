@@ -34,6 +34,9 @@ for (var i = 0; i < selected.length; i++) {
     var stimuliScanpath = document.createElement('div');
     stimuliScanpath.id = "a" + specificStimuliName + "_scanpath";
 
+    var stimuliBoxplot = document.createElement('div');
+    stimuliBoxplot.id = "a" + specificStimuliName + "_boxplot";
+
     var bubblemapImage = document.querySelector('#bubblemap');
     var heatmapImage = document.querySelector('#heatmap');
     var scanpathImage = document.querySelector('#scanpath');
@@ -133,10 +136,12 @@ function loadingImage(content, name) {
             scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, scanpathVars);
             bubbleMap(copyContent, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap, bubblemapVars);
             heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap, heatmapVars);
+            boxplot(copyContent, name);
             } else {
             scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath);
             bubbleMap(copyContent, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap);
             heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
+            boxplot(copyContent, name);
             }
         });
 

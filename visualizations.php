@@ -94,7 +94,8 @@
     <div class="visualization" id="heatmap">
     </div>
 
-    
+    <div class="visualization" id="boxplot">
+    </div>
 
     <div id="downloadButtons">
         <div id="downloadVariables">
@@ -113,5 +114,6 @@
     <script src="visualizations/simpleheat.js"></script>
     <script src="visualizations/heatmap.js"></script>
     <script src="visualizations/FinalBubble.js"></script>
+    <script src="visualizations/testBox.js"></script>
     <script src="visualizations/visualizations.js" charset="utf-8"></script>
 

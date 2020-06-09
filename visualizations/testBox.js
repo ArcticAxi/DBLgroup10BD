@@ -1,7 +1,10 @@
 
 
-var stimulus = "01_Antwerpen_S1.jpg";
-
+function boxplot(content, name) {
+    
+    stimulus = name;
+    data = JSON.parse(JSON.stringify(content));
+    
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 50, left: 120},
@@ -29,7 +32,7 @@ var svg = d3.select("#my_dataviz")
 
 
 // Read the data and compute summary statistics for each specie
-d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixation_data_cleaned_up.csv", function(error, data) {
+
 	data = data.filter(function (d) {
 		return (d.StimuliName == stimulus);
 		
@@ -210,10 +213,4 @@ d3.tsv("https://raw.githubusercontent.com/AnnikaLarissa/MetroMap/master/all_fixa
             .style("opacity", 0)
         })
 
-
-   
-  
-
-
-
-})
+}
