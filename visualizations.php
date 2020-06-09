@@ -57,11 +57,11 @@
     <div class="visualization" id="scanpath">
     </div>
 
-// Dont move the slider, everything will break...
+
     <div class="slidecontainer">
         <div id="grid_size">
             <p> Change grid size: </p>
-            <input type="range" min="1" max="500" value="100" class="slider" id="grid_size_slider">
+            <input type="range" min="1" max="150" value="100" class="slider" id="grid_size_slider">
         </div>
     </div>
 	

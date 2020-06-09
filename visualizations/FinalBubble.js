@@ -1,9 +1,15 @@
+	
+	var array_stimuli_bubblemap = [];
+	var numberBubblemaps = -1;
+
 function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     var array_bubblemap = [];							// make an array to store d.coordinates
-    var duplicates = [];					// count how many duplicates in array
+	var duplicates = [];					// count how many duplicates in array
     var gridSize = 100;
-	var grid_size_slider = document.getElementById("grid_size_slider");
+	var gridSizeSlider = document.getElementById("grid_size_slider");
 
+	array_stimuli_bubblemap.push(name);
+	numberBubblemaps += 1;
 
     // create svg
 
@@ -11,17 +17,19 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
         .append("svg")
         .attr("width", width)
         .attr("height", height)
+		.attr("id", "bubblemap_" + numberBubblemaps)
         .append('g');
+		
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
 	
 		var div = d3.select("body").append("div")	// Define the div for the tooltip
 		.attr("class", "tooltip")				
 		.style("opacity", 0);
 
-    var data_bubblemap = JSON.parse(JSON.stringify(content));
+    var data_bubblemap_original = JSON.parse(JSON.stringify(content));
 
     // read the data
-    data_bubblemap = data_bubblemap.filter(function (d) {
+    data_bubblemap = data_bubblemap_original.filter(function (d) {
         if (d.StimuliName !== name) {
             return false;
         }
@@ -30,8 +38,8 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     });
 
     data_bubblemap.forEach(function (d) {
-        d.averageX = Math.round(d.MappedFixationPointX / (100 / sizeDecrease)) * 100 / sizeDecrease;
-        d.averageY = Math.round(d.MappedFixationPointY / (100 / sizeDecrease)) * 100 / sizeDecrease;
+        d.averageX = Math.round(d.MappedFixationPointX / gridSize) * gridSize;
+        d.averageY = Math.round(d.MappedFixationPointY / gridSize) * gridSize;
         d.coordinates = d.averageX.toString() + " " + d.averageY.toString()
     });
 
@@ -88,8 +96,8 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
 
     // Add a scale for bubble size
     var z = d3.scaleSqrt()
-        .domain([0, 200 / sizeDecrease])
-        .range([0, 100 / sizeDecrease]);
+        .domain([0, 200 ])
+        .range([0, 100 ]);
 
     //=========================================================================
     // Bubbles
@@ -150,13 +158,18 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
 //=========================================================================
 //=========================================================================
 
-    grid_size_slider.oninput = function () {
-        gridSize = this.value;
-          
+	gridSizeSlider.oninput = function(){
+		var gridSize = this.value;
+		var array_bubblemap = [];							// make an array to store d.coordinates
+		var duplicates = [];					// count how many duplicates in array          
+		for (a=0 ; a <= numberBubblemaps; a++){
+			
+		var svg = d3.select(document.getElementById('bubblemap_' + a))
+		
    
     // read the data
-    data_bubblemap = data_bubblemap.filter(function (d) {
-        if (d.StimuliName !== name) {
+    data_bubblemap = data_bubblemap_original.filter(function (d) {
+        if (d.StimuliName !== array_stimuli_bubblemap[a]) {
             return false;
         }
         //   d.MappedFixationPointY = -d.MappedFixationPointY;
@@ -164,8 +177,8 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
     });
 
     data_bubblemap.forEach(function (d) {
-        d.averageX = Math.round(d.MappedFixationPointX / (100 / sizeDecrease)) * 100 / sizeDecrease;
-        d.averageY = Math.round(d.MappedFixationPointY / (100 / sizeDecrease)) * 100 / sizeDecrease;
+        d.averageX = Math.round(d.MappedFixationPointX / gridSize) * gridSize;
+        d.averageY = Math.round(d.MappedFixationPointY /  gridSize) * gridSize;
         d.coordinates = d.averageX.toString() + " " + d.averageY.toString()
     });
 
@@ -222,15 +235,14 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
 
     // Add a scale for bubble size
     var z = d3.scaleSqrt()
-        .domain([0, 200 / sizeDecrease])
-        .range([0, 100 / sizeDecrease]);
+        .domain([0, 200 ])
+        .range([0, 100 ]);
 
     //=========================================================================
     // Bubbles
     //=========================================================================
     
-	// Remove previous dots
-	d3.select("g").remove("*");
+	svg.select('g').remove('g');
 	
 	// Add dots
     svg.append('g')
@@ -250,6 +262,8 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
         .attr("r", function (d) {
             return z(d.counts);
         })
+		
+		
 
         //==========================================================================
         // Interaction with tooltip
@@ -268,6 +282,6 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
                 .duration(500)		
                 .style("opacity", 0);	
         });
-
+	};
 } }; 
  
