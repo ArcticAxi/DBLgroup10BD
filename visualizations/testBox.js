@@ -9,16 +9,16 @@ function boxplot(content, name, idName) {
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 50, left: 120},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    width_boxplot = 460 - margin.left - margin.right,
+    height_boxplot = 400 - margin.top - margin.bottom;
 
 
 
 // append the svg object to the body of the page
 var svg = d3.select(boxplot_div_name)
   .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", width_boxplot + margin.left + margin.right)
+    .attr("height", height_boxplot + margin.top + margin.bottom)
   .append("g")
     .attr("transform",
          "translate(" + margin.left + "," + margin.top + ")");
@@ -82,7 +82,7 @@ var svg = d3.select(boxplot_div_name)
 
   // Show the Y scale
   var y = d3.scaleBand()
-    .range([ height, 0 ])
+    .range([ height_boxplot, 0 ])
     .domain([stimulus])
     .padding(.4);
   svg.append("g")
@@ -95,9 +95,9 @@ var svg = d3.select(boxplot_div_name)
   var max = d3.max(data_boxplot, function(d) { return d.totalDuration; } );
   var x = d3.scaleLinear()
     .domain([4,max+1000])
-    .range([0, width])
+    .range([0, width_boxplot])
   svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + height_boxplot + ")")
     .call(d3.axisBottom(x).ticks(5))
     .select(".domain").remove()
 
@@ -106,8 +106,8 @@ var svg = d3.select(boxplot_div_name)
   // Add X axis label:
   svg.append("text")
       .attr("text-anchor", "end")
-      .attr("x", width)
-      .attr("y", height + margin.top + 30)
+      .attr("x", width_boxplot)
+      .attr("y", height_boxplot + margin.top + 30)
       .text("Duration (ms)");
 
 

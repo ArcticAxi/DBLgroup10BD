@@ -140,7 +140,7 @@ function loadingImage(content, name) {
             scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease);
             bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap);
             heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
-            boxplot(copyContent, name. idNameBoxplot);
+            boxplot(copyContent, name, idNameBoxplot);
             }
         });
 
