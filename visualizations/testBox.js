@@ -1,9 +1,10 @@
 
 
-function boxplot(content, name) {
+function boxplot(content, name, idName) {
     
     stimulus = name;
-    data = JSON.parse(JSON.stringify(content));
+    data_boxplot = JSON.parse(JSON.stringify(content));
+    boxplot_div_name = idName
     
 
 // set the dimensions and margins of the graph
@@ -14,16 +15,16 @@ var margin = {top: 10, right: 30, bottom: 50, left: 120},
 
 
 // append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
+var svg = d3.select(boxplot_div_name)
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+         "translate(" + margin.left + "," + margin.top + ")");
 
 // create a tooltip
-  var tooltip = d3.select("#my_dataviz")
+  var tooltip = d3.select(boxplot_div_name)
     .append("div")
       .style("opacity", 0)
       .attr("class", "tooltip")
@@ -32,15 +33,14 @@ var svg = d3.select("#my_dataviz")
 
 
 // Read the data and compute summary statistics for each specie
-
-	data = data.filter(function (d) {
+	data_boxplot = data_boxplot.filter(function (d) {
 		return (d.StimuliName == stimulus);
 		
 	});
 	
-	data.forEach(function(d) {							// calculates total duration per user
+	data_boxplot.forEach(function(d) {							// calculates total duration per user
 		d.totalDuration = d.FixationDuration;
-		data.forEach(function(e) {
+		data_boxplot.forEach(function(e) {
 			if (d.user == e.user && d.StimuliName == e.StimuliName) {
 				d.totalDuration = +d.totalDuration + +e.FixationDuration;
 			}
@@ -48,23 +48,19 @@ var svg = d3.select("#my_dataviz")
 		d.stimuliUser = d.StimuliName.toString() + " " + d.user.toString()
 	})
 
-	var dubbles = [...new Set(data.map(function(d) {		// collecting all dubble entries
+	var dubbles = [...new Set(data_boxplot.map(function(d) {		// collecting all dubble entries
 		return d.stimuliUser;
 	}))]
 
 	var noDubbles = dubbles.map(function(d) {				// create array of objects without duplicates (coordinates)
-		return data.find(function(e) {
+		return data_boxplot.find(function(e) {
 			return e.stimuliUser === d
 		})
 	});
 
   var highlighted_users = []
   selectedUsersDraw = noDubbles.filter(function(d) {
-    if (highlighted_users.length == 0) {
-      return noDubbles;
-    } else {
-      return highlighted_users.includes(d.user);
-    }
+    return highlighted_users.includes(d.user);
     
   })
 
@@ -96,7 +92,7 @@ var svg = d3.select("#my_dataviz")
 
 
   // Show the X scale
-  var max = d3.max(data, function(d) { return d.totalDuration; } );
+  var max = d3.max(data_boxplot, function(d) { return d.totalDuration; } );
   var x = d3.scaleLinear()
     .domain([4,max+1000])
     .range([0, width])
@@ -212,5 +208,4 @@ var svg = d3.select("#my_dataviz")
             .duration(200)
             .style("opacity", 0)
         })
-
 }

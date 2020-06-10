@@ -40,10 +40,12 @@ for (var i = 0; i < selected.length; i++) {
     var bubblemapImage = document.querySelector('#bubblemap');
     var heatmapImage = document.querySelector('#heatmap');
     var scanpathImage = document.querySelector('#scanpath');
+    var boxplotImage = document.querySelector('#boxplot');
 
     bubblemapImage.appendChild(stimuliBubblemap);
     heatmapImage.appendChild(stimuliHeatmap);
     scanpathImage.appendChild(stimuliScanpath);
+    boxplotImage.appendChild(stimuliBoxplot);
 
     loadingImage(dataAll, selected[i]);
 }
@@ -138,12 +140,12 @@ function loadingImage(content, name) {
             scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, scanpathVars);
             bubbleMap(copyContent, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap, bubblemapVars);
             heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap, heatmapVars);
-            boxplot(copyContent, name);
+            boxplot(copyContent, name, idNameBoxplot);
             } else {
             scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath);
             bubbleMap(copyContent, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap);
             heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
-            boxplot(copyContent, name);
+            boxplot(copyContent, name. idNameBoxplot);
             }
         });
 
