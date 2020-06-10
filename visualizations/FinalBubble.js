@@ -166,7 +166,7 @@ function bubbleMap(content, name, width, height, idName) {
 		
    
     // read the data
-    data_bubblemap = data_bubblemap_original.filter(function (d) {
+    data_bubblemap = content.filter(function (d) {
         if (d.StimuliName !== array_stimuli_bubblemap[a]) {
             return false;
         }

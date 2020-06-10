@@ -305,6 +305,12 @@ function createDownloadButtonHeatmap(name) {
 function heatmap(content, name, width, height, idName, vars) {
     createDownloadButtonHeatmap(name);
 
+    if (typeof vars == 'object'){
+        if (typeof vars.intensity_heatmap == 'number') {
+            updateVarsHeatmap(vars);
+        }
+    };
+
     addToIdNum();
     names_heatmap.push(name);
     widths_heatmap.push(width);
@@ -387,4 +393,17 @@ function downloadHeatmap(name) {
 
 function addToIdNum() {
     id_num_add += 1;
+};
+
+function updateVarsHeatmap(variables) {
+    rainbow = variables.rainbow;
+
+    intensity_heatmap = variables.intensity_heatmap;
+    intensity_slider_heatmap.value = variables.intensity_heatmap;
+
+    radius_heatmap = variables.radius_heatmap * 4;
+    radius_slider_heatmap = variables.radius_heatmap;
+
+    blur_heatmap = variables.blur_heatmap *3;
+    blur_slider_heatmap = variables.blur_heatmap;
 }

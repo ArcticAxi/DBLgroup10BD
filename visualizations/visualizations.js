@@ -10,11 +10,16 @@ var basicJSON = {
                             "highlight_fixation_radius" : 6,
                             "base_fixation_opacity" : 8,
                             "highlight_fixation_opacity" : 10,
-                            "highlighted_users" : ["p5"],
-                            "base_colour" : "something else"
+                            "highlighted_users" : [],
+                            "base_colour" : "blue"
                             },
                     "bubblemap" : {},
-                    "heatmap" : {}
+                    "heatmap" : {
+                            "rainbow" : false,
+                            "intensity_heatmap" : 5,
+                            "radius_heatmap" : 6,
+                            "blur_heatmap" : 10
+                        }
                 }
 
 function sortByDateAscending(a, b) {

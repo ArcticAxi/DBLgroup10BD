@@ -45,7 +45,6 @@
 //highlighted users
     var highlighted_user_container = document.getElementById("highlighted_user")
 //data used by buttons and sliders
-    var buttonData;
     var numberButtons = 0;
     var sliderData;
     var numberScanpaths = -1;
@@ -54,7 +53,7 @@
     var userCheckboxes = [];
 
 //passed variables
-    var stimulus = "22_Venedig_S2.jpg"
+    var stimulus;
 }
 
 //creates scanpath with given variables
@@ -62,10 +61,9 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, va
     //checks if vars is a valid input
     if (typeof vars == 'object'){
         if (typeof vars.base_stroke_width == 'number') {
-            updateVars(vars);
+            updateVarsScanpath(vars);
         }
-        
-    }
+    };
     stimulus = name;
     height = sizeHeight;
     width = sizeWidth;
@@ -76,7 +74,7 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, va
 }
 
 //creates an svg element and users array to work with
-function initialSetup(data_scanpath, idName) {
+function initialSetup(original_data_scanpath, idName) {
     numberScanpaths += 1;
     //create canvas
     canvas = d3.select(idName)
@@ -87,7 +85,7 @@ function initialSetup(data_scanpath, idName) {
         .attr("width", width)
         .attr("height", height);
 
-    data_scanpath = data_scanpath.filter(function (d) {
+    data_scanpath = original_data_scanpath.filter(function (d) {
         return (d.StimuliName == stimulus);
     });
 
@@ -129,63 +127,63 @@ function initialSetup(data_scanpath, idName) {
 //update base stroke width when moving slider
     base_stroke_width_slider.oninput = function () {
         base_stroke_width = this.value;
-        redrawScanpath(buttonData)
+        redrawScanpath()
     }
 
 //update base stroke opacity when moving slider
     base_stroke_opacity_slider.oninput = function () {
         base_stroke_opacity = this.value / 10;
-        redrawScanpath(buttonData)
+        redrawScanpath()
     }
 
 //update highlight stroke width when moving slider
     highlight_stroke_width_slider.oninput = function () {
         highlight_stroke_width = this.value;
-        redrawScanpath(buttonData)
+        redrawScanpath()
     }
 
 //update highlight stroke opacity when moving slider
     highlight_stroke_opacity_slider.oninput = function () {
         highlight_stroke_opacity = this.value / 10;
-        redrawScanpath(buttonData)
+        redrawScanpath()
     }
 
 //fixation sliders
 //update base fixation radius when moving slider
     base_fixation_radius_slider.oninput = function () {
         base_fixation_radius = this.value;
-        redrawScanpath(buttonData)
+        redrawScanpath()
     }
 
 //update highlight fixation radius when moving slider
     highlight_fixation_radius_slider.oninput = function () {
         highlight_fixation_radius = this.value;
-        redrawScanpath(buttonData)
+        redrawScanpath()
     }
 
 //update base fixation opacity when moving slider
     base_fixation_opacity_slider.oninput = function () {
         base_fixation_opacity = this.value / 10;
-        redrawScanpath(buttonData)
+        redrawScanpath()
     }
 
 //update highlight fixation opacity when moving slider
     highlight_fixation_opacity_slider.oninput = function () {
         highlight_fixation_opacity = this.value / 10;
-        redrawScanpath(buttonData)
+        redrawScanpath()
     }
 
 //buttons
 //update base colour when pressing main blue button
     base_colour_button_db.onclick = function () {
         base_colour = dark_blue;
-        redrawScanpath(buttonData)
+        redrawScanpath()
     }
 
 //update base colour when pressing black button
     base_colour_button_b.onclick = function () {
         base_colour = "black";
-        redrawScanpath(buttonData)
+        redrawScanpath()
     }
 
 //user buttons event
@@ -209,14 +207,14 @@ function initialSetup(data_scanpath, idName) {
                 }
             }
         }
-        redrawScanpath(buttonData);
+        redrawScanpath();
         userSelectionHeatmap(highlighted_users);
     }
 }
 
 //draw the scanpath visualisation
-function drawScanpath(data_scanpath) {
-    data_scanpath = data_scanpath.filter(function (d) {
+function drawScanpath(original_data_scanpath) {
+    data_scanpath = original_data_scanpath.filter(function (d) {
         return (d.StimuliName == stimulus);
     });
 
@@ -325,92 +323,69 @@ function createVis(data_scanpath, users) {
 //interactions draw
 {
 //draw scanpath after interactions
-function redrawScanpath(data_scanpath) {
+function redrawScanpath() {
     for (j=0; j<=numberScanpaths; j++) {
-        var svg = document.getElementById('scanpath_' + j)
-        var temp_stim = svg.getAttribute('data-image')
-        var temp_can = d3.select(svg)
+        var svg = d3.select(document.getElementById('scanpath_' + j))
+        //var temp_can = d3.select(svg)
+        
+        //select the paths
+        paths = svg.selectAll("g.paths")
 
-        temp_data = data_scanpath.filter(function (d) {
-            return (d.StimuliName == temp_stim);
-        });
-
-        var allUsers = temp_data.map(function (d) {
-            return d.user
-        });
-        var uniqueUsers = new Set(allUsers);
-    
-        //turns the set into an array
-        var arrayUsers = [...uniqueUsers];
-    
-        //create the actual visualization
-        redraw(temp_data, arrayUsers, temp_can);
-    }
-};
-
-//redraws visualization
-function redraw(data_scanpath, users, temp_can) {
-    
-    //select the paths
-    paths = temp_can.selectAll("g.paths")
-
-    //turn the users into an array of objects containing the data of the users
-    for (i in users) {
-        users[i] = data_scanpath.filter(function (d) {
-            return d.user == users[i]
-        });
-    };
-
-    //transition the paths
-    paths.selectAll("path")
-            .transition()
-            .duration(0)
-            .attr("stroke", function (d) {
-                if (highlighted_users.indexOf(d[0].user) !== -1) {
-                    return highlight_colour
-                } else {
-                    return base_colour
-                }
-            })
-            .attr("stroke-width", function (d) {
-                if (highlighted_users.indexOf(d[0].user) !== -1) {
-                    return highlight_stroke_width
-                } else {
-                    return base_stroke_width
-                }
-            })
-            .attr("stroke-opacity", function (d) {
-                if (highlighted_users.indexOf(d[0].user) !== -1) {
-                    return highlight_stroke_opacity
-                } else {
-                    return base_stroke_opacity
-                }
-            }); 
-
-    temp_can.selectAll("circle")
+        //transition the paths
+        paths.selectAll("path")
                 .transition()
                 .duration(0)
-                .attr("fill", function (d) {
-                    if (highlighted_users.indexOf(d.user) !== -1) {
+                .attr("stroke", function (d) {
+                    if (highlighted_users.indexOf(d[0].user) !== -1) {
                         return highlight_colour
                     } else {
                         return base_colour
                     }
                 })
-                .attr("r", function (d) {
-                    if (highlighted_users.indexOf(d.user) !== -1) {
-                        return highlight_fixation_radius
+                .attr("stroke-width", function (d) {
+                    if (highlighted_users.indexOf(d[0].user) !== -1) {
+                        return highlight_stroke_width
                     } else {
-                        return base_fixation_radius
+                        return base_stroke_width
                     }
                 })
-                .attr("opacity", function (d) {
-                    if (highlighted_users.indexOf(d.user) !== -1) {
-                        return highlight_fixation_opacity
+                .attr("stroke-opacity", function (d) {
+                    if (highlighted_users.indexOf(d[0].user) !== -1) {
+                        return highlight_stroke_opacity
                     } else {
-                        return base_fixation_opacity
+                        return base_stroke_opacity
                     }
-                });  
+                }); 
+
+        svg.selectAll("circle")
+                    .transition()
+                    .duration(0)
+                    .attr("fill", function (d) {
+                        if (highlighted_users.indexOf(d.user) !== -1) {
+                            return highlight_colour
+                        } else {
+                            return base_colour
+                        }
+                    })
+                    .attr("r", function (d) {
+                        if (highlighted_users.indexOf(d.user) !== -1) {
+                            return highlight_fixation_radius
+                        } else {
+                            return base_fixation_radius
+                        }
+                    })
+                    .attr("opacity", function (d) {
+                        if (highlighted_users.indexOf(d.user) !== -1) {
+                            return highlight_fixation_opacity
+                        } else {
+                            return base_fixation_opacity
+                        }
+                    });  
+    }
+};
+
+//redraws visualization
+function redraw(temp_can) {
 }
 }
 
@@ -606,7 +581,7 @@ function downloadScanpath(name) {
 }
 
 //sets the vars to those in the provided json file
-function updateVars(variables) {
+function updateVarsScanpath(variables) {
     base_stroke_width = variables.base_stroke_width;
     base_stroke_width_slider.value = variables.base_stroke_width;
 
