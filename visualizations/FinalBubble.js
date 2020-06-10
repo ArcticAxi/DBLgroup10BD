@@ -2,7 +2,7 @@
 	var array_stimuli_bubblemap = [];
 	var numberBubblemaps = -1;
 
-function bubbleMap(content, name, width, height, sizeDecrease, idName) {
+function bubbleMap(content, name, width, height, idName) {
     var array_bubblemap = [];							// make an array to store d.coordinates
 	var duplicates = [];					// count how many duplicates in array
     var gridSize = 100;
@@ -26,10 +26,8 @@ function bubbleMap(content, name, width, height, sizeDecrease, idName) {
 		.attr("class", "tooltip")				
 		.style("opacity", 0);
 
-    var data_bubblemap_original = JSON.parse(JSON.stringify(content));
-
     // read the data
-    data_bubblemap = data_bubblemap_original.filter(function (d) {
+    data_bubblemap = content.filter(function (d) {
         if (d.StimuliName !== name) {
             return false;
         }
