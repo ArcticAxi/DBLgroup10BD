@@ -3,6 +3,8 @@
     var width = 2000;
     var height = 2000;
 
+    var size_decrease = 2;
+
 //css variables
     var dark_blue = getComputedStyle(document.documentElement).getPropertyValue('--dark-blue-color');
     var main_blue = getComputedStyle(document.documentElement).getPropertyValue('--main-blue-color');
@@ -56,7 +58,7 @@
 }
 
 //creates scanpath with given variables
-function scanpath(content, name, sizeWidth, sizeHeight, idName, vars) {
+function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, vars) {
     //checks if vars is a valid input
     if (typeof vars == 'object'){
         if (typeof vars.base_stroke_width == 'number') {
@@ -67,9 +69,9 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName, vars) {
     stimulus = name;
     height = sizeHeight;
     width = sizeWidth;
-    buttonData = JSON.parse(JSON.stringify(content));
-    initialSetup(buttonData, idName);
-    drawScanpath(buttonData);
+    size_decrease = sizeDecrease;
+    initialSetup(content, idName);
+    drawScanpath(content);
     createDownloadButtonScanpath(name);
 }
 
@@ -87,6 +89,11 @@ function initialSetup(data_scanpath, idName) {
 
     data_scanpath = data_scanpath.filter(function (d) {
         return (d.StimuliName == stimulus);
+    });
+
+    data_scanpath.forEach(function (d) {
+        d.MappedFixationPointX = d.MappedFixationPointX / size_decrease;
+        d.MappedFixationPointY = d.MappedFixationPointY / size_decrease;
     });
 
     //creates a set containing all unique users

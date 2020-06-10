@@ -126,24 +126,19 @@ function loadingImage(content, name) {
 
             let copyContent = JSON.parse(JSON.stringify(content));
 
-            copyContent.forEach(function (d) {
-                d.MappedFixationPointX = d.MappedFixationPointX / sizeDecrease;
-                d.MappedFixationPointY = d.MappedFixationPointY / sizeDecrease;
-            });
-
             if (typeof json == "object"){
                 //takes the variable settings for specific visualizations from json
             var scanpathVars = json.scanpath;
             var bubblemapVars = json.bubblemap;
             var heatmapVars = json.heatmap;
 
-            scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, scanpathVars);
-            bubbleMap(copyContent, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap, bubblemapVars);
+            scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease, scanpathVars);
+            bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap, bubblemapVars);
             heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap, heatmapVars);
             boxplot(copyContent, name, idNameBoxplot);
             } else {
-            scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath);
-            bubbleMap(copyContent, name, sizeWidth, sizeHeight, sizeDecrease, idNameBubblemap);
+            scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease);
+            bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap);
             heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
             boxplot(copyContent, name. idNameBoxplot);
             }
