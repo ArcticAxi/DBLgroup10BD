@@ -24,6 +24,7 @@ function bubbleMap(content, name, width, height, idName) {
 	
 	//take the background picture
 	var imageBack =  document.querySelector('#bubblemap');
+<<<<<<< HEAD
 	var childImage = imageBack.querySelectorAll("div");
 	console.log(name);
 	console.log(idName);
@@ -36,6 +37,10 @@ function bubbleMap(content, name, width, height, idName) {
 		var numberFile = i;
 		}
 	}
+=======
+	var childImage = imageBack.querySelector("div");
+	childImage.style.backgroundImage = "";
+>>>>>>> 525190457fff7b46f117c6bc75211fe32c20d6b2
 	
 	const imagesFile = document.querySelector('#stimuli-input').files[numberFile]; 
 	const objectURL = URL.createObjectURL(imagesFile)
