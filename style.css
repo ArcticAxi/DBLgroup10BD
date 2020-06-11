@@ -134,15 +134,41 @@ table {
 	width: 100px;
 	margin-right: 20px;
 }
-.uploadlink {
+.uploadlink{
 	position: relative;
-	top: 40px;
-	right: 8%;
+	top: 25px;
+	right: 10%;
     float: right;
     height: 10px;
-	width: 100px
+	width: 150px;
+	font-size: 18px; 
+}
+#viz_button, #upload_button{
+	background-color: var(--main-blue-color);
+	border: none;
+	font-size: 17px;
+	border-radius: 15px;
+	color: black;
+	text-align: center;	
+}
+#viz_button:hover, #upload_button:hover{
+	background-color:  var(--main-blue-color);
+	border: none;
+	font-size: 16px;
+	border-radius: 15px;
+	text-align: center;
+	color: white;
+	outline:none;
+}
+#viz_button:hover {
+    height: 30px;
+	width: 163px;
 }
 
+#upload_button:hover {
+	height: 30px;
+	width: 120px;	
+}
 #photo_introduction{
    grid-area: intro2;
    margin: 6% 0 0 0;
@@ -281,7 +307,7 @@ input[type = "file"] {
     display: none;
 }
 
-#fileButton, #imageButton, #JSONButton, input[type = "button"], input[type = "submit"] {
+#fileButton, #imageButton, input[type = "button"], input[type = "submit"] {
     background-color: var(--main-blue-color);
     border: 1px solid var(--dark-grey-color); /* Was black before */
     color: white;
@@ -296,11 +322,11 @@ input[type = "file"] {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#fileButton, #imageButton, #JSONButton {
-    width: 220px;
+#fileButton, #imageButton {
+    width: 200px;
 }
 
-#fileButton:hover, #imageButton:hover, #JSONButton:hover, input[type = "submit"]:hover, input[type = "button"] {
+#fileButton:hover, #imageButton:hover, input[type = "submit"]:hover, input[type = "button"] {
     background-color: var(--dark-blue-color); /* Was dark blue #0099ff before */
     color: white;
 }
@@ -449,4 +475,31 @@ div.tooltip {
     border: 0px;		
     border-radius: 8px;			
     pointer-events: none;			
+}
+[data-tooltip]:before {
+    /* needed - do not touch */
+    content: attr(data-tooltip);
+    position: absolute;
+    opacity: 0;
+    
+    /* customizable */
+    transition: all 0.15s ease;
+    padding: 10px;
+    color: #333;
+    border-radius: 10px;
+    box-shadow: 2px 2px 1px silver;    
+}
+
+[data-tooltip]:hover:before {
+    /* needed - do not touch */
+    opacity: 1;
+    
+    /* customizable */
+    background: yellow;
+    margin-top: -50px;
+    margin-left: 20px;    
+}
+
+[data-tooltip]:not([data-tooltip-persistent]):before {
+    pointer-events: none;
 }
