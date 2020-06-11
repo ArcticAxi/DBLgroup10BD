@@ -1,43 +1,43 @@
 <div class="slidecontainer">
         <div class="left_elem" id="base_stroke_width">
-            <p> Base Path Width: </p>
+             <p>Base path width:<div data-tooltip="Increase or decrease the width of the connections between fixations">❓</div></p> 
             <input type="range" min="1" max="10" value="1" class="slider" id="base_stroke_width_slider">
         </div>
         <div id="highlight_stroke_width">
-            <p> Highlight Path Width: </p>
+            <p>Highlight Path Width:<div data-tooltip="Increase or decrease the width of highlighted paths for better clarity">❓</div></p>
             <input type="range" min="1" max="10" value="3" class="slider" id="highlight_stroke_width_slider">
         </div>
     </div>
 
     <div class="slidecontainer">
         <div class="left_elem" id="base_stroke_opacity">
-            <p> Base Path Opacity: </p>
+            <p>Base Path Opacity<div data-tooltip="Decrease if necessary to see both the background picture and the paths">❓</div></p>
             <input type="range" min="0" max="10" value="7" class="slider" id="base_stroke_opacity_slider">
         </div>
         <div id="highlight_stroke_opacity">
-            <p> Highlight Path Opacity: </p>
+            <p>Highlight Path Opacity:<div data-tooltip="Decrease if necessary to see both the background picture and the highlighted paths">❓</div></p>
             <input type="range" min="0" max="10" value="10" class="slider" id="highlight_stroke_opacity_slider">
         </div>
     </div>
 
     <div class="slidecontainer">
         <div class="left_elem" id="base_fixation_radius">
-            <p> Base Fixation Size: </p>
+            <p>Base Fixation Size:<div data-tooltip = "Increase or decrease the size of individual fixations">❓</div></p>
             <input type="range" min="0" max="15" value="3" class="slider" id="base_fixation_radius_slider">
         </div>
         <div id="highlight_fixation_radius">
-            <p> Highlight Fixation Size: </p>
+            <p>Highlight Fixation Size:<div data-tooltip = "Increase the size of individual highlighted fixations">❓</div></p>
             <input type="range" min="0" max="15" value="6" class="slider" id="highlight_fixation_radius_slider">
         </div>
     </div>
 
     <div class="slidecontainer">
         <div class="left_elem" id="base_fixation_opacity">
-            <p> Base Fixation Opacity: </p>
+            <p>Base Fixation Opacity:<div data-tooltip= "Decrease if necessary to see both the background picture and the fixations">❓</div></p>
             <input type="range" min="0" max="10" value="7" class="slider" id="base_fixation_opacity_slider">
         </div>
         <div id="highlight_fixation_opacity">
-            <p> Highlight Fixation Opacity: </p>
+            <p>Highlight Fixation Opacity:<div data-tooltip = "Decrease if necessary to see both the background picture and the highlighted fixations">❓</div></p>
             <input type="range" min="0" max="10" value="10" class="slider" id="highlight_fixation_opacity_slider">
         </div>
     </div>
@@ -60,7 +60,7 @@
 
     <div class="slidecontainer">
         <div id="grid_size">
-            <p> Change grid size: </p>
+            <p> Change grid size: <div data-tooltip = "Increase for more and smaller bubbles, decrease for less and bigger bubbles">❓</div></p>
             <input type="range" min="1" max="150" value="100" class="slider" id="grid_size_slider">
         </div>
     </div>
@@ -70,15 +70,15 @@
 
     <div class="slidecontainer" id="all_heatmap_sliders">
         <div id="intensity_heatmap">
-            <p>Intensity:</p>
+            <p>Intensity:<div data-tooltip = "Slide to the left for more intense colors, slide to the right for less intense colors">❓</div></p>
             <input type="range" min="1" max="30" value="5" class="slider" id="intensity_slider_heatmap">
         </div>
         <div class="left_elem" id="radius_heatmap">
-            <p>Radius:</p>
+            <p>Radius:<div data-tooltip = "Increase or decrease size of each observation">❓</div></p>
             <input type="range" min="1" max="10" value="6" class="slider" id="radius_slider_heatmap">
         </div>
         <div id="blur_heatmap">
-            <p>Blur:</p>
+            <p>Blur:<div data-tooltip = "Decrease the blur for more information on particular points or increase for a more general view">❓</div></p>
             <input type="range" min="0" max="10" value="10" class="slider" id="blur_slider_heatmap">
         </div>
         <p> Checking the checkbox next to the timestamp slider shows a 2-second interval of fixations around the selected timestamp. </p>
