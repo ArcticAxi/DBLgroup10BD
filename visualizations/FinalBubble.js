@@ -22,6 +22,18 @@ function bubbleMap(content, name, width, height, idName) {
 		
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
 	
+	//take the background picture
+	var imageBack =  document.querySelector('#bubblemap');
+	var childImage = imageBack.querySelectorAll("div");
+	childImage.style.backgroundImage = "";
+	
+	
+	const imagesFile = document.querySelector('#stimuli-input').files[0]; 
+	const objectURL = URL.createObjectURL(imagesFile)
+	
+	var image1 = svg.append("svg:image").attr("height", height)
+	                .attr("width", width).attr("xlink:href", objectURL);
+	
 		var div = d3.select("body").append("div")	// Define the div for the tooltip
 		.attr("class", "tooltip")				
 		.style("opacity", 0);
@@ -136,7 +148,48 @@ function bubbleMap(content, name, width, height, idName) {
                 .duration(500)		
                 .style("opacity", 0);	
         });
+	//zoom properties	
+    var zoom = d3.zoom()
+		  .scaleExtent([1, 5])  // This control how much you can unzoom (x0.5) and zoom (x10)
+		  .extent([[0, 0], [width, height]])
+		  .on("zoom", updateZoom)
+		  .on('end', function () {
+		   if(d3.event.transform !== d3.zoomIdentity) {
+		   console.log("zoom.end", d3.event.transform, d3.zoomIdentity)
+	      svg.transition()
+		  .delay(2500)
+	      .call(d3.event.target.transform, d3.zoomIdentity);
+	   }
+	   });	
+		  
+	  
 
+    svg.call(zoom)
+	  // .on("mousedown.zoom", null)
+
+ 
+
+function updateZoom (){
+	const transform = d3.zoomTransform(svg.node());
+
+	var newX = d3.event.transform.rescaleX(x);
+	var newY = d3.event.transform.rescaleY(y);
+	var newZ = d3.scaleSqrt()
+				 .domain([0, 200 ])
+				 .range([ 0, (100*d3.event.transform.k)]); //multiply range by scale factor
+
+	svg.selectAll("circle")
+		  .attr('cx', function(d) {return newX(d.averageX);})
+		  .attr('cy', function(d) {return newY(d.averageY);})
+		  .attr("r", function(d)  {return newZ(d.counts);})
+		  
+	svg.style("transform-origin", "50% 50% 0");	  
+		 
+     image1.attr("transform", d3.event.transform)
+	       .on("mousedown.zoom", null)
+		   .on("move.zoom", null);
+	
+}
 
 
 
@@ -280,6 +333,8 @@ function bubbleMap(content, name, width, height, idName) {
                 .duration(500)		
                 .style("opacity", 0);	
         });
+		
+		svg.call(zoom);
 	};
 } }; 
  
