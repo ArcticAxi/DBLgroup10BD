@@ -24,7 +24,7 @@ function bubbleMap(content, name, width, height, idName) {
 	
 	//take the background picture
 	var imageBack =  document.querySelector('#bubblemap');
-	var childImage = imageBack.querySelectorAll("div");
+	var childImage = imageBack.querySelector("div");
 	childImage.style.backgroundImage = "";
 	
 	
