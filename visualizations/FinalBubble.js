@@ -25,10 +25,19 @@ function bubbleMap(content, name, width, height, idName) {
 	//take the background picture
 	var imageBack =  document.querySelector('#bubblemap');
 	var childImage = imageBack.querySelectorAll("div");
-	childImage.style.backgroundImage = "";
+	console.log(name);
+	console.log(idName);
+	console.log(imageBack);
+	console.log(childImage[0].id);
+	for (var i = 0; i < childImage.length; i++) {
+		if("#" + childImage[i].id == idName)
+		{
+		childImage[i].style.backgroundImage = "";
+		var numberFile = i;
+		}
+	}
 	
-	
-	const imagesFile = document.querySelector('#stimuli-input').files[0]; 
+	const imagesFile = document.querySelector('#stimuli-input').files[numberFile]; 
 	const objectURL = URL.createObjectURL(imagesFile)
 	
 	var image1 = svg.append("svg:image").attr("height", height)
