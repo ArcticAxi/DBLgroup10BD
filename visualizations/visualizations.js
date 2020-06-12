@@ -91,7 +91,6 @@ function loadingImage(content, name) {
             var bubblemapImage = document.querySelector(idNameBubblemap);
             var heatmapImage = document.querySelector(idNameHeatmap);
             var scanpathImage = document.querySelector(idNameScanpath);
-            var boxplotImage = document.querySelector(idNameBoxplot);
 
             if (hasImage) {
                 var stimuliLocationURL = "url(" + imageDataURI + ")";
@@ -105,26 +104,6 @@ function loadingImage(content, name) {
                 scanpathImage.style.backgroundImage = stimuliLocationURL;
                 scanpathImage.style.backgroundRepeat = 'no-repeat';
             }
-
-            /* var heatmapCanvas = document.createElement('canvas');
-
-             heatmapCanvas.id = 'canvas' + name;
-             heatmapCanvas.classList.add('heatmapCanvas');
-             heatmapCanvas.width = sizeWidth;
-             heatmapCanvas.height = sizeHeight;
-
-             ctx = heatmapCanvas.getContext("2d");
-             ctx.globalAlpha = 1;
-             background = new Image();
-             background.src = '../stimuli/' + name;
-
-             ctx.globalCompositeOperation = "destination-over";
-
-             background.onload = function () {
-                 ctx.drawImage(background, 0, 0, sizeWidth, sizeHeight);
-             };
-
-             heatmapImage.appendChild(heatmapCanvas);*/
 
             bubblemapImage.style.width = sizeWidth + "px";
             bubblemapImage.style.height = sizeHeight + "px";
@@ -146,12 +125,12 @@ function loadingImage(content, name) {
                 var bubblemapVars = json.bubblemap;
                 var heatmapVars = json.heatmap;
 
-                scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease, scanpathVars);
+                scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease, hasImage, scanpathVars);
                 bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap, bubblemapVars);
                 heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap, heatmapVars);
                 boxplot(copyContent, name, idNameBoxplot);
             } else {
-                scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease);
+                scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease, hasImage);
                 bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap);
                 heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
                 boxplot(copyContent, name, idNameBoxplot);

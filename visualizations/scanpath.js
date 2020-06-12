@@ -54,21 +54,22 @@
 
 //passed variables
     var stimulus;
+    var has_image = false;
 }
 
 //creates scanpath with given variables
-function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, vars) {
+function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, hasImage, vars) {
     //checks if vars is a valid input
     if (typeof vars == 'object') {
         if (typeof vars.base_stroke_width == 'number') {
             updateVarsScanpath(vars);
         }
     }
-    ;
     stimulus = name;
     height = sizeHeight;
     width = sizeWidth;
     size_decrease = sizeDecrease;
+    has_image = hasImage;
     initialSetup(content, idName);
     drawScanpath(content);
 }
@@ -234,15 +235,47 @@ function drawScanpath(original_data_scanpath) {
 
 };
 
+function attachImage() {
+    if (has_image) {
+        var imageBackScanpath = document.querySelector('#scanpath');
+        var childImageScanpath = imageBackScanpath.querySelectorAll("div");
+        var numberFileScanpath = -1;
+        var width;
+        var height;
+
+        for (var i = 0; i < childImageScanpath.length; i++) {
+            if (childImageScanpath[i].id.substring(1, childImageScanpath[i].id.lastIndexOf('_')) + '.jpg' === stimulus) {
+                width = childImageScanpath[i].style.width;
+                height = childImageScanpath[i].style.height;
+                childImageScanpath[i].style.backgroundImage = "";
+                numberFileScanpath = i;
+            }
+        }
+
+        if (numberFileScanpath > -1) {
+            const imagesFile = document.querySelector('#stimuli-input').files[numberFileScanpath];
+            const objectURL = URL.createObjectURL(imagesFile);
+
+            var image = canvas.selectAll('image')
+                .data([0]);
+            image.enter().append("svg:image").attr("xlink:href", objectURL)
+                .attr('width', width)
+                .attr('height', height);
+        }
+    }
+}
+
 //creates the actual visualization
 function createVis(data_scanpath, users) {
-    //create group object            
+    attachImage();
+
+//create group object
     var group = canvas.append("g")
         .attr("class", "paths");
     var fixation = canvas.append("g")
         .attr("class", "fixations");
 
-    //create line object
+//create line object
     var line = d3.line()
         .x(function (d) {
             return d.MappedFixationPointX
@@ -251,7 +284,7 @@ function createVis(data_scanpath, users) {
             return d.MappedFixationPointY
         });
 
-    //turn the users into an array of objects containing the data of the users
+//turn the users into an array of objects containing the data of the users
     for (i in users) {
         users[i] = data_scanpath.filter(function (d) {
             return d.user == users[i]
@@ -259,7 +292,7 @@ function createVis(data_scanpath, users) {
     }
     ;
 
-    //add the scanpath to the canvas
+//add the scanpath to the canvas
     group.selectAll("path")
         .data([...users])
         .enter()
@@ -516,45 +549,49 @@ function createUserButtons(users) {
 }
 
 function createDownloadButtonsScanpath(name) {
-    // creates button
+// creates button
     var downloadButton = document.createElement('input');
     downloadButton.type = 'button';
-    downloadButton.id = name + '.downloadButton_scanpath' + '/' + numberScanpaths;
+    let currentNumScanpath = numberScanpaths + 1;
+    downloadButton.id = name + '.downloadButton_scanpath' + '/' + currentNumScanpath;
     downloadButton.value = 'Download scanpath of ' + name.substring(0, name.indexOf('.')) + " as .svg";
 
-    // adds event listener which runs the actual download function
+// adds event listener which runs the actual download function
     downloadButton.addEventListener("click", function () {
         downloadScanpath(downloadButton.id)
     });
 
-    // appends the newly created button to the div with all scanpath buttons
+// appends the newly created button to the div with all scanpath buttons
     var downloadDiv = document.querySelector('#downloadButtonsScanpath');
     downloadDiv.appendChild(downloadButton);
 }
 
-// IMAGE DOESN'T DISPLAY BEHIND SVG
-// HAPPENS BECAUSE IMAGE IS EXTERNAL RELATIVE TO THE SVG
-// FIX: ADD "<image href='path/to/image'(or callback containing image) width=width height=height/>"
-// the image becomes part of the svg, which means that it should then be downloaded behind the svg
+function saveSvg(svgEl, name) {
+    svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    var svgData = svgEl.outerHTML;
+    var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+    var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
+    var svgUrl = URL.createObjectURL(svgBlob);
+    var downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = name;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+
 // downloads the scanpath visualization
 function downloadScanpath(name) {
     var num_of_scanpath = name.substring(name.indexOf('/') + 1, name.length);
 
-    // draws image over all the other elements
-    d3.select('#scanpath_' + num_of_scanpath)
-        .append("svg:image")
-        .attr('id', 'backgroundImageScanpathDownload')
-        .attr('width', width)
-        .attr('height', height)
-        .attr('xlink:href', "../stimuli/" + stimulus);
-
     var svg = document.getElementById("scanpath_" + num_of_scanpath);
+    //saveSvg(svg, 'WORK.svg')
 
     // I need to look into what XML does/is, but this gets some source of the svg
     var serializer = new XMLSerializer();
     var source = serializer.serializeToString(svg);
 
-    // as above, description said 'adds namespaces'
+// as above, description said 'adds namespaces'
     if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
         source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
     }
@@ -562,14 +599,14 @@ function downloadScanpath(name) {
         source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
     }
 
-    //add xml declaration
+//add xml declaration
     source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
 
-    //convert svg source to URI data scheme.
+//convert svg source to URI data scheme.
     var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
-    // doesn't load the image attribute but just 'no image thumbnial'-thing
-    // actual bit which downloads the file passed in the url / URI data scheme
+// doesn't load the image attribute but just 'no image thumbnial'-thing
+// actual bit which downloads the file passed in the url / URI data scheme
     var link = document.createElement("a");
     link.download = name.substring(0, name.indexOf(".")) + "_scanpath" + '.svg';
     link.href = url;
