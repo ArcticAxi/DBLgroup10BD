@@ -76,7 +76,11 @@ function bubblemapInit() {
     attachImgBubblemap(svg);
 }
 
-function bubbleMap(content, name, width, height, idName, hasImg) {
+function bubbleMap(content, name, width, height, idName, hasImg, vars) {
+    if (typeof vars == 'object') {
+        updateVarsBubblemap(vars);
+    }
+
     contentBubblemap = content;
     nameBubblemap = name;
     widthBubblemap = width;
@@ -88,6 +92,13 @@ function bubbleMap(content, name, width, height, idName, hasImg) {
     numberBubblemaps += 1;
 
     bubblemapInit();
+}
+
+function updateVarsBubblemap(vars) {
+    if (typeof vars.gridsize == 'number') {
+        gridSize = vars.gridsize;
+        gridSizeSlider.value = vars.gridsize;
+    }
 }
 
 function createBubblemap(svg) {
