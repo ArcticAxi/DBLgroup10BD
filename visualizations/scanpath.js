@@ -275,6 +275,8 @@ function attachImage(data_scanpath, users) {
             }
 
         }
+    } else {
+        createVis(data_scanpath, users);
     }
 }
 
