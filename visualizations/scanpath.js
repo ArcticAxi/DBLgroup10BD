@@ -59,18 +59,18 @@
 //creates scanpath with given variables
 function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, vars) {
     //checks if vars is a valid input
-    if (typeof vars == 'object'){
+    if (typeof vars == 'object') {
         if (typeof vars.base_stroke_width == 'number') {
             updateVarsScanpath(vars);
         }
-    };
+    }
+    ;
     stimulus = name;
     height = sizeHeight;
     width = sizeWidth;
     size_decrease = sizeDecrease;
     initialSetup(content, idName);
     drawScanpath(content);
-    createDownloadButtonScanpath(name);
 }
 
 //creates an svg element and users array to work with
@@ -196,8 +196,8 @@ function initialSetup(original_data_scanpath, idName) {
             highlighted_users.push(value);
             button.style.backgroundColor = highlight_colour;
         }
-        for (iter=0; iter<numberButtons; iter++){
-            identity = value+'_'+iter
+        for (iter = 0; iter < numberButtons; iter++) {
+            identity = value + '_' + iter
             button_color = document.getElementById(identity)
             if (button_color !== null && button_color !== button) {
                 if (highlighted_users.indexOf(value) !== -1) {
@@ -238,9 +238,9 @@ function drawScanpath(original_data_scanpath) {
 function createVis(data_scanpath, users) {
     //create group object            
     var group = canvas.append("g")
-                        .attr("class", "paths");
+        .attr("class", "paths");
     var fixation = canvas.append("g")
-                        .attr("class", "fixations");
+        .attr("class", "fixations");
 
     //create line object
     var line = d3.line()
@@ -256,7 +256,8 @@ function createVis(data_scanpath, users) {
         users[i] = data_scanpath.filter(function (d) {
             return d.user == users[i]
         });
-    };
+    }
+    ;
 
     //add the scanpath to the canvas
     group.selectAll("path")
@@ -323,16 +324,16 @@ function createVis(data_scanpath, users) {
 //interactions draw
 {
 //draw scanpath after interactions
-function redrawScanpath() {
-    for (j=0; j<=numberScanpaths; j++) {
-        var svg = d3.select(document.getElementById('scanpath_' + j))
-        //var temp_can = d3.select(svg)
-        
-        //select the paths
-        paths = svg.selectAll("g.paths")
+    function redrawScanpath() {
+        for (j = 0; j <= numberScanpaths; j++) {
+            var svg = d3.select(document.getElementById('scanpath_' + j))
+            //var temp_can = d3.select(svg)
 
-        //transition the paths
-        paths.selectAll("path")
+            //select the paths
+            paths = svg.selectAll("g.paths")
+
+            //transition the paths
+            paths.selectAll("path")
                 .transition()
                 .duration(0)
                 .attr("stroke", function (d) {
@@ -355,145 +356,146 @@ function redrawScanpath() {
                     } else {
                         return base_stroke_opacity
                     }
-                }); 
+                });
 
-        svg.selectAll("circle")
-                    .transition()
-                    .duration(0)
-                    .attr("fill", function (d) {
-                        if (highlighted_users.indexOf(d.user) !== -1) {
-                            return highlight_colour
-                        } else {
-                            return base_colour
-                        }
-                    })
-                    .attr("r", function (d) {
-                        if (highlighted_users.indexOf(d.user) !== -1) {
-                            return highlight_fixation_radius
-                        } else {
-                            return base_fixation_radius
-                        }
-                    })
-                    .attr("opacity", function (d) {
-                        if (highlighted_users.indexOf(d.user) !== -1) {
-                            return highlight_fixation_opacity
-                        } else {
-                            return base_fixation_opacity
-                        }
-                    });  
-    }
-};
+            svg.selectAll("circle")
+                .transition()
+                .duration(0)
+                .attr("fill", function (d) {
+                    if (highlighted_users.indexOf(d.user) !== -1) {
+                        return highlight_colour
+                    } else {
+                        return base_colour
+                    }
+                })
+                .attr("r", function (d) {
+                    if (highlighted_users.indexOf(d.user) !== -1) {
+                        return highlight_fixation_radius
+                    } else {
+                        return base_fixation_radius
+                    }
+                })
+                .attr("opacity", function (d) {
+                    if (highlighted_users.indexOf(d.user) !== -1) {
+                        return highlight_fixation_opacity
+                    } else {
+                        return base_fixation_opacity
+                    }
+                });
+        }
+    };
 
 //redraws visualization
-function redraw(temp_can) {
-}
+    function redraw(temp_can) {
+    }
 }
 
 //timeslider draw (needs one specific map instead of all)
 {
-function timerScanpath(idNum, data_scanpath) {
-    var svg_0 = document.getElementById("scanpath_" + idNum)
-    var svg = d3.select(svg_0)
+    function timerScanpath(idNum, data_scanpath) {
+        var svg_0 = document.getElementById("scanpath_" + idNum)
+        var svg = d3.select(svg_0)
 
-    var allUsers = data_scanpath.map(function (d) {
-        return d.user
-    });
-    var uniqueUsers = new Set(allUsers);
-
-    //turns the set into an array
-    var  arrayUsers = [...uniqueUsers];
-
-    timerDraw(data_scanpath, arrayUsers, svg)
-}
-
-function timerDraw(data_scanpath, users, svg) {
-    
-    //clear svg
-    svg.selectAll("g").remove();
-
-    //create group object            
-    var group = svg.append("g")
-                        .attr("class", "paths");
-    var fixation = svg.append("g")
-                        .attr("class", "fixations");
-
-    //create line object
-    var line = d3.line()
-        .x(function (d) {
-            return d.MappedFixationPointX
-        })
-        .y(function (d) {
-            return d.MappedFixationPointY
+        var allUsers = data_scanpath.map(function (d) {
+            return d.user
         });
+        var uniqueUsers = new Set(allUsers);
 
-    //turn the users into an array of objects containing the data of the users
-    for (i in users) {
-        users[i] = data_scanpath.filter(function (d) {
-            return d.user == users[i]
-        });
-    };
+        //turns the set into an array
+        var arrayUsers = [...uniqueUsers];
 
-    //add the scanpath to the canvas
-    group.selectAll("path")
-        .data([...users])
-        .enter()
-        .append("path")
-        .attr("d", line)
-        .attr("fill", "none")
-        .attr("stroke", function (d) {
-            if (highlighted_users.indexOf(d[0].user) !== -1) {
-                return highlight_colour
-            } else {
-                return base_colour
-            }
-        })
-        .attr("stroke-width", function (d) {
-            if (highlighted_users.indexOf(d[0].user) !== -1) {
-                return highlight_stroke_width
-            } else {
-                return base_stroke_width
-            }
-        })
-        .attr("stroke-opacity", function (d) {
-            if (highlighted_users.indexOf(d[0].user) !== -1) {
-                return highlight_stroke_opacity
-            } else {
-                return base_stroke_opacity
-            }
-        });
+        timerDraw(data_scanpath, arrayUsers, svg)
+    }
 
-    fixation.selectAll("circle")
-        .data(data_scanpath)
-        .enter()
-        .append("circle")
-        .attr("opacity", function (d) {
-            if (highlighted_users.indexOf(d.user) !== -1) {
-                return highlight_fixation_opacity
-            } else {
-                return base_fixation_opacity
-            }
-        })
-        .attr("cx", function (d) {
-            return d.MappedFixationPointX
-        })
-        .attr("cy", function (d) {
-            return d.MappedFixationPointY
-        })
-        .attr("r", function (d) {
-            if (highlighted_users.indexOf(d.user) !== -1) {
-                return highlight_fixation_radius
-            } else {
-                return base_fixation_radius
-            }
-        })
-        .attr("fill", function (d) {
-            if (highlighted_users.indexOf(d.user) !== -1) {
-                return highlight_colour
-            } else {
-                return base_colour
-            }
-        });
-}
+    function timerDraw(data_scanpath, users, svg) {
+
+        //clear svg
+        svg.selectAll("g").remove();
+
+        //create group object
+        var group = svg.append("g")
+            .attr("class", "paths");
+        var fixation = svg.append("g")
+            .attr("class", "fixations");
+
+        //create line object
+        var line = d3.line()
+            .x(function (d) {
+                return d.MappedFixationPointX
+            })
+            .y(function (d) {
+                return d.MappedFixationPointY
+            });
+
+        //turn the users into an array of objects containing the data of the users
+        for (i in users) {
+            users[i] = data_scanpath.filter(function (d) {
+                return d.user == users[i]
+            });
+        }
+        ;
+
+        //add the scanpath to the canvas
+        group.selectAll("path")
+            .data([...users])
+            .enter()
+            .append("path")
+            .attr("d", line)
+            .attr("fill", "none")
+            .attr("stroke", function (d) {
+                if (highlighted_users.indexOf(d[0].user) !== -1) {
+                    return highlight_colour
+                } else {
+                    return base_colour
+                }
+            })
+            .attr("stroke-width", function (d) {
+                if (highlighted_users.indexOf(d[0].user) !== -1) {
+                    return highlight_stroke_width
+                } else {
+                    return base_stroke_width
+                }
+            })
+            .attr("stroke-opacity", function (d) {
+                if (highlighted_users.indexOf(d[0].user) !== -1) {
+                    return highlight_stroke_opacity
+                } else {
+                    return base_stroke_opacity
+                }
+            });
+
+        fixation.selectAll("circle")
+            .data(data_scanpath)
+            .enter()
+            .append("circle")
+            .attr("opacity", function (d) {
+                if (highlighted_users.indexOf(d.user) !== -1) {
+                    return highlight_fixation_opacity
+                } else {
+                    return base_fixation_opacity
+                }
+            })
+            .attr("cx", function (d) {
+                return d.MappedFixationPointX
+            })
+            .attr("cy", function (d) {
+                return d.MappedFixationPointY
+            })
+            .attr("r", function (d) {
+                if (highlighted_users.indexOf(d.user) !== -1) {
+                    return highlight_fixation_radius
+                } else {
+                    return base_fixation_radius
+                }
+            })
+            .attr("fill", function (d) {
+                if (highlighted_users.indexOf(d.user) !== -1) {
+                    return highlight_colour
+                } else {
+                    return base_colour
+                }
+            });
+    }
 }
 
 //create buttons to select highlighted user
@@ -501,8 +503,8 @@ function createUserButtons(users) {
     highlighted_user_container.innerHTML += '<p>' + stimulus + '</p>'
     for (user in users) {
         thisUser = users[user] + '_' + numberButtons.toString(10)
-        highlighted_user_container.innerHTML += '<input type="button" id ="' + thisUser + 
-                                                '" value =' + users[user] + ' name="highlighted_users" onclick="highlightButton(this.value, this.id)">';
+        highlighted_user_container.innerHTML += '<input type="button" id ="' + thisUser +
+            '" value =' + users[user] + ' name="highlighted_users" onclick="highlightButton(this.value, this.id)">';
         if (user % 4 == 3) {
             highlighted_user_container.innerHTML += "</br>";
         }
@@ -513,14 +515,12 @@ function createUserButtons(users) {
     numberButtons += 1
 }
 
-// creates download buttons for each individual visualization
-// should move the creation of these buttons to old_visualizations.js since these are essentially the same for each vis
-function createDownloadButtonScanpath(name) {
+function createDownloadButtonsScanpath(name) {
     // creates button
     var downloadButton = document.createElement('input');
     downloadButton.type = 'button';
     downloadButton.id = name + '.downloadButton_scanpath' + '/' + numberScanpaths;
-    downloadButton.value = 'Download scanpath of ' + name;
+    downloadButton.value = 'Download scanpath of ' + name.substring(0, name.indexOf('.')) + " as .svg";
 
     // adds event listener which runs the actual download function
     downloadButton.addEventListener("click", function () {
@@ -538,7 +538,7 @@ function createDownloadButtonScanpath(name) {
 // the image becomes part of the svg, which means that it should then be downloaded behind the svg
 // downloads the scanpath visualization
 function downloadScanpath(name) {
-    var num_of_scanpath = name.substring(name.indexOf('/') +1 , name.length);
+    var num_of_scanpath = name.substring(name.indexOf('/') + 1, name.length);
 
     // draws image over all the other elements
     d3.select('#scanpath_' + num_of_scanpath)
@@ -608,16 +608,16 @@ function updateVarsScanpath(variables) {
 
     highlighted_users = variables.highlighted_users;
 
-    if (variables.base_colour == "black"){
+    if (variables.base_colour == "black") {
         base_colour = variables.base_colour;
     }
 }
 
 function updateButtons() {
-    for(x in highlighted_users) {
+    for (x in highlighted_users) {
         var value = highlighted_users[x]
-        for (i=0; i<numberButtons; i++){
-            var identity = value+'_'+i
+        for (i = 0; i < numberButtons; i++) {
+            var identity = value + '_' + i
             var button_color = document.getElementById(identity)
             if (button_color !== null && button_color !== button) {
                 if (highlighted_users.indexOf(value) !== -1) {
@@ -626,5 +626,6 @@ function updateButtons() {
                     button_color.style.backgroundColor = dark_blue;
                 }
             }
-}}
+        }
+    }
 }

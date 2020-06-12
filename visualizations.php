@@ -108,6 +108,8 @@
         </div>
         <div id="downloadButtonsHeatmap">
         </div>
+        <div id="downloadButtonsBoxplot">
+        </div>
     </div>
 
     <script src="visualizations/scanpath.js"></script>
