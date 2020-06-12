@@ -23,7 +23,7 @@
         </div>!-->
         <div class="uploadlink">
             <form action="upload">
-                     <input type="submit" id = "upload_button" value="Upload page" />
+                     <input type="submit" id = "upload_button" value="Visualization page" />
                 </form>
         </div>
     </div>
@@ -42,7 +42,7 @@
             </div>
             <div>
                 <input type="button" id="JSONButton" value="Upload previous settings">
-                <input type="file" id="json-input"/>
+                <input type="file" id="json-input" accept=".json, .txt"/>
                 <label for="json-input" id="label_json"> No file selected</label>
             </div>
             <input type="submit" value="Submit" name="submit"/>

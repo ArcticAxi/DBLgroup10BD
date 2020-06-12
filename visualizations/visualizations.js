@@ -13,7 +13,9 @@ var basicJSON = {
         "highlighted_users": [],
         "base_colour": "blue"
     },
-    "bubblemap": {},
+    "bubblemap": {
+        "gridsize": 100
+    },
     "heatmap": {
         "rainbow": false,
         "intensity_heatmap": 5,
