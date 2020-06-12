@@ -23,7 +23,7 @@
         </div>!-->
         <div class="uploadlink">
             <form action="upload">
-                     <input type="submit" id = "upload_button" value="Upload page" />
+                     <input type="submit" id = "upload_button" value="Visualization page" />
                 </form>
         </div>
     </div>

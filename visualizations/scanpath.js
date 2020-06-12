@@ -234,8 +234,6 @@ function drawScanpath(original_data_scanpath) {
     //create the actual visualization
     //createVis(data_scanpath, arrayUsers);
     attachImage(data_scanpath, arrayUsers);
-
-
 };
 
 function attachImage(data_scanpath, users) {
@@ -579,7 +577,7 @@ function createDownloadButtonsScanpath(name) {
     downloadDiv.appendChild(downloadButton);
 }
 
-function xmlSvg(name, svg, num_of_scanpath) {
+function xmlSvg(name, svg) {
     // I need to look into what XML does/is, but this gets some source of the svg
     var serializer = new XMLSerializer();
     var source = serializer.serializeToString(svg);
@@ -616,7 +614,7 @@ function downloadScanpath(name) {
 
     var svg = document.getElementById("scanpath_" + num_of_scanpath);
 
-    xmlSvg(name, svg, num_of_scanpath)
+    xmlSvg(name, svg)
 }
 
 //sets the vars to those in the provided json file
