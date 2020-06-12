@@ -272,5 +272,34 @@ function createDownloadButtonsBoxplot(name) {
 }
 
 function downloadBoxplot(name) {
+    var svg = document.getElementById(name);
 
+    // I need to look into what XML does/is, but this gets some source of the svg
+    var serializer = new XMLSerializer();
+    var source = serializer.serializeToString(svg);
+
+    // as above, description said 'adds namespaces'
+    if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+        source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+    }
+    if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+        source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    }
+
+    //add xml declaration
+    source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+    //convert svg source to URI data scheme.
+    var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+
+    // doesn't load the image attribute but just 'no image thumbnial'-thing
+    // actual bit which downloads the file passed in the url / URI data scheme
+    var link = document.createElement("a");
+    link.download = name.substring(0, name.indexOf(".")) + "_boxplot" + '.svg';
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+   // d3.select('#'+ name).select('#backgroundImageBoxplotDownload').remove();
 }

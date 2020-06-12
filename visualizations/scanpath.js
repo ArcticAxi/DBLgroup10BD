@@ -577,7 +577,7 @@ function createDownloadButtonsScanpath(name) {
     downloadDiv.appendChild(downloadButton);
 }
 
-function xmlSvg(svg, num_of_scanpath) {
+function xmlSvg(name, svg, num_of_scanpath) {
     // I need to look into what XML does/is, but this gets some source of the svg
     var serializer = new XMLSerializer();
     var source = serializer.serializeToString(svg);
@@ -605,7 +605,7 @@ function xmlSvg(svg, num_of_scanpath) {
     link.click();
     document.body.removeChild(link);
 
-    d3.select('#scanpath_' + num_of_scanpath).select('#backgroundImageScanpathDownload').remove();
+   // d3.select('#scanpath_' + num_of_scanpath).select('#backgroundImageScanpathDownload').remove();
 }
 
 // downloads the scanpath visualization
@@ -614,7 +614,7 @@ function downloadScanpath(name) {
 
     var svg = document.getElementById("scanpath_" + num_of_scanpath);
 
-    xmlSvg(svg, num_of_scanpath)
+    xmlSvg(name, svg, num_of_scanpath)
 }
 
 //sets the vars to those in the provided json file
