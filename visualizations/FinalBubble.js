@@ -35,6 +35,7 @@ function bubbleMap(content, name, width, height, idName, hasImg) {
 	}
 	
 	const imagesFile = document.querySelector('#stimuli-input').files[numberFile]; 
+	console.log(imagesFile);
 	const objectURL = URL.createObjectURL(imagesFile);
 	
 	var image1 = svg.append("svg:image").attr("height", height)
@@ -195,7 +196,7 @@ function updateZoom (){
 		  .attr('cx', function(d) {return newX(d.averageX);})
 		  .attr('cy', function(d) {return newY(d.averageY);})
 		  .attr("r", function(d)  {return newZ(d.counts);})
-		  
+	//console.log("yes");	  
 	svg.style("transform-origin", "50% 50% 0");	  
 	if(hasImg) {
      image1.attr("transform", d3.event.transform)
@@ -220,7 +221,24 @@ function updateZoom (){
         for (a = 0; a <= numberBubblemaps; a++) {
 
             var svg = d3.select(document.getElementById('bubblemap_' + a))
-
+			
+		if(hasImg){
+			var imageBack =  document.querySelector('#bubblemap');
+			var childImage = imageBack.querySelectorAll("div");
+			for (var i = 0; i < childImage.length; i++) {
+				if("#" + childImage[i].id == idName)
+				{
+				childImage[i].style.backgroundImage = "";
+				var numberFile = i;
+				}
+			}
+			
+			const imagesFile = document.querySelector('#stimuli-input').files[numberFile]; 
+			const objectURL = URL.createObjectURL(imagesFile);
+			
+			var image1 = svg.append("svg:image").attr("height", height)
+							.attr("width", width).attr("xlink:href", objectURL);
+			}
 
             // read the data
             data_bubblemap = content.filter(function (d) {
@@ -339,8 +357,7 @@ function updateZoom (){
                 });
 
             svg.call(zoom);
-        }
-        ;
+        };
     }
 };
 
