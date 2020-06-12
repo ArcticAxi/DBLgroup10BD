@@ -2,7 +2,7 @@
 	var array_stimuli_bubblemap = [];
 	var numberBubblemaps = -1;
 
-function bubbleMap(content, name, width, height, idName) {
+function bubbleMap(content, name, width, height, idName, hasImg) {
     var array_bubblemap = [];							// make an array to store d.coordinates
 	var duplicates = [];					// count how many duplicates in array
     var gridSize = 100;
@@ -23,6 +23,7 @@ function bubbleMap(content, name, width, height, idName) {
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
 	
 	//take the background picture
+	if(hasImg){
 	var imageBack =  document.querySelector('#bubblemap');
 	var childImage = imageBack.querySelectorAll("div");
 	for (var i = 0; i < childImage.length; i++) {
@@ -34,10 +35,12 @@ function bubbleMap(content, name, width, height, idName) {
 	}
 	
 	const imagesFile = document.querySelector('#stimuli-input').files[numberFile]; 
-	const objectURL = URL.createObjectURL(imagesFile)
+	const objectURL = URL.createObjectURL(imagesFile);
 	
 	var image1 = svg.append("svg:image").attr("height", height)
 	                .attr("width", width).attr("xlink:href", objectURL);
+	}
+	
 	
 		var div = d3.select("body").append("div")	// Define the div for the tooltip
 		.attr("class", "tooltip")				
@@ -189,11 +192,11 @@ function updateZoom (){
 		  .attr("r", function(d)  {return newZ(d.counts);})
 		  
 	svg.style("transform-origin", "50% 50% 0");	  
-		 
+	if(hasImg) {
      image1.attr("transform", d3.event.transform)
 	       .on("mousedown.zoom", null)
 		   .on("move.zoom", null);
-	
+	}
 }
 
 

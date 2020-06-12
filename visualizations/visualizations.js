@@ -138,12 +138,12 @@ function loadingImage(content, name) {
             var heatmapVars = json.heatmap;
 
             scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease, scanpathVars);
-            bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap, bubblemapVars);
+            bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap, hasImage, bubblemapVars);
             heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap, heatmapVars);
             boxplot(copyContent, name, idNameBoxplot);
             } else {
             scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease);
-            bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap);
+            bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap, hasImage);
             heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
             boxplot(copyContent, name, idNameBoxplot);
             }
