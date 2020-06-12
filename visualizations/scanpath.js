@@ -580,13 +580,7 @@ function saveSvg(svgEl, name) {
     document.body.removeChild(downloadLink);
 }
 
-// downloads the scanpath visualization
-function downloadScanpath(name) {
-    var num_of_scanpath = name.substring(name.indexOf('/') + 1, name.length);
-
-    var svg = document.getElementById("scanpath_" + num_of_scanpath);
-    //saveSvg(svg, 'WORK.svg')
-
+function xmlSvg(svg, num_of_scanpath) {
     // I need to look into what XML does/is, but this gets some source of the svg
     var serializer = new XMLSerializer();
     var source = serializer.serializeToString(svg);
@@ -615,6 +609,46 @@ function downloadScanpath(name) {
     document.body.removeChild(link);
 
     d3.select('#scanpath_' + num_of_scanpath).select('#backgroundImageScanpathDownload').remove();
+}
+
+function toCanvas(svg) {
+    let clonedSvgElement = svg.cloneNode(true);
+
+    let outerHTML = clonedSvgElement.outerHTML,
+        blob = new Blob([outerHTML], {type:'image/svg+xml;charset=utf-8'});
+
+    let URL = window.URL || window.webkitURL || window;
+    let blobURL = URL.createObjectURL(blob);
+    
+    let image = new Image();
+    image.src = blobURL;
+
+    image.onload = function () {
+        console.log('image onload');
+
+        let canvas = document.createElement('canvas');
+        canvas.width = 825;
+        canvas.height = 600;
+
+        let context = canvas.getContext('2d');
+
+        context.drawImage(image, 0, 0, width, height);
+
+        let grandma = document.getElementById('scanpath');
+        grandma.appendChild(canvas);
+    };
+
+}
+
+// downloads the scanpath visualization
+function downloadScanpath(name) {
+    var num_of_scanpath = name.substring(name.indexOf('/') + 1, name.length);
+
+    var svg = document.getElementById("scanpath_" + num_of_scanpath);
+    //saveSvg(svg, 'WORK.svg')
+    //xmlSvg(svg, num_of_scanpath)
+
+    toCanvas(svg)
 }
 
 //sets the vars to those in the provided json file
