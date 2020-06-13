@@ -13,7 +13,9 @@ var basicJSON = {
         "highlighted_users": [],
         "base_colour": "blue"
     },
-    "bubblemap": {},
+    "bubblemap": {
+        "gridsize": 100
+    },
     "heatmap": {
         "rainbow": false,
         "intensity_heatmap": 5,
@@ -121,20 +123,19 @@ function loadingImage(content, name) {
 
             if (typeof json == "object") {
                 //takes the variable settings for specific visualizations from json
-            var scanpathVars = json.scanpath;
-            var bubblemapVars = json.bubblemap;
-            var heatmapVars = json.heatmap;
+                var scanpathVars = json.scanpath;
+                var bubblemapVars = json.bubblemap;
+                var heatmapVars = json.heatmap;
 
-            scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease, scanpathVars);
-            bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap, hasImage, bubblemapVars);
-            heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap, heatmapVars);
-            boxplot(copyContent, name, idNameBoxplot);
+                scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease, hasImage, scanpathVars);
+                bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap, hasImage, bubblemapVars);
+                heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap, heatmapVars);
+                boxplot(copyContent, name, idNameBoxplot);
             } else {
-            scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease);
-            bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap, hasImage);
-            heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
-            boxplot(copyContent, name, idNameBoxplot);
-
+                scanpath(copyContent, name, sizeWidth, sizeHeight, idNameScanpath, sizeDecrease, hasImage);
+                bubbleMap(copyContent, name, sizeWidth, sizeHeight, idNameBubblemap, hasImage);
+                heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
+                boxplot(copyContent, name, idNameBoxplot);
             }
         });
 }
