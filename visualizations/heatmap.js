@@ -1,6 +1,7 @@
 //Brackets are added for the very convenient collapse option Visual Studio provides :)
 //old_heatmap variables
 {
+    var preset_timestamps = []
     var flatten_data = [];
     var timestamp_slider_heatmap = [];
     var heatmaps = [];
@@ -148,22 +149,40 @@ function getTimestamps(data) {
     return flatten_data;
 }
 
-function timestamp_slider_input(e) {
-    var timestamp_heatmap = this.value;
-    // had some weird issues with timestamp_heatmap being interpreted as a string so I added parseInt everywhere
-    // might clean this up later but who knows at this point
-    timestamp_heatmap = parseInt(timestamp_heatmap);
+function timestamp_slider_input(e, num) {
 
+    if(typeof num != "undefined" && num <= (preset_timestamps.length - 1)){
+        var timestamp_heatmap = preset_timestamps[num]
+    } else {
+        var timestamp_heatmap = this.value;
+    }
+    
     // gets the checkbox linked to the slider
-    let id = this.id;
-    id = id.substring(id.lastIndexOf('.') + 1, id.length - 1);
+    if(typeof num != "undefined" && num <= preset_timestamps.length){
+        var id = names_heatmap[num];
+        id = id.substring(0, id.lastIndexOf('.'));
+        id = "#a" + id + "_heatmap/" + num;
+    } else {
+        var id = this.id;
+        id = id.substring(id.lastIndexOf('.') + 1, id.length - 1);
+    }
+
     id = "'timestamp_slider_checkbox." + id + "'";
     var checkbox = document.getElementById(id);
 
     // links slider to the old_heatmap
-    let idNum = this.id;
-    idNum = id.substring(id.lastIndexOf('/') + 1, id.length - 1);
+    if(typeof num != "undefined" && num <= preset_timestamps.length){
+        var idNum = num;
+    } else {
+        var idNum = this.id;
+        idNum = id.substring(id.lastIndexOf('/') + 1, id.length - 1);
+    }
+
     var startingZero = getTimestamps(nestUsers(data_stimuli[idNum]));
+
+    // had some weird issues with timestamp_heatmap being interpreted as a string so I added parseInt everywhere
+    // might clean this up later but who knows at this point
+    timestamp_heatmap = parseInt(timestamp_heatmap);
 
     var filteredTimestamp;
 
@@ -198,8 +217,10 @@ function timestamp_slider_input(e) {
     // draws old_heatmap
     heatmaps[idNum].draw();
 
+    var sendToScanpath = filteredTimestamp;
+
     // draws scanpath
-    timerScanpath(idNum, filteredTimestamp);
+    timerScanpath(idNum, sendToScanpath);
 }
 
 function timestamp_slider_checkbox(e) {
@@ -362,10 +383,14 @@ function heatmap(content, name, width, height, idName, vars) {
         heat.gradient({0.48: '#86007D', 0.55: '#0000F9', 0.60 : '#008018', 0.7 : '#FFFF41', 0.75 : '#FFA52C', 1: '#FF0018'});
     }
 
+    if(id_num_add <= preset_timestamps.length -1){
+        timestamp_slider_heatmap[id_num_add].value = preset_timestamps[id_num_add];
+    }
+
     // draws the heatmap
     heat.draw();
     userSelectionHeatmap(highlightedUsers_heatmap)
-
+    timestamp_slider_input(true, id_num_add)
 }
 
 function downloadHeatmap(name, multiple) {
@@ -399,7 +424,7 @@ function addToIdNum() {
     id_num_add += 1;
 };
 
-function updateVarsHeatmap(variables) {
+function updateVarsHeatmap(variables, num) {
     rainbow = variables.rainbow;
 
     intensity_heatmap = variables.intensity_heatmap;
@@ -412,4 +437,6 @@ function updateVarsHeatmap(variables) {
     blur_slider_heatmap = variables.blur_heatmap;
 
     highlightedUsers_heatmap = variables.highlightedUsers_heatmap;
+
+    preset_timestamps = variables.preset_timestamps;
 }
