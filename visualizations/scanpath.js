@@ -548,7 +548,7 @@ function createDownloadButtonsScanpath(name) {
 
 // adds event listener which runs the actual download function
     downloadButton.addEventListener("click", function () {
-        downloadScanpath(downloadButton.id)
+        downloadScanpath(downloadButton.id, false)
     });
 
 // appends the newly created button to the div with all scanpath buttons
@@ -556,7 +556,7 @@ function createDownloadButtonsScanpath(name) {
     downloadDiv.appendChild(downloadButton);
 }
 
-function xmlSvg(name, svg) {
+function xmlSvg(name, svg, multiple) {
     // I need to look into what XML does/is, but this gets some source of the svg
     var serializer = new XMLSerializer();
     var source = serializer.serializeToString(svg);
@@ -577,23 +577,30 @@ function xmlSvg(name, svg) {
 
 // doesn't load the image attribute but just 'no image thumbnial'-thing
 // actual bit which downloads the file passed in the url / URI data scheme
-    var link = document.createElement("a");
-    link.download = name.substring(0, name.indexOf(".")) + "_scanpath" + '.svg';
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-   // d3.select('#scanpath_' + num_of_scanpath).select('#backgroundImageScanpathDownload').remove();
+    if (multiple) {
+        return url;
+    } else {
+        var link = document.createElement("a");
+        link.download = name.substring(0, name.indexOf(".")) + "_scanpath" + '.svg';
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    // d3.select('#scanpath_' + num_of_scanpath).select('#backgroundImageScanpathDownload').remove();
 }
 
 // downloads the scanpath visualization
-function downloadScanpath(name) {
+function downloadScanpath(name, multiple) {
     var num_of_scanpath = name.substring(name.indexOf('/') + 1, name.length);
 
     var svg = document.getElementById("scanpath_" + num_of_scanpath);
 
-    xmlSvg(name, svg)
+    if (multiple) {
+        return xmlSvg(name, svg, multiple)
+    } else {
+        xmlSvg(name, svg, multiple)
+    }
 }
 
 //sets the vars to those in the provided json file
