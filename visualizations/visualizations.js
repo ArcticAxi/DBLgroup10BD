@@ -219,6 +219,14 @@ downloadVarsButton.onclick = function () {
         json.scanpath.base_colour = "blue";
     }
 
+    //updates the bubblemap variables
+    json.bubblemap.gridsize = parseInt(gridSizeSlider.value)
+
+    //updates the heatmap variables
+    json.heatmap.intensity_heatmap = parseInt(intensity_slider_heatmap.value)
+    json.radius_heatmap = parseInt(radius_slider_heatmap.value)
+    json.blur_heatmap = parseInt(blur_slider_heatmap.value)
+
     //bit that does the actual downloading, directly copied from StackOverflow, cause why not
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json));
     var downloadThing = document.getElementById('downloadVarsElement');
