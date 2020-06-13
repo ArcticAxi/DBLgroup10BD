@@ -55,6 +55,8 @@
 //passed variables
     var stimulus;
     var has_image = false;
+
+    var canvas;
 }
 
 //creates scanpath with given variables
@@ -120,7 +122,7 @@ function initialSetup(original_data_scanpath, idName) {
 
     //creates buttons used to highlight users
     createUserButtons(arrayUsers);
-    //})                
+    //})
 }
 
 //interactions
@@ -258,20 +260,16 @@ function attachImage(data_scanpath, users) {
             const imagesFileReader = new FileReader();
 
             imagesFileReader.addEventListener('load', function () {
-                var image = canvas.selectAll('image')
-                    .data([0]);
-                image.enter().append("svg:image").attr("xlink:href", imagesFileReader.result)
+                var image = canvas.append("svg:image").attr("xlink:href", imagesFileReader.result)
                     .attr('width', width)
                     .attr('height', height);
 
                 createVis(data_scanpath, users);
-
             }, false);
 
             if (imagesFile) {
                 imagesFileReader.readAsDataURL(imagesFile)
             }
-
         }
     } else {
         createVis(data_scanpath, users);
@@ -280,7 +278,7 @@ function attachImage(data_scanpath, users) {
 
 //creates the actual visualization
 function createVis(data_scanpath, users) {
-//create group object
+    //create group object
     var group = canvas.append("g")
         .attr("class", "paths");
     var fixation = canvas.append("g")
