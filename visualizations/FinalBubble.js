@@ -50,6 +50,7 @@ function attachImgBubblemap(svg) {
                 image1 = svg.append("svg:image").attr("height", height)
                     .attr("width", width).attr("xlink:href", objectURL).attr('id', 'imageblob');
 
+
                 createBubblemap(svg);
             }, false);
 
@@ -436,6 +437,7 @@ function xmlSvgBubblemap(name, svg) {
     //add xml declaration
     source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
 
+
     //convert svg source to URI data scheme.
     var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
@@ -463,3 +465,5 @@ function downloadBubblemap(name) {
 
     removingImgBlob.select('#imageblob').attr('opacity', 1);
 }
+
+

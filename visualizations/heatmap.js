@@ -362,8 +362,10 @@ function heatmap(content, name, width, height, idName, vars) {
         heat.gradient({0.48: '#86007D', 0.55: '#0000F9', 0.60 : '#008018', 0.7 : '#FFFF41', 0.75 : '#FFA52C', 1: '#FF0018'});
     }
 
-    // draws the old_heatmap
+    // draws the heatmap
     heat.draw();
+    userSelectionHeatmap(highlightedUsers_heatmap)
+
 }
 
 function downloadHeatmap(name) {
@@ -405,4 +407,6 @@ function updateVarsHeatmap(variables) {
 
     blur_heatmap = variables.blur_heatmap *3;
     blur_slider_heatmap = variables.blur_heatmap;
+
+    highlightedUsers_heatmap = variables.highlightedUsers_heatmap;
 }
