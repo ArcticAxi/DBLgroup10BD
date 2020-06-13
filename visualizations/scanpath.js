@@ -72,57 +72,7 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, ha
     width = sizeWidth;
     size_decrease = sizeDecrease;
     has_image = hasImage;
-    initialSetup(content, idName);
-    drawScanpath(content);
-}
-
-//creates an svg element and users array to work with
-function initialSetup(original_data_scanpath, idName) {
-    numberScanpaths += 1;
-    //create canvas
-    canvas = d3.select(idName)
-        .append("svg")
-        .attr("data-image", stimulus)
-        .attr("data-name", idName)
-        .attr("id", "scanpath_" + numberScanpaths)
-        .attr("width", width)
-        .attr("height", height)
-        .attr('xmlns', "http://www.w3.org/2000/svg");
-
-    data_scanpath = original_data_scanpath.filter(function (d) {
-        return (d.StimuliName == stimulus);
-    });
-
-    data_scanpath.forEach(function (d) {
-        d.MappedFixationPointX = d.MappedFixationPointX / size_decrease;
-        d.MappedFixationPointY = d.MappedFixationPointY / size_decrease;
-    });
-
-    //creates a set containing all unique users
-    var allUsers = data_scanpath.map(function (d) {
-        return d.user
-    });
-    uniqueUsers = new Set(allUsers);
-
-    //turns the set into an array and sorts said array
-    arrayUsers = [...uniqueUsers];
-    temp_users = [];
-
-    for (i in arrayUsers) {
-        temp_users[i] = arrayUsers[i].substr(1);
-    }
-
-    temp_users.sort(function (a, b) {
-        return a - b
-    });
-
-    for (i in arrayUsers) {
-        arrayUsers[i] = "p" + temp_users[i];
-    }
-
-    //creates buttons used to highlight users
-    createUserButtons(arrayUsers);
-    //})
+    drawScanpath(content, idName);
 }
 
 //interactions
@@ -217,9 +167,26 @@ function initialSetup(original_data_scanpath, idName) {
 }
 
 //draw the scanpath visualisation
-function drawScanpath(original_data_scanpath) {
+function drawScanpath(original_data_scanpath,  idName) {
+
+    numberScanpaths += 1;
+    //create canvas
+    var canvas = d3.select(idName)
+        .append("svg")
+        .attr("data-image", stimulus)
+        .attr("data-name", idName)
+        .attr("id", "scanpath_" + numberScanpaths)
+        .attr("width", width)
+        .attr("height", height)
+        .attr('xmlns', "http://www.w3.org/2000/svg");
+
     data_scanpath = original_data_scanpath.filter(function (d) {
         return (d.StimuliName == stimulus);
+    });
+
+    data_scanpath.forEach(function (d) {
+        d.MappedFixationPointX = d.MappedFixationPointX / size_decrease;
+        d.MappedFixationPointY = d.MappedFixationPointY / size_decrease;
     });
 
     //creates a set containing all unique users
@@ -228,17 +195,31 @@ function drawScanpath(original_data_scanpath) {
     });
     uniqueUsers = new Set(allUsers);
 
-    //turns the set into an array
+    //turns the set into an array and sorts said array
     arrayUsers = [...uniqueUsers];
+    temp_users = [];
 
-    users = arrayUsers;
+    for (i in arrayUsers) {
+        temp_users[i] = arrayUsers[i].substr(1);
+    }
+
+    temp_users.sort(function (a, b) {
+        return a - b
+    });
+
+    for (i in arrayUsers) {
+        arrayUsers[i] = "p" + temp_users[i];
+    }
+
+    //creates buttons used to highlight users
+    createUserButtons(arrayUsers);
 
     //create the actual visualization
     //createVis(data_scanpath, arrayUsers);
-    attachImage(data_scanpath, arrayUsers);
+    attachImage(data_scanpath, arrayUsers, canvas);
 };
 
-function attachImage(data_scanpath, users) {
+function attachImage(data_scanpath, users, canvas) {
     if (has_image) {
         var imageBackScanpath = document.querySelector('#scanpath');
         var childImageScanpath = imageBackScanpath.querySelectorAll("div");
@@ -264,7 +245,7 @@ function attachImage(data_scanpath, users) {
                     .attr('width', width)
                     .attr('height', height);
 
-                createVis(data_scanpath, users);
+                createVis(data_scanpath, users, canvas);
             }, false);
 
             if (imagesFile) {
@@ -272,12 +253,12 @@ function attachImage(data_scanpath, users) {
             }
         }
     } else {
-        createVis(data_scanpath, users);
+        createVis(data_scanpath, users, canvas);
     }
 }
 
 //creates the actual visualization
-function createVis(data_scanpath, users) {
+function createVis(data_scanpath, users, canvas) {
     //create group object
     var group = canvas.append("g")
         .attr("class", "paths");
