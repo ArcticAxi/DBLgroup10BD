@@ -296,7 +296,7 @@ function createDownloadButtonsHeatmap(name) {
     downloadButton.value = 'Download heat map of ' + name.substring(0, name.indexOf('.')) + " as .png";
 
     downloadButton.addEventListener("click", function() {
-        downloadHeatmap(name)
+        downloadHeatmap(name, false)
     });
 
     var downloadDiv = document.querySelector('#downloadButtonsHeatmap');
@@ -368,7 +368,7 @@ function heatmap(content, name, width, height, idName, vars) {
 
 }
 
-function downloadHeatmap(name) {
+function downloadHeatmap(name, multiple) {
     var div = 'a' + name.substring(0, name.lastIndexOf(".")) + "_heatmap";
     div = document.getElementById(div);
     //divWidth = div.style.backgroundSize.substring(0, div.style.backgroundSize.indexOf(' ') -2);
@@ -379,16 +379,19 @@ function downloadHeatmap(name) {
         var img = canvas.toDataURL();
         //document.body.appendChild(canvas);
 
-        //download popup
-        // call this entire function upon button click
-        var link = document.createElement("a");
-        link.download = name.substring(0, name.lastIndexOf(".")) + "_heatmap";
-        link.href = img;
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+        if (multiple) {
+            return img;
+        } else {
+            //download popup
+            // call this entire function upon button click
+            var link = document.createElement("a");
+            link.download = name.substring(0, name.lastIndexOf(".")) + "_heatmap";
+            link.href = img;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+        }
     });
 }
 

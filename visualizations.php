@@ -110,6 +110,8 @@
         </div>
         <div id="downloadButtonsBoxplot">
         </div>
+        <div id="downloadButtonsAll">
+        </div>
     </div>
 
     <script src="visualizations/scanpath.js"></script>
