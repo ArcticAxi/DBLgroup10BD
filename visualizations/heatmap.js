@@ -1,7 +1,8 @@
 //Brackets are added for the very convenient collapse option Visual Studio provides :)
 //old_heatmap variables
 {
-    var preset_timestamps = []
+    var preset_timestamps = [];
+    var preset_checkboxes = [];
     var flatten_data = [];
     var timestamp_slider_heatmap = [];
     var heatmaps = [];
@@ -170,8 +171,12 @@ function timestamp_slider_input(e, num) {
     id = "'timestamp_slider_checkbox." + id + "'";
     var checkbox = document.getElementById(id);
 
+    if(typeof num != "undefined" && num <= preset_checkboxes.length -1) {
+        checkbox.checked = preset_checkboxes[num]
+    }
+
     // links slider to the old_heatmap
-    if(typeof num != "undefined" && num <= preset_timestamps.length){
+    if(typeof num != "undefined" && num <= preset_timestamps.length -1){
         var idNum = num;
     } else {
         var idNum = this.id;
@@ -389,8 +394,14 @@ function heatmap(content, name, width, height, idName, vars) {
 
     // draws the heatmap
     heat.draw();
-    userSelectionHeatmap(highlightedUsers_heatmap)
-    timestamp_slider_input(true, id_num_add)
+
+    // updates heatmap if variables are provided
+    if (typeof vars == 'object'){
+        if (typeof vars.intensity_heatmap == 'number') {
+            userSelectionHeatmap(highlightedUsers_heatmap)
+            timestamp_slider_input(true, id_num_add)
+        }
+    };
 }
 
 function downloadHeatmap(name, multiple) {
@@ -439,4 +450,6 @@ function updateVarsHeatmap(variables, num) {
     highlightedUsers_heatmap = variables.highlightedUsers_heatmap;
 
     preset_timestamps = variables.preset_timestamps;
+
+    preset_checkboxes = variables.preset_checkboxes;
 }
