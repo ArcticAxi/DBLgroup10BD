@@ -13,12 +13,17 @@ var heightBubblemap;
 var idNameBubblemap;
 var hasImgBubblemap;
 
-var image1;
+var svgArray = [];
+var svg1 = null;	
+
+var childImageBubblemap
 
 function attachImgBubblemap(svg) {
+	
+	
     if (hasImgBubblemap) {
         var imageBackBubblemap = document.querySelector('#bubblemap');
-        var childImageBubblemap = imageBackBubblemap.querySelectorAll("div");
+        childImageBubblemap = imageBackBubblemap.querySelectorAll("div");
         var numberFileBubblemap = -1;
         var width;
         var height;
@@ -33,27 +38,29 @@ function attachImgBubblemap(svg) {
         }
 
         if (numberFileBubblemap > -1) {
-            const imagesFile = document.querySelector('#stimuli-input').files[numberFileBubblemap];
-
-            const imagesFileReader = new FileReader();
+            const imagesFile = document.querySelector('#stimuli-input').files[numberFileBubblemap];//
+            
+			
+    
+			const imagesFileReader = new FileReader();
 
             imagesFileReader.addEventListener('load', function () {
                 var image = svg.selectAll('image')
                     .data([0]);
-                image.enter().append("svg:image").attr("xlink:href", imagesFileReader.result)
+                image1 = image.enter().append("svg:image").attr("xlink:href", imagesFileReader.result)
                     .attr('width', width)
                     .attr('height', height)
                     .attr('id', 'imageForDownload');
+				
 
-                const objectURL = URL.createObjectURL(imagesFile);
+               // const objectURL = URL.createObjectURL(imagesFile);
 
-                image1 = svg.append("svg:image").attr("height", height)
-                    .attr("width", width).attr("xlink:href", objectURL).attr('id', 'imageblob');
+               // image1 = svg.append("svg:image").attr("height", height)
+               //   .attr("width", width).attr("xlink:href", objectURL).attr('id', 'imageblob');
+			    createBubblemap(svg);
 
-
-                createBubblemap(svg);
             }, false);
-
+                
             if (imagesFile) {
                 imagesFileReader.readAsDataURL(imagesFile)
             }
@@ -71,9 +78,10 @@ function bubblemapInit() {
         .attr("width", width)
         .attr("height", height)
         .attr("id", "bubblemap_" + numberBubblemaps);
-
+	
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
-
+   
+	
     attachImgBubblemap(svg);
 }
 
@@ -91,7 +99,7 @@ function bubbleMap(content, name, width, height, idName, hasImg, vars) {
 
     array_stimuli_bubblemap.push(name);
     numberBubblemaps += 1;
-
+   
     bubblemapInit();
 }
 
@@ -103,26 +111,33 @@ function updateVarsBubblemap(vars) {
 }
 
 function createBubblemap(svg) {
-    svg.append('g');
-
+	
+	array_bubblemap = [];
+	var duplicates = [];
+    //svg.append('g');
 
     var div = d3.select("body").append("div")	// Define the div for the tooltip
         .attr("class", "tooltip")
         .style("opacity", 0);
 
     // read the data
-    data_bubblemap = contentBubblemap.filter(function (d) {
-        if (d.StimuliName !== nameBubblemap) {
+
+	
+	var svgNumber = svg.attr('id');
+	svgNumber = svgNumber.substring((svgNumber.length - 1), svgNumber.length);
+	
+    var data_bubblemap = contentBubblemap.filter(function (d) {
+        if (d.StimuliName !== array_stimuli_bubblemap[svgNumber]) {
             return false;
         }
         //   d.MappedFixationPointY = -d.MappedFixationPointY;
         return true;
     });
-
+  
     data_bubblemap.forEach(function (d) {
-        d.averageX = Math.round(d.MappedFixationPointX / gridSize) * gridSize;
-        d.averageY = Math.round(d.MappedFixationPointY / gridSize) * gridSize;
-        d.coordinates = d.averageX.toString() + " " + d.averageY.toString()
+        d.averageX = Math.round(d.MappedFixationPointX / (2*gridSize)) * gridSize;
+        d.averageY = Math.round(d.MappedFixationPointY / (2*gridSize)) * gridSize; // divide by 2 because the pictures are divided by two,                                                                              	
+        d.coordinates = d.averageX.toString() + " " + d.averageY.toString()        //	but there is problem with map Berlin s1
     });
 
     //==========================================================================
@@ -167,6 +182,7 @@ function createBubblemap(svg) {
     // Scale and axis
     //==========================================================================
     // Add X axis
+	
     var x = d3.scaleLinear()
         .domain([0, width])							// What input is accepted (doesnt cause error if too small)
         .range([0, width]);
@@ -223,36 +239,64 @@ function createBubblemap(svg) {
             div.transition()
                 .duration(500)
                 .style("opacity", 0);
-        });
-
-    //zoom properties
+        })
+		
+	 //zoom properties
     var zoom = d3.zoom()
-        .scaleExtent([1, 5])  // This control how much you can unzoom (x0.5) and zoom (x10)
+        .scaleExtent([1, 5])  // This control how much you can unzoom (x1) and zoom (x5)
         .extent([[0, 0], [width, height]])
         .on("zoom", updateZoom)
         .on('end', function () {
             if (d3.event.transform !== d3.zoomIdentity) {
                 console.log("zoom.end", d3.event.transform, d3.zoomIdentity);
+				if(svg1 != null){ 				
+					svg1.transition()
+                    .delay(3000)
+                    .call(d3.event.target.transform, d3.zoomIdentity);				
+				} else {
                 svg.transition()
-                    .delay(2500)
-                    .call(d3.event.target.transform, d3.zoomIdentity);
+                    .delay(3000)
+                    .call(d3.event.target.transform, d3.zoomIdentity);	
+				}
             }
         });
+   svg.call(zoom)
+      .on("mousedown.zoom", null);
+   svgArray.push(svg);
 
-    svg.call(zoom);
+function updateZoom() {
 
-    // .on("mousedown.zoom", null)
+		let number;
+		let svgZoom;
+		
+		if(this.tagName=='svg') {
+		svgZoom = this;
+		number = this.getAttribute('id');
+		}
+		else {
+		svgZoom = (this.parentElement).parentElement;
+		number = svgZoom.getAttribute('id');
+		console.log(number);
+		}
 
-    function updateZoom() {
-        const transform = d3.zoomTransform(svg.node());
+	    number = number.substring((number.length - 1), number.length);
+    
+        const transform = d3.zoomTransform(svgArray[number].node());
 
-        var newX = d3.event.transform.rescaleX(x);
-        var newY = d3.event.transform.rescaleY(y);
-        var newZ = d3.scaleSqrt()
+        let x = d3.scaleLinear()
+        .domain([0, width])							
+        .range([0, width]);
+		let y = d3.scaleLinear()
+        .domain([0, height])
+        .range([0, height]);
+
+		let newX = d3.event.transform.rescaleX(x);
+		let newY = d3.event.transform.rescaleY(y);
+        let newZ = d3.scaleSqrt()
             .domain([0, 200])
             .range([0, (100 * d3.event.transform.k)]); //multiply range by scale factor
 
-        svg.selectAll("circle")
+        svgArray[number].selectAll("circle")
             .attr('cx', function (d) {
                 return newX(d.averageX);
             })
@@ -263,13 +307,22 @@ function createBubblemap(svg) {
                 return newZ(d.counts);
             });
 
-        svg.style("transform-origin", "50% 50% 0");
-        if (hasImgBubblemap) {
-            image1.attr("transform", d3.event.transform)
-                .on("mousedown.zoom", null)
-                .on("move.zoom", null);
+       // svgZoom.style("transform-origin", "50% 50% 0");
+		
+        if (svgZoom.querySelector('image')!= undefined) {
+                   d3.select(svgZoom.querySelector('image')).attr('transform', d3.event.transform)
+                        .on("mousedown.zoom", null)
+                          .on("move.zoom", null);
         }
-    }
+    }  
+ 
+
+
+
+
+
+
+
 
 //=========================================================================
 //=========================================================================
@@ -282,9 +335,15 @@ function createBubblemap(svg) {
         gridSize = this.value;
         array_bubblemap = [];							// make an array to store d.coordinates
         duplicates = [];					// count how many duplicates in array
-
+		for(var i = 0; i < svgArray.length; i ++) {
+            svgArray[i].selectAll('g').remove();
+			svgArray[i].selectAll('circles').remove();
+			}
+		console.log(svg.select("#bubblemap_0"));
+		
+        svgArray = [];
         for (a = 0; a <= numberBubblemaps; a++) {
-            var svg = d3.select(document.getElementById('bubblemap_' + a));
+            var svg1 = d3.select(document.getElementById('bubblemap_' + a));
 
             // read the data
             data_bubblemap = contentBubblemap.filter(function (d) {
@@ -296,8 +355,8 @@ function createBubblemap(svg) {
             });
 
             data_bubblemap.forEach(function (d) {
-                d.averageX = Math.round(d.MappedFixationPointX / gridSize) * gridSize;
-                d.averageY = Math.round(d.MappedFixationPointY / gridSize) * gridSize;
+                d.averageX = Math.round(d.MappedFixationPointX / (2*gridSize)) * gridSize;
+                d.averageY = Math.round(d.MappedFixationPointY / (2*gridSize)) * gridSize;
                 d.coordinates = d.averageX.toString() + " " + d.averageY.toString()
             });
 
@@ -360,10 +419,12 @@ function createBubblemap(svg) {
             //=========================================================================
             // Bubbles
             //=========================================================================
-            svg.select('g').remove('g');
-
+			
+			svg.select('g').remove('g');
+            svg1.select('g').remove('g');
+			
             // Add dots
-            svg.append('g')
+            svg1.append('g')
                 .selectAll("dot")
                 .data(filtered_bubblemap)
                 .enter()
@@ -396,12 +457,15 @@ function createBubblemap(svg) {
                     div.transition()
                         .duration(500)
                         .style("opacity", 0);
-                });
-
-            svg.call(zoom);
-        }
+                }).call(zoom)
+				  .on("mousedown.zoom", null);
+				svgArray.push(svg1);
+				
+		}
+          
     }
 }
+
 
 function createDownloadButtonsBubblemap(name) {
     // creates button
@@ -457,13 +521,13 @@ function downloadBubblemap(name) {
     var num_of_bubblemap = name.substring(name.indexOf('/') + 1, name.length);
 
     var removingImgBlob = d3.select('#bubblemap_' + num_of_bubblemap);
-    removingImgBlob.select('#imageblob').attr('opacity', 0);
+   // removingImgBlob.select('#imageblob').attr('opacity', 0);
 
     var svgDownload = document.getElementById("bubblemap_" + num_of_bubblemap);
 
     xmlSvgBubblemap(name, svgDownload);
 
-    removingImgBlob.select('#imageblob').attr('opacity', 1);
+    //removingImgBlob.select('#imageblob').attr('opacity', 1);
 }
 
 
