@@ -212,6 +212,9 @@ function timestamp_slider_input(e, num) {
         });
     }
 
+    // draws scanpath
+    timerScanpath(idNum, filteredTimestamp);
+
     filteredTimestamp = timestampUsers(filteredTimestamp);
 
     // creates new data for the old_heatmap based on filter with timestamp
@@ -221,11 +224,6 @@ function timestamp_slider_input(e, num) {
 
     // draws old_heatmap
     heatmaps[idNum].draw();
-
-    var sendToScanpath = filteredTimestamp;
-
-    // draws scanpath
-    timerScanpath(idNum, sendToScanpath);
 }
 
 function timestamp_slider_checkbox(e) {
@@ -263,6 +261,9 @@ function timestamp_slider_checkbox(e) {
         });
     }
 
+    timerScanpath(idNum, filteredTimestamp);
+
+    // draws scanpath
     filteredTimestamp = timestampUsers(filteredTimestamp);
 
     // creates new data for the old_heatmap based on filter with timestamp
@@ -272,9 +273,6 @@ function timestamp_slider_checkbox(e) {
 
     // draws old_heatmap
     heatmaps[idNum].draw();
-
-    // draws scanpath
-    timerScanpath(idNum, filteredTimestamp);
 }
 
 function timestampUsers(filteredTimestamp) {
@@ -384,6 +382,7 @@ function heatmap(content, name, width, height, idName, vars) {
     // optionally customize gradient colors, e.g. below
     // (would be nicer if d3 color scale worked here)
     // default uses 5 different colours I believe, doesn't seem like a good idea to mess with this
+    // I messed with it anyway ~Tobias
     if (rainbow) {
         heat.gradient({0.48: '#86007D', 0.55: '#0000F9', 0.60 : '#008018', 0.7 : '#FFFF41', 0.75 : '#FFA52C', 1: '#FF0018'});
     }
