@@ -81,12 +81,12 @@ table {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-areas: "emptytitle emptytitle" "submit selectingdata";
-    margin: 0 8% 0 8%;
+    margin: 0 0% 0 16%;
     background-color: var(--light-grey-color);
 }
 
 .visualizationpage {
-    margin: 0 8% 0 8%;
+    margin: 0 0% 0 16%;
 
 }
 
@@ -102,7 +102,7 @@ table {
     background-color: var(--dark-blue-color);
     padding: 10px;
     position: fixed;
-    margin: 0 -8% 0 -8%;
+    margin: 0 0% 0 0%;
     z-index: 1000;
 
 }
@@ -503,3 +503,18 @@ div.tooltip {
 [data-tooltip]:not([data-tooltip-persistent]):before {
     pointer-events: none;
 }
+
+
+/* styling for the sidebar on the visualization page */
+.sidebar {
+  height: 100%;
+  width: 240px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: var(--light-grey-color);
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+

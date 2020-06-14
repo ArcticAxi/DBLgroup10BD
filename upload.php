@@ -16,7 +16,7 @@
     <link rel="icon" href="photos_homepage/logosmall.svg">
 </head>
 <body>
-<div class="upload">
+
     <div class="title">
         <div class="homelink">
             <a href="index"> <img src="photos_homepage/logoiFish.png" height="70"> </a>
@@ -30,6 +30,8 @@
                 </form>
         </div>
     </div>
+
+<div class="upload">    
     <div class="emptytitle"></div>
     <div class="submitlink">
         <form class="uploadData" method="post" enctype="multipart/form-data">
