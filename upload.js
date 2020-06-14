@@ -154,6 +154,10 @@ function createCheckboxes(dataset) {
 
         span.classList.add("checkmark");
 
+        if (imageNames.includes(dataset[i])) {
+            containerLabel.style.color = '#4477BD';
+        }
+
         // adding label text
         containerLabel.appendChild(document.createTextNode(dataset[i]));
         containerLabel.appendChild(checkbox);

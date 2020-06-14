@@ -55,6 +55,8 @@
 //passed variables
     var stimulus;
     var has_image = false;
+
+    var canvas;
 }
 
 //creates scanpath with given variables
@@ -70,57 +72,7 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, ha
     width = sizeWidth;
     size_decrease = sizeDecrease;
     has_image = hasImage;
-    initialSetup(content, idName);
-    drawScanpath(content);
-}
-
-//creates an svg element and users array to work with
-function initialSetup(original_data_scanpath, idName) {
-    numberScanpaths += 1;
-    //create canvas
-    canvas = d3.select(idName)
-        .append("svg")
-        .attr("data-image", stimulus)
-        .attr("data-name", idName)
-        .attr("id", "scanpath_" + numberScanpaths)
-        .attr("width", width)
-        .attr("height", height)
-        .attr('xmlns', "http://www.w3.org/2000/svg");
-
-    data_scanpath = original_data_scanpath.filter(function (d) {
-        return (d.StimuliName == stimulus);
-    });
-
-    data_scanpath.forEach(function (d) {
-        d.MappedFixationPointX = d.MappedFixationPointX / size_decrease;
-        d.MappedFixationPointY = d.MappedFixationPointY / size_decrease;
-    });
-
-    //creates a set containing all unique users
-    var allUsers = data_scanpath.map(function (d) {
-        return d.user
-    });
-    uniqueUsers = new Set(allUsers);
-
-    //turns the set into an array and sorts said array
-    arrayUsers = [...uniqueUsers];
-    temp_users = [];
-
-    for (i in arrayUsers) {
-        temp_users[i] = arrayUsers[i].substr(1);
-    }
-
-    temp_users.sort(function (a, b) {
-        return a - b
-    });
-
-    for (i in arrayUsers) {
-        arrayUsers[i] = "p" + temp_users[i];
-    }
-
-    //creates buttons used to highlight users
-    createUserButtons(arrayUsers);
-    //})                
+    drawScanpath(content, idName);
 }
 
 //interactions
@@ -215,9 +167,26 @@ function initialSetup(original_data_scanpath, idName) {
 }
 
 //draw the scanpath visualisation
-function drawScanpath(original_data_scanpath) {
+function drawScanpath(original_data_scanpath,  idName) {
+
+    numberScanpaths += 1;
+    //create canvas
+    var canvas = d3.select(idName)
+        .append("svg")
+        .attr("data-image", stimulus)
+        .attr("data-name", idName)
+        .attr("id", "scanpath_" + numberScanpaths)
+        .attr("width", width)
+        .attr("height", height)
+        .attr('xmlns', "http://www.w3.org/2000/svg");
+
     data_scanpath = original_data_scanpath.filter(function (d) {
         return (d.StimuliName == stimulus);
+    });
+
+    data_scanpath.forEach(function (d) {
+        d.MappedFixationPointX = d.MappedFixationPointX / size_decrease;
+        d.MappedFixationPointY = d.MappedFixationPointY / size_decrease;
     });
 
     //creates a set containing all unique users
@@ -226,17 +195,31 @@ function drawScanpath(original_data_scanpath) {
     });
     uniqueUsers = new Set(allUsers);
 
-    //turns the set into an array
+    //turns the set into an array and sorts said array
     arrayUsers = [...uniqueUsers];
+    temp_users = [];
 
-    users = arrayUsers;
+    for (i in arrayUsers) {
+        temp_users[i] = arrayUsers[i].substr(1);
+    }
+
+    temp_users.sort(function (a, b) {
+        return a - b
+    });
+
+    for (i in arrayUsers) {
+        arrayUsers[i] = "p" + temp_users[i];
+    }
+
+    //creates buttons used to highlight users
+    createUserButtons(arrayUsers);
 
     //create the actual visualization
     //createVis(data_scanpath, arrayUsers);
-    attachImage(data_scanpath, arrayUsers);
+    attachImage(data_scanpath, arrayUsers, canvas);
 };
 
-function attachImage(data_scanpath, users) {
+function attachImage(data_scanpath, users, canvas) {
     if (has_image) {
         var imageBackScanpath = document.querySelector('#scanpath');
         var childImageScanpath = imageBackScanpath.querySelectorAll("div");
@@ -258,29 +241,25 @@ function attachImage(data_scanpath, users) {
             const imagesFileReader = new FileReader();
 
             imagesFileReader.addEventListener('load', function () {
-                var image = canvas.selectAll('image')
-                    .data([0]);
-                image.enter().append("svg:image").attr("xlink:href", imagesFileReader.result)
+                var image = canvas.append("svg:image").attr("xlink:href", imagesFileReader.result)
                     .attr('width', width)
                     .attr('height', height);
 
-                createVis(data_scanpath, users);
-
+                createVis(data_scanpath, users, canvas);
             }, false);
 
             if (imagesFile) {
                 imagesFileReader.readAsDataURL(imagesFile)
             }
-
         }
     } else {
-        createVis(data_scanpath, users);
+        createVis(data_scanpath, users, canvas);
     }
 }
 
 //creates the actual visualization
-function createVis(data_scanpath, users) {
-//create group object
+function createVis(data_scanpath, users, canvas) {
+    //create group object
     var group = canvas.append("g")
         .attr("class", "paths");
     var fixation = canvas.append("g")
@@ -569,7 +548,7 @@ function createDownloadButtonsScanpath(name) {
 
 // adds event listener which runs the actual download function
     downloadButton.addEventListener("click", function () {
-        downloadScanpath(downloadButton.id)
+        downloadScanpath(downloadButton.id, false)
     });
 
 // appends the newly created button to the div with all scanpath buttons
@@ -577,7 +556,7 @@ function createDownloadButtonsScanpath(name) {
     downloadDiv.appendChild(downloadButton);
 }
 
-function xmlSvg(name, svg) {
+function xmlSvg(name, svg, multiple) {
     // I need to look into what XML does/is, but this gets some source of the svg
     var serializer = new XMLSerializer();
     var source = serializer.serializeToString(svg);
@@ -598,23 +577,30 @@ function xmlSvg(name, svg) {
 
 // doesn't load the image attribute but just 'no image thumbnial'-thing
 // actual bit which downloads the file passed in the url / URI data scheme
-    var link = document.createElement("a");
-    link.download = name.substring(0, name.indexOf(".")) + "_scanpath" + '.svg';
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-   // d3.select('#scanpath_' + num_of_scanpath).select('#backgroundImageScanpathDownload').remove();
+    if (multiple) {
+        return url;
+    } else {
+        var link = document.createElement("a");
+        link.download = name.substring(0, name.indexOf(".")) + "_scanpath" + '.svg';
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    // d3.select('#scanpath_' + num_of_scanpath).select('#backgroundImageScanpathDownload').remove();
 }
 
 // downloads the scanpath visualization
-function downloadScanpath(name) {
+function downloadScanpath(name, multiple) {
     var num_of_scanpath = name.substring(name.indexOf('/') + 1, name.length);
 
     var svg = document.getElementById("scanpath_" + num_of_scanpath);
 
-    xmlSvg(name, svg)
+    if (multiple) {
+        return xmlSvg(name, svg, multiple)
+    } else {
+        xmlSvg(name, svg, multiple)
+    }
 }
 
 //sets the vars to those in the provided json file

@@ -32,7 +32,7 @@ dataAll = initialRead.sort(sortByDateAscending);
 
 for (var i = 0; i < selected.length; i++) {
     let stimuliName = selected[i];
-    let specificStimuliName = selected[i].substr(0, selected[i].lastIndexOf('.'));
+    let specificStimuliName = stimuliName.substr(0, stimuliName.lastIndexOf('.'));
     var stimuliBubblemap = document.createElement('div');
     stimuliBubblemap.id = "a" + specificStimuliName + "_bubblemap";
 
@@ -55,18 +55,66 @@ for (var i = 0; i < selected.length; i++) {
     scanpathImage.appendChild(stimuliScanpath);
     boxplotImage.appendChild(stimuliBoxplot);
 
-    loadingImage(dataAll, selected[i]);
-    createDownloadButtons(stimuliName);
+    loadingImage(dataAll, stimuliName);
+    createDownloadButtons(stimuliName, i);
 }
 
 var background;
 
-function createDownloadButtons(selected) {
+function createDownloadButtons(selected, current) {
     createDownloadButtonsScanpath(selected);
     createDownloadButtonsBubblemap(selected);
     createDownloadButtonsHeatmap(selected);
     createDownloadButtonsBoxplot(selected);
+    createDownloadButtonAll(selected, current);
 }
+
+function createDownloadButtonAll (selected, current) {
+    // creates button
+    var downloadButton = document.createElement('input');
+    downloadButton.type = 'button';
+    downloadButton.id = selected + '.downloadButton_all' + '/' + current;
+    downloadButton.value = 'Download all vis. of ' + selected.substring(0, selected.indexOf('.'));
+
+// adds event listener which runs the actual download function
+    downloadButton.addEventListener("click", function () {
+        downloadAll(selected, current);
+    });
+
+// appends the newly created button to the div with all scanpath buttons
+    var downloadDiv = document.querySelector('#downloadButtonsAll');
+    downloadDiv.appendChild(downloadButton);
+}
+
+function downloadAll(selected, current) {
+    let scanpathURI = downloadScanpath(selected + 'downloadButton_scanpath/' + current, true);
+// let bubblemapURI = downloadBubblemap(selected + 'downloadButton_bubblemap/' + current, true);
+    let heatmapURI = downloadHeatmap(selected, true);
+    let boxplotURI = downloadBoxplot(selected, true);
+
+    var zip = new JSZip();
+    let withoutJPG = selected.substring(0, selected.indexOf('.'));
+    var img = zip.folder( withoutJPG + '_visualizations');
+    img.file(withoutJPG + '_scanpath.svg', scanpathURI);
+
+    img.file(withoutJPG + '_heatmap.png', heatmapURI);
+    img.file(withoutJPG + '_boxplot.svg', boxplotURI);
+
+    zip.generateAsync({type:"blob"})
+        .then(function(content) {
+            console.log(content);
+            var link = document.createElement("a");
+            link.download = withoutJPG + "_visualizations" + '.zip';
+            link.href = window.URL.createObjectURL(content);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+    //downloadBubblemap(selected + '.downloadButton_bubblemap/' + current);
+    //downloadBoxplot(selected);
+}
+
 
 function loadingImage(content, name) {
     // turning this opacity down also turns down the opacity of the plot
@@ -218,6 +266,14 @@ downloadVarsButton.onclick = function () {
         //but using blue makes this look like it actually does something when loaded
         json.scanpath.base_colour = "blue";
     }
+
+    //updates the bubblemap variables
+    json.bubblemap.gridsize = parseInt(gridSizeSlider.value)
+
+    //updates the heatmap variables
+    json.heatmap.intensity_heatmap = parseInt(intensity_slider_heatmap.value)
+    json.radius_heatmap = parseInt(radius_slider_heatmap.value)
+    json.blur_heatmap = parseInt(blur_slider_heatmap.value)
 
     //bit that does the actual downloading, directly copied from StackOverflow, cause why not
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json));

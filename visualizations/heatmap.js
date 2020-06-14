@@ -1,6 +1,8 @@
 //Brackets are added for the very convenient collapse option Visual Studio provides :)
 //old_heatmap variables
 {
+    var preset_timestamps = [];
+    var preset_checkboxes = [];
     var flatten_data = [];
     var timestamp_slider_heatmap = [];
     var heatmaps = [];
@@ -148,22 +150,44 @@ function getTimestamps(data) {
     return flatten_data;
 }
 
-function timestamp_slider_input(e) {
-    var timestamp_heatmap = this.value;
-    // had some weird issues with timestamp_heatmap being interpreted as a string so I added parseInt everywhere
-    // might clean this up later but who knows at this point
-    timestamp_heatmap = parseInt(timestamp_heatmap);
+function timestamp_slider_input(e, num) {
 
+    if(typeof num != "undefined" && num <= (preset_timestamps.length - 1)){
+        var timestamp_heatmap = preset_timestamps[num]
+    } else {
+        var timestamp_heatmap = this.value;
+    }
+    
     // gets the checkbox linked to the slider
-    let id = this.id;
-    id = id.substring(id.lastIndexOf('.') + 1, id.length - 1);
+    if(typeof num != "undefined" && num <= preset_timestamps.length){
+        var id = names_heatmap[num];
+        id = id.substring(0, id.lastIndexOf('.'));
+        id = "#a" + id + "_heatmap/" + num;
+    } else {
+        var id = this.id;
+        id = id.substring(id.lastIndexOf('.') + 1, id.length - 1);
+    }
+
     id = "'timestamp_slider_checkbox." + id + "'";
     var checkbox = document.getElementById(id);
 
+    if(typeof num != "undefined" && num <= preset_checkboxes.length -1) {
+        checkbox.checked = preset_checkboxes[num]
+    }
+
     // links slider to the old_heatmap
-    let idNum = this.id;
-    idNum = id.substring(id.lastIndexOf('/') + 1, id.length - 1);
+    if(typeof num != "undefined" && num <= preset_timestamps.length -1){
+        var idNum = num;
+    } else {
+        var idNum = this.id;
+        idNum = id.substring(id.lastIndexOf('/') + 1, id.length - 1);
+    }
+
     var startingZero = getTimestamps(nestUsers(data_stimuli[idNum]));
+
+    // had some weird issues with timestamp_heatmap being interpreted as a string so I added parseInt everywhere
+    // might clean this up later but who knows at this point
+    timestamp_heatmap = parseInt(timestamp_heatmap);
 
     var filteredTimestamp;
 
@@ -188,6 +212,9 @@ function timestamp_slider_input(e) {
         });
     }
 
+    // draws scanpath
+    timerScanpath(idNum, filteredTimestamp);
+
     filteredTimestamp = timestampUsers(filteredTimestamp);
 
     // creates new data for the old_heatmap based on filter with timestamp
@@ -197,9 +224,6 @@ function timestamp_slider_input(e) {
 
     // draws old_heatmap
     heatmaps[idNum].draw();
-
-    // draws scanpath
-    timerScanpath(idNum, filteredTimestamp);
 }
 
 function timestamp_slider_checkbox(e) {
@@ -237,6 +261,9 @@ function timestamp_slider_checkbox(e) {
         });
     }
 
+    timerScanpath(idNum, filteredTimestamp);
+
+    // draws scanpath
     filteredTimestamp = timestampUsers(filteredTimestamp);
 
     // creates new data for the old_heatmap based on filter with timestamp
@@ -246,9 +273,6 @@ function timestamp_slider_checkbox(e) {
 
     // draws old_heatmap
     heatmaps[idNum].draw();
-
-    // draws scanpath
-    timerScanpath(idNum, filteredTimestamp);
 }
 
 function timestampUsers(filteredTimestamp) {
@@ -296,7 +320,7 @@ function createDownloadButtonsHeatmap(name) {
     downloadButton.value = 'Download heat map of ' + name.substring(0, name.indexOf('.')) + " as .png";
 
     downloadButton.addEventListener("click", function() {
-        downloadHeatmap(name)
+        downloadHeatmap(name, false)
     });
 
     var downloadDiv = document.querySelector('#downloadButtonsHeatmap');
@@ -358,17 +382,28 @@ function heatmap(content, name, width, height, idName, vars) {
     // optionally customize gradient colors, e.g. below
     // (would be nicer if d3 color scale worked here)
     // default uses 5 different colours I believe, doesn't seem like a good idea to mess with this
+    // I messed with it anyway ~Tobias
     if (rainbow) {
         heat.gradient({0.48: '#86007D', 0.55: '#0000F9', 0.60 : '#008018', 0.7 : '#FFFF41', 0.75 : '#FFA52C', 1: '#FF0018'});
     }
 
+    if(id_num_add <= preset_timestamps.length -1){
+        timestamp_slider_heatmap[id_num_add].value = preset_timestamps[id_num_add];
+    }
+
     // draws the heatmap
     heat.draw();
-    userSelectionHeatmap(highlightedUsers_heatmap)
 
+    // updates heatmap if variables are provided
+    if (typeof vars == 'object'){
+        if (typeof vars.intensity_heatmap == 'number') {
+            userSelectionHeatmap(highlightedUsers_heatmap)
+            timestamp_slider_input(true, id_num_add)
+        }
+    };
 }
 
-function downloadHeatmap(name) {
+function downloadHeatmap(name, multiple) {
     var div = 'a' + name.substring(0, name.lastIndexOf(".")) + "_heatmap";
     div = document.getElementById(div);
     //divWidth = div.style.backgroundSize.substring(0, div.style.backgroundSize.indexOf(' ') -2);
@@ -379,16 +414,19 @@ function downloadHeatmap(name) {
         var img = canvas.toDataURL();
         //document.body.appendChild(canvas);
 
-        //download popup
-        // call this entire function upon button click
-        var link = document.createElement("a");
-        link.download = name.substring(0, name.lastIndexOf(".")) + "_heatmap";
-        link.href = img;
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+        if (multiple) {
+            return img;
+        } else {
+            //download popup
+            // call this entire function upon button click
+            var link = document.createElement("a");
+            link.download = name.substring(0, name.lastIndexOf(".")) + "_heatmap";
+            link.href = img;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+        }
     });
 }
 
@@ -396,7 +434,7 @@ function addToIdNum() {
     id_num_add += 1;
 };
 
-function updateVarsHeatmap(variables) {
+function updateVarsHeatmap(variables, num) {
     rainbow = variables.rainbow;
 
     intensity_heatmap = variables.intensity_heatmap;
@@ -409,4 +447,8 @@ function updateVarsHeatmap(variables) {
     blur_slider_heatmap = variables.blur_heatmap;
 
     highlightedUsers_heatmap = variables.highlightedUsers_heatmap;
+
+    preset_timestamps = variables.preset_timestamps;
+
+    preset_checkboxes = variables.preset_checkboxes;
 }

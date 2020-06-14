@@ -263,7 +263,7 @@ function createDownloadButtonsBoxplot(name) {
 
     // adds event listener which runs the actual download function
     downloadButton.addEventListener("click", function () {
-        downloadBoxplot(downloadButton.id.substring(0, downloadButton.id.lastIndexOf('.')) + '/svg');
+        downloadBoxplot(downloadButton.id.substring(0, downloadButton.id.lastIndexOf('.')) + '/svg', false);
     });
 
     // appends the newly created button to the div with all scanpath buttons
@@ -271,7 +271,7 @@ function createDownloadButtonsBoxplot(name) {
     downloadDiv.appendChild(downloadButton);
 }
 
-function downloadBoxplot(name) {
+function downloadBoxplot(name, multiple) {
     var svg = document.getElementById(name);
 
     // I need to look into what XML does/is, but this gets some source of the svg
@@ -292,14 +292,17 @@ function downloadBoxplot(name) {
     //convert svg source to URI data scheme.
     var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
-    // doesn't load the image attribute but just 'no image thumbnial'-thing
-    // actual bit which downloads the file passed in the url / URI data scheme
-    var link = document.createElement("a");
-    link.download = name.substring(0, name.indexOf(".")) + "_boxplot" + '.svg';
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    if (multiple) {
+        return url;
+    } else {
+        // actual bit which downloads the file passed in the url / URI data scheme
+        var link = document.createElement("a");
+        link.download = name.substring(0, name.indexOf(".")) + "_boxplot" + '.svg';
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
    // d3.select('#'+ name).select('#backgroundImageBoxplotDownload').remove();
 }
