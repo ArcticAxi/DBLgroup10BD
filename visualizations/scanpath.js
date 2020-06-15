@@ -45,7 +45,6 @@
 //highlighted users
     var highlighted_user_container = document.getElementById("highlighted_user")
 //data used by buttons and sliders
-    var numberButtons = 0;
     var sliderData;
     var numberScanpaths = -1;
 
@@ -150,8 +149,8 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, ha
             highlighted_users.push(value);
             button.style.backgroundColor = highlight_colour;
         }
-        for (iter = 0; iter < numberButtons; iter++) {
-            identity = value + '_' + iter
+        for (i = 0; i <= numberScanpaths; i++) {
+            identity = value + '_' + i
             button_color = document.getElementById(identity)
             if (button_color !== null && button_color !== button) {
                 if (highlighted_users.indexOf(value) !== -1) {
@@ -523,19 +522,30 @@ function createVis(data_scanpath, users, canvas) {
 
 //create buttons to select highlighted user
 function createUserButtons(users) {
-    highlighted_user_container.innerHTML += '<p>' + stimulus + '</p>'
+    //creates a div to store the buttons in
+    var userContainer = document.createElement('div');
+    userContainer.id = "users_" + numberScanpaths;
+    userContainer.class = "buttoncontainer";
+
+    //creates a button for every user in the users array and adds it to the container
     for (user in users) {
-        thisUser = users[user] + '_' + numberButtons.toString(10)
-        highlighted_user_container.innerHTML += '<input type="button" id ="' + thisUser +
-            '" value =' + users[user] + ' name="highlighted_users" onclick="highlightButton(this.value, this.id)">';
-        if (user % 4 == 3) {
-            highlighted_user_container.innerHTML += "</br>";
+        button = document.createElement('input');
+        thisUser = users[user] + '_' + numberScanpaths.toString(10);
+
+        button.type = 'button';
+        button.id = thisUser;
+        button.value = users[user];
+        button.name = "highlighted_users";
+        button.onclick = "highlightButton(this.value, this.id)";
+        if(highlighted_users.indexOf(users[user]) != -1) {
+            button.style.backgroundColor = highlight_colour;
         }
-        if (highlighted_users.indexOf(users[user]) != -1) {
-            document.getElementById(thisUser).style.backgroundColor = highlight_colour;
-        }
+
+        userContainer.appendChild(button);
     }
-    numberButtons += 1
+
+    //adds the container to the container for containers
+    highlighted_user_container.appendChild(userContainer);
 }
 
 function createDownloadButtonsScanpath(name) {
@@ -639,7 +649,7 @@ function updateVarsScanpath(variables) {
 function updateButtons() {
     for (x in highlighted_users) {
         var value = highlighted_users[x]
-        for (i = 0; i < numberButtons; i++) {
+        for (i = 0; i <= numberScanpaths; i++) {
             var identity = value + '_' + i
             var button_color = document.getElementById(identity)
             if (button_color !== null && button_color !== button) {
