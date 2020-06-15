@@ -17,7 +17,7 @@
 </head>
 <body>
 
-    <div class="title">
+    <div class="titleviz">
         <div class="homelink">
             <a href="index"> <img src="photos_homepage/logoiFish.png" height="70"> </a>
         </div>

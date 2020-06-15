@@ -102,9 +102,18 @@ table {
     background-color: var(--dark-blue-color);
     padding: 10px;
     position: fixed;
+    margin: 0 -8% 0 -8%;
+    z-index: 1000;
+}
+
+.titleviz {
+    height: 65px;
+    width: 100vw;
+    background-color: var(--dark-blue-color);
+    padding: 10px;
+    position: fixed;
     margin: 0 0% 0 0%;
     z-index: 1000;
-
 }
  
 .homelink {
@@ -360,7 +369,7 @@ input[type = "file"] {
     appearance: none;
     width: 15px; /* Set a specific slider handle width */
     height: 15px; /* Slider handle height */
-    background: var(--main-blue-color); /* Green background */
+    background: var(--dark-blue-color); /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
@@ -513,8 +522,8 @@ div.tooltip {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: var(--light-grey-color);
+  background-color: var(--main-blue-color);
   overflow-x: hidden;
-  padding-top: 20px;
+  padding-top: 90px;
 }
 

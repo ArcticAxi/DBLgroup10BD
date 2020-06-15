@@ -151,13 +151,13 @@ function getTimestamps(data) {
 }
 
 function timestamp_slider_input(e, num) {
-
+    // the if statements are for when it is callled from the heatmap function and not the slider
     if(typeof num != "undefined" && num <= (preset_timestamps.length - 1)){
-        var timestamp_heatmap = preset_timestamps[num]
+        var timestamp_heatmap = preset_timestamps[num];
     } else {
         var timestamp_heatmap = this.value;
     }
-    
+
     // gets the checkbox linked to the slider
     if(typeof num != "undefined" && num <= preset_timestamps.length){
         var id = names_heatmap[num];
