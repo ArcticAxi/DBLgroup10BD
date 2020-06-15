@@ -136,7 +136,7 @@
     <script src="visualizations/scanpath.js"></script>
     <script src="visualizations/simpleheat.js"></script>
     <script src="visualizations/heatmap.js"></script>
-    <script src="visualizations/FinalBubble.js"></script>
+    <script src="visualizations/bubblemap.js"></script>
     <script src="visualizations/testBox.js"></script>
     <script src="visualizations/visualizations.js" charset="utf-8"></script>
 
