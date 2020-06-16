@@ -138,31 +138,6 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, ha
         base_colour = "black";
         redrawScanpath()
     }
-
-//user buttons event
-    function highlightButton(value, id) {
-        button = document.getElementById(id)
-        if (highlighted_users.indexOf(value) !== -1) {
-            highlighted_users.splice(highlighted_users.indexOf(value), 1);
-            button.style.backgroundColor = dark_blue;
-        } else {
-            highlighted_users.push(value);
-            button.style.backgroundColor = highlight_colour;
-        }
-        for (i = 0; i <= numberScanpaths; i++) {
-            identity = value + '_' + i
-            button_color = document.getElementById(identity)
-            if (button_color !== null && button_color !== button) {
-                if (highlighted_users.indexOf(value) !== -1) {
-                    button_color.style.backgroundColor = highlight_colour;
-                } else {
-                    button_color.style.backgroundColor = dark_blue;
-                }
-            }
-        }
-        redrawScanpath();
-        userSelectionHeatmap(highlighted_users);
-    }
 }
 
 //draw the scanpath visualisation
@@ -536,7 +511,28 @@ function createUserButtons(users) {
         button.id = thisUser;
         button.value = users[user];
         button.name = "highlighted_users";
-        button.onclick = "highlightButton(this.value, this.id)";
+        button.onclick = function() {
+            if (highlighted_users.indexOf(this.value) !== -1) {
+                highlighted_users.splice(highlighted_users.indexOf(this.value), 1);
+                this.style.backgroundColor = dark_blue;
+            } else {
+                highlighted_users.push(this.value);
+                this.style.backgroundColor = highlight_colour;
+            }
+            for (i = 0; i <= numberScanpaths; i++) {
+                identity = this.value + '_' + i
+                button_color = document.getElementById(identity)
+                if (button_color !== null && button_color !== this.button) {
+                    if (highlighted_users.indexOf(this.value) !== -1) {
+                        button_color.style.backgroundColor = highlight_colour;
+                    } else {
+                        button_color.style.backgroundColor = dark_blue;
+                    }
+                }
+            }
+            redrawScanpath();
+            userSelectionHeatmap(highlighted_users);
+        };
         if(highlighted_users.indexOf(users[user]) != -1) {
             button.style.backgroundColor = highlight_colour;
         }
