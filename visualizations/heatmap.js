@@ -396,7 +396,7 @@ function heatmap(content, name, width, height, idName, vars) {
 
     // updates heatmap if variables are provided
     if (typeof vars == 'object'){
-        if (typeof vars.intensity_heatmap == 'number') {
+        if (vars.preset_timestamps.length >= heatmaps.length) {
             userSelectionHeatmap(highlightedUsers_heatmap)
             timestamp_slider_input(true, id_num_add)
         }
