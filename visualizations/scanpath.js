@@ -179,13 +179,13 @@ function drawScanpath(original_data_scanpath,  idName) {
         .attr("height", height)
         .attr('xmlns', "http://www.w3.org/2000/svg");
 
-    data_scanpath = original_data_scanpath.filter(function (d) {
+    let data_scanpath = original_data_scanpath.filter(function (d) {
         return (d.StimuliName == stimulus);
     });
 
     data_scanpath.forEach(function (d) {
-        d.MappedFixationPointX = d.MappedFixationPointX / size_decrease;
-        d.MappedFixationPointY = d.MappedFixationPointY / size_decrease;
+        d.MappedFixationPointX1 = d.MappedFixationPointX / size_decrease;
+        d.MappedFixationPointY1 = d.MappedFixationPointY / size_decrease;
     });
 
     //creates a set containing all unique users
@@ -267,10 +267,10 @@ function createVis(data_scanpath, users, canvas) {
 //create line object
     var line = d3.line()
         .x(function (d) {
-            return d.MappedFixationPointX
+            return d.MappedFixationPointX1
         })
         .y(function (d) {
-            return d.MappedFixationPointY
+            return d.MappedFixationPointY1
         });
 
 //turn the users into an array of objects containing the data of the users
@@ -322,10 +322,10 @@ function createVis(data_scanpath, users, canvas) {
             }
         })
         .attr("cx", function (d) {
-            return d.MappedFixationPointX
+            return d.MappedFixationPointX1
         })
         .attr("cy", function (d) {
-            return d.MappedFixationPointY
+            return d.MappedFixationPointY1
         })
         .attr("r", function (d) {
             if (highlighted_users.indexOf(d.user) !== -1) {
@@ -443,10 +443,10 @@ function createVis(data_scanpath, users, canvas) {
         //create line object
         var line = d3.line()
             .x(function (d) {
-                return d.MappedFixationPointX
+                return d.MappedFixationPointX1
             })
             .y(function (d) {
-                return d.MappedFixationPointY
+                return d.MappedFixationPointY1
             });
 
         //turn the users into an array of objects containing the data of the users
@@ -498,10 +498,10 @@ function createVis(data_scanpath, users, canvas) {
                 }
             })
             .attr("cx", function (d) {
-                return d.MappedFixationPointX
+                return d.MappedFixationPointX1
             })
             .attr("cy", function (d) {
-                return d.MappedFixationPointY
+                return d.MappedFixationPointY1
             })
             .attr("r", function (d) {
                 if (highlighted_users.indexOf(d.user) !== -1) {
