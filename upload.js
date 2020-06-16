@@ -139,7 +139,6 @@ function createCheckboxes(dataset) {
         // creating checkbox element
         var checkbox = document.createElement('input');
         var containerLabel = document.createElement('label');
-		//var containerOption = document.createElement('option');
         var span = document.createElement('span');
 
         // assigned correct attributes
@@ -150,7 +149,7 @@ function createCheckboxes(dataset) {
 
         containerLabel.classList.add("containerLabel");
         containerLabel.name = "stimuliLabel";
-        /// containerLabel.htmlFor = dataset[i].key;
+        // containerLabel.htmlFor = dataset[i].key;
 
         span.classList.add("checkmark");
 
