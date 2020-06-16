@@ -369,7 +369,7 @@ function heatmap(content, name, width, height, idName, vars) {
 
     // converts data in to the [[x1,y1,val],...,[xn,yn,valn]] format
     heat.data(dataHeat.map(function (d) {
-        return [d.MappedFixationPointX, d.MappedFixationPointY, 1]
+        return [d.MappedFixationPointX/2, d.MappedFixationPointY/2, 1]
     }));
 
     // changes how red things are
