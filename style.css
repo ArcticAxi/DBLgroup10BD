@@ -169,15 +169,11 @@ table {
 	color: white;
 	outline:none;
 }
-#viz_button:hover {
+#viz_button:hover, #upload_button:hover {
     height: 30px;
-	width: 163px;
+    width: 163px;
 }
 
-#upload_button:hover {
-	height: 30px;
-	width: 120px;	
-}
 #photo_introduction{
    grid-area: intro2;
    margin: 6% 0 0 0;
