@@ -512,14 +512,21 @@ div.tooltip {
 
 /* styling for the sidebar on the visualization page */
 .sidebar {
-  height: 100%;
-  width: 240px;
+  height: 90%;
+  width: 16%;
   position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
   background-color: var(--main-blue-color);
   overflow-x: hidden;
-  padding-top: 90px;
+  padding-top: 85px;
 }
 
+.devider {
+    padding: 6px 8px 6px 16px;
+    font-size: 20px;
+    background-color: var(--dark-grey-color);
+    display: block;
+    width: 100%;
+}
