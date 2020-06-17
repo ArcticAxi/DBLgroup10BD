@@ -272,6 +272,7 @@ function createDownloadButtonsBoxplot(name) {
 }
 
 function downloadBoxplot(name, multiple) {
+    console.log(name);
     var svg = document.getElementById(name);
 
     // I need to look into what XML does/is, but this gets some source of the svg
@@ -286,6 +287,8 @@ function downloadBoxplot(name, multiple) {
         source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
     }
 
+    var encodedData = window.btoa(source);
+
     //add xml declaration
     source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
 
@@ -293,7 +296,7 @@ function downloadBoxplot(name, multiple) {
     var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
     if (multiple) {
-        return url;
+        return encodedData;
     } else {
         // actual bit which downloads the file passed in the url / URI data scheme
         var link = document.createElement("a");

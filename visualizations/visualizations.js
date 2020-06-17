@@ -30,8 +30,8 @@ function sortByDateAscending(a, b) {
 
 dataAll = initialRead.sort(sortByDateAscending);
 
-for (var i = 0; i < selected.length; i++) {
-    let stimuliName = selected[i];
+for (var iMainLoop = 0; iMainLoop < selected.length; iMainLoop++) {
+    let stimuliName = selected[iMainLoop];
     let specificStimuliName = stimuliName.substr(0, stimuliName.lastIndexOf('.'));
     var stimuliBubblemap = document.createElement('div');
     stimuliBubblemap.id = "a" + specificStimuliName + "_bubblemap";
@@ -56,20 +56,84 @@ for (var i = 0; i < selected.length; i++) {
     boxplotImage.appendChild(stimuliBoxplot);
 
     loadingImage(dataAll, stimuliName);
-    createDownloadButtons(stimuliName, i);
+    createDownloadButtons(stimuliName, iMainLoop);
 }
+
+createDownloadButtonEverything();
 
 var background;
 
+function createDownloadButtonEverything() {
+    // creates button
+    var downloadButton = document.createElement('input');
+    downloadButton.type = 'button';
+    downloadButton.id = 'downloadButton_every';
+    downloadButton.value = 'Download every vis.';
+
+// adds event listener which runs the actual download function
+    downloadButton.addEventListener("click", function () {
+        downloadEverything();
+    });
+
+// appends the newly created button to the div with all scanpath buttons
+    var downloadDiv = document.querySelector('#downloadButtonsAll');
+    downloadDiv.appendChild(downloadButton);
+}
+
+function downloadEverything() {
+    var zip = new JSZip();
+
+    for (var iLooping = 0; iLooping < selected.length; iLooping++) {
+        var currentSelected = selected[iLooping];
+        let scanpathURI = downloadScanpath(currentSelected + 'downloadButton_scanpath/' + iLooping, true);
+        let bubblemapURI = downloadBubblemap(currentSelected + 'downloadButton_bubblemap/' + iLooping, true);
+        let boxplotURI = downloadBoxplot(currentSelected + '/svg', true);
+
+        var div = 'a' + currentSelected.substring(0, currentSelected.lastIndexOf(".")) + "_heatmap";
+        div = document.getElementById(div);
+
+        let withoutJPG = currentSelected.substring(0, currentSelected.indexOf('.'));
+
+        var heatmapURI;
+        window.scrollTo(0, 0);
+        html2canvas(div).then(function (canvas) {
+            heatmapURI = canvas.toDataURL();
+            window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+
+            heatmapURI = getBase64String(heatmapURI);
+
+            zip.file(withoutJPG + '_heatmap.png', heatmapURI, {base64: true});
+            zip.file(withoutJPG + '_scanpath.svg', scanpathURI, {base64: true});
+            zip.file(withoutJPG + '_bubblemap.svg', bubblemapURI, {base64: true});
+            zip.file(withoutJPG + '_boxplot.svg', boxplotURI, {base64: true});
+
+            if (iLooping === selected.length) {
+                zip.generateAsync({type: "blob"})
+                    .then(function (content) {
+                        var link = document.createElement("a");
+                        link.download = "iFish visualizations" + '.zip';
+                        link.href = window.URL.createObjectURL(content);
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    });
+            }
+        });
+    }
+}
+
 function createDownloadButtons(selected, current) {
-    createDownloadButtonsScanpath(selected);
-    createDownloadButtonsBubblemap(selected);
-    createDownloadButtonsHeatmap(selected);
-    createDownloadButtonsBoxplot(selected);
+    // removed the buttons below because these are for individual visualizations
+    // they cluttered too much
+    //createDownloadButtonsScanpath(selected);
+    //createDownloadButtonsBubblemap(selected);
+    //createDownloadButtonsHeatmap(selected);
+    //createDownloadButtonsBoxplot(selected);
+
     createDownloadButtonAll(selected, current);
 }
 
-function createDownloadButtonAll (selected, current) {
+function createDownloadButtonAll(selected, current) {
     // creates button
     var downloadButton = document.createElement('input');
     downloadButton.type = 'button';
@@ -88,33 +152,68 @@ function createDownloadButtonAll (selected, current) {
 
 function downloadAll(selected, current) {
     let scanpathURI = downloadScanpath(selected + 'downloadButton_scanpath/' + current, true);
-// let bubblemapURI = downloadBubblemap(selected + 'downloadButton_bubblemap/' + current, true);
-    let heatmapURI = downloadHeatmap(selected, true);
-    let boxplotURI = downloadBoxplot(selected, true);
+    let bubblemapURI = downloadBubblemap(selected + 'downloadButton_bubblemap/' + current, true);
+    let boxplotURI = downloadBoxplot(selected + '/svg', true);
 
-    var zip = new JSZip();
-    let withoutJPG = selected.substring(0, selected.indexOf('.'));
-    var img = zip.folder( withoutJPG + '_visualizations');
-    img.file(withoutJPG + '_scanpath.svg', scanpathURI);
+    var div = 'a' + selected.substring(0, selected.lastIndexOf(".")) + "_heatmap";
+    div = document.getElementById(div);
 
-    img.file(withoutJPG + '_heatmap.png', heatmapURI);
-    img.file(withoutJPG + '_boxplot.svg', boxplotURI);
+    var heatmapURI;
+    window.scrollTo(0, 0);
+    html2canvas(div).then(function (canvas) {
+        heatmapURI = canvas.toDataURL();
+        window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
 
-    zip.generateAsync({type:"blob"})
-        .then(function(content) {
-            console.log(content);
-            var link = document.createElement("a");
-            link.download = withoutJPG + "_visualizations" + '.zip';
-            link.href = window.URL.createObjectURL(content);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
+        heatmapURI = getBase64String(heatmapURI);
 
-    //downloadBubblemap(selected + '.downloadButton_bubblemap/' + current);
-    //downloadBoxplot(selected);
+        var zip = new JSZip();
+        let withoutJPG = selected.substring(0, selected.indexOf('.'));
+        zip.file(withoutJPG + '_scanpath.svg', scanpathURI, {base64: true});
+        zip.file(withoutJPG + '_bubblemap.svg', bubblemapURI, {base64: true});
+        zip.file(withoutJPG + '_heatmap.png', heatmapURI, {base64: true});
+        zip.file(withoutJPG + '_boxplot.svg', boxplotURI, {base64: true});
+
+        zip.generateAsync({type: "blob"})
+            .then(function (content) {
+                var link = document.createElement("a");
+                link.download = withoutJPG + "_visualizations" + '.zip';
+                link.href = window.URL.createObjectURL(content);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+    });
 }
 
+function dataURItoBlob(dataURI) {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    var byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+    // write the bytes of the string to an ArrayBuffer
+    var ab = new ArrayBuffer(byteString.length);
+
+    // create a view into the buffer
+    var ia = new Uint8Array(ab);
+
+    // set the bytes of the buffer to the correct values
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    // write the ArrayBuffer to a blob, and you're done
+    var blob = new Blob([ab], {type: mimeString});
+    return blob;
+
+}
+
+function getBase64String(dataURL) {
+    var idx = dataURL.indexOf('base64,') + 'base64,'.length;
+    return dataURL.substring(idx);
+}
 
 function loadingImage(content, name) {
     // turning this opacity down also turns down the opacity of the plot

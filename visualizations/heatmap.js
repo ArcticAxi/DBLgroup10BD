@@ -219,7 +219,7 @@ function timestamp_slider_input(e, num) {
 
     // creates new data for the old_heatmap based on filter with timestamp
     heatmaps[idNum].data(filteredTimestamp.map(function (d) {
-        return [d.MappedFixationPointX, d.MappedFixationPointY, 1]
+        return [d.MappedFixationPointX1, d.MappedFixationPointY1, 1]
     }));
 
     // draws old_heatmap
@@ -268,7 +268,7 @@ function timestamp_slider_checkbox(e) {
 
     // creates new data for the old_heatmap based on filter with timestamp
     heatmaps[idNum].data(filteredTimestamp.map(function (d) {
-        return [d.MappedFixationPointX, d.MappedFixationPointY, 1]
+        return [d.MappedFixationPointX1, d.MappedFixationPointY1, 1]
     }));
 
     // draws old_heatmap
@@ -306,7 +306,7 @@ function userSelectionHeatmap(users_array) {
         }
 
         heatmaps[i].data(userFiltered.map(function (d) {
-            return [d.MappedFixationPointX, d.MappedFixationPointY, 1]
+            return [d.MappedFixationPointX1, d.MappedFixationPointY1, 1]
         }));
         heatmaps[i].draw();
     }
@@ -369,7 +369,7 @@ function heatmap(content, name, width, height, idName, vars) {
 
     // converts data in to the [[x1,y1,val],...,[xn,yn,valn]] format
     heat.data(dataHeat.map(function (d) {
-        return [d.MappedFixationPointX/2, d.MappedFixationPointY/2, 1]
+        return [d.MappedFixationPointX1, d.MappedFixationPointY1, 1]
     }));
 
     // changes how red things are
@@ -393,11 +393,10 @@ function heatmap(content, name, width, height, idName, vars) {
 
     // draws the heatmap
     heat.draw();
-
     // updates heatmap if variables are provided
     if (typeof vars == 'object'){
         if (vars.preset_timestamps.length >= heatmaps.length) {
-            userSelectionHeatmap(highlightedUsers_heatmap)
+            userSelectionHeatmap(highlightedUsers_heatmap);
             timestamp_slider_input(true, id_num_add)
         }
     };
@@ -406,6 +405,7 @@ function heatmap(content, name, width, height, idName, vars) {
 function downloadHeatmap(name, multiple) {
     var div = 'a' + name.substring(0, name.lastIndexOf(".")) + "_heatmap";
     div = document.getElementById(div);
+
     //divWidth = div.style.backgroundSize.substring(0, div.style.backgroundSize.indexOf(' ') -2);
     //divHeight = div.style.backgroundSize.substring(div.style.backgroundSize.indexOf(' ') + 1, div.style.backgroundSize.length-2);
 
@@ -415,6 +415,7 @@ function downloadHeatmap(name, multiple) {
         //document.body.appendChild(canvas);
 
         if (multiple) {
+            console.log(img);
             return img;
         } else {
             //download popup
@@ -425,8 +426,8 @@ function downloadHeatmap(name, multiple) {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         }
+        window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
     });
 }
 

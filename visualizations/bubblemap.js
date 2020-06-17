@@ -14,13 +14,13 @@ var idNameBubblemap;
 var hasImgBubblemap;
 
 var svgArray = [];
-var svg1 = null;	
+var svg1 = null;
 
 var childImageBubblemap
 
 function attachImgBubblemap(svg) {
-	
-	
+
+
     if (hasImgBubblemap) {
         var imageBackBubblemap = document.querySelector('#bubblemap');
         childImageBubblemap = imageBackBubblemap.querySelectorAll("div");
@@ -39,10 +39,9 @@ function attachImgBubblemap(svg) {
 
         if (numberFileBubblemap > -1) {
             const imagesFile = document.querySelector('#stimuli-input').files[numberFileBubblemap];//
-            
-			
-    
-			const imagesFileReader = new FileReader();
+
+
+            const imagesFileReader = new FileReader();
 
             imagesFileReader.addEventListener('load', function () {
                 var image = svg.selectAll('image')
@@ -51,16 +50,16 @@ function attachImgBubblemap(svg) {
                     .attr('width', width)
                     .attr('height', height)
                     .attr('id', 'imageForDownload');
-				
 
-               // const objectURL = URL.createObjectURL(imagesFile);
 
-               // image1 = svg.append("svg:image").attr("height", height)
-               //   .attr("width", width).attr("xlink:href", objectURL).attr('id', 'imageblob');
-			    createBubblemap(svg);
+                // const objectURL = URL.createObjectURL(imagesFile);
+
+                // image1 = svg.append("svg:image").attr("height", height)
+                //   .attr("width", width).attr("xlink:href", objectURL).attr('id', 'imageblob');
+                createBubblemap(svg);
 
             }, false);
-                
+
             if (imagesFile) {
                 imagesFileReader.readAsDataURL(imagesFile)
             }
@@ -78,10 +77,10 @@ function bubblemapInit() {
         .attr("width", width)
         .attr("height", height)
         .attr("id", "bubblemap_" + numberBubblemaps);
-	
+
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
-   
-	
+
+
     attachImgBubblemap(svg);
 }
 
@@ -99,7 +98,7 @@ function bubbleMap(content, name, width, height, idName, hasImg, vars) {
 
     array_stimuli_bubblemap.push(name);
     numberBubblemaps += 1;
-   
+
     bubblemapInit();
 }
 
@@ -111,9 +110,9 @@ function updateVarsBubblemap(vars) {
 }
 
 function createBubblemap(svg) {
-	
-	array_bubblemap = [];
-	var duplicates = [];
+
+    array_bubblemap = [];
+    var duplicates = [];
     //svg.append('g');
 
     var div = d3.select("body").append("div")	// Define the div for the tooltip
@@ -122,10 +121,10 @@ function createBubblemap(svg) {
 
     // read the data
 
-	
-	var svgNumber = svg.attr('id');
-	svgNumber = svgNumber.substring((svgNumber.length - 1), svgNumber.length);
-	
+
+    var svgNumber = svg.attr('id');
+    svgNumber = svgNumber.substring((svgNumber.length - 1), svgNumber.length);
+
     var data_bubblemap = contentBubblemap.filter(function (d) {
         if (d.StimuliName !== array_stimuli_bubblemap[svgNumber]) {
             return false;
@@ -133,10 +132,10 @@ function createBubblemap(svg) {
         //   d.MappedFixationPointY = -d.MappedFixationPointY;
         return true;
     });
-  
+
     data_bubblemap.forEach(function (d) {
-        d.averageX = Math.round(d.MappedFixationPointX / (2*gridSize)) * gridSize;
-        d.averageY = Math.round(d.MappedFixationPointY / (2*gridSize)) * gridSize; // divide by 2 because the pictures are divided by two,                                                                              	
+        d.averageX = Math.round(d.MappedFixationPointX / (2 * gridSize)) * gridSize;
+        d.averageY = Math.round(d.MappedFixationPointY / (2 * gridSize)) * gridSize; // divide by 2 because the pictures are divided by two,
         d.coordinates = d.averageX.toString() + " " + d.averageY.toString()        //	but there is problem with map Berlin s1
     });
 
@@ -182,7 +181,7 @@ function createBubblemap(svg) {
     // Scale and axis
     //==========================================================================
     // Add X axis
-	
+
     var x = d3.scaleLinear()
         .domain([0, width])							// What input is accepted (doesnt cause error if too small)
         .range([0, width]);
@@ -240,56 +239,55 @@ function createBubblemap(svg) {
                 .duration(500)
                 .style("opacity", 0);
         })
-		
-	 //zoom properties
+
+    //zoom properties
     var zoom = d3.zoom()
         .scaleExtent([1, 5])  // This control how much you can unzoom (x1) and zoom (x5)
         .extent([[0, 0], [width, height]])
         .on("zoom", updateZoom)
         .on('end', function () {
             if (d3.event.transform !== d3.zoomIdentity) {
-				if(svg1 != null){ 				
-					svg1.transition()
-                    .delay(3000)
-                    .call(d3.event.target.transform, d3.zoomIdentity);				
-				} else {
-                svg.transition()
-                    .delay(3000)
-                    .call(d3.event.target.transform, d3.zoomIdentity);	
-				}
+                if (svg1 != null) {
+                    svg1.transition()
+                        .delay(3000)
+                        .call(d3.event.target.transform, d3.zoomIdentity);
+                } else {
+                    svg.transition()
+                        .delay(3000)
+                        .call(d3.event.target.transform, d3.zoomIdentity);
+                }
             }
         });
-   svg.call(zoom)
-      .on("mousedown.zoom", null);
-   svgArray.push(svg);
+    svg.call(zoom)
+        .on("mousedown.zoom", null);
+    svgArray.push(svg);
 
-function updateZoom() {
+    function updateZoom() {
 
-		let number;
-		let svgZoom;
-		
-		if(this.tagName=='svg') {
-		svgZoom = this;
-		number = this.getAttribute('id');
-		}
-		else {
-		svgZoom = (this.parentElement).parentElement;
-		number = svgZoom.getAttribute('id');
-		}
+        let number;
+        let svgZoom;
 
-	    number = number.substring((number.length - 1), number.length);
-    
+        if (this.tagName == 'svg') {
+            svgZoom = this;
+            number = this.getAttribute('id');
+        } else {
+            svgZoom = (this.parentElement).parentElement;
+            number = svgZoom.getAttribute('id');
+        }
+
+        number = number.substring((number.length - 1), number.length);
+
         const transform = d3.zoomTransform(svgArray[number].node());
 
         let x = d3.scaleLinear()
-        .domain([0, width])							
-        .range([0, width]);
-		let y = d3.scaleLinear()
-        .domain([0, height])
-        .range([0, height]);
+            .domain([0, width])
+            .range([0, width]);
+        let y = d3.scaleLinear()
+            .domain([0, height])
+            .range([0, height]);
 
-		let newX = d3.event.transform.rescaleX(x);
-		let newY = d3.event.transform.rescaleY(y);
+        let newX = d3.event.transform.rescaleX(x);
+        let newY = d3.event.transform.rescaleY(y);
         let newZ = d3.scaleSqrt()
             .domain([0, 200])
             .range([0, (100 * d3.event.transform.k)]); //multiply range by scale factor
@@ -305,22 +303,14 @@ function updateZoom() {
                 return newZ(d.counts);
             });
 
-       // svgZoom.style("transform-origin", "50% 50% 0");
-		
-        if (svgZoom.querySelector('image')!= undefined) {
-                   d3.select(svgZoom.querySelector('image')).attr('transform', d3.event.transform)
-                        .on("mousedown.zoom", null)
-                          .on("move.zoom", null);
+        // svgZoom.style("transform-origin", "50% 50% 0");
+
+        if (svgZoom.querySelector('image') != undefined) {
+            d3.select(svgZoom.querySelector('image')).attr('transform', d3.event.transform)
+                .on("mousedown.zoom", null)
+                .on("move.zoom", null);
         }
-    }  
- 
-
-
-
-
-
-
-
+    }
 
 //=========================================================================
 //=========================================================================
@@ -333,11 +323,11 @@ function updateZoom() {
         gridSize = this.value;
         array_bubblemap = [];							// make an array to store d.coordinates
         duplicates = [];					// count how many duplicates in array
-		for(var i = 0; i < svgArray.length; i ++) {
+        for (var i = 0; i < svgArray.length; i++) {
             svgArray[i].selectAll('g').remove();
-			svgArray[i].selectAll('circles').remove();
-			}
-		
+            svgArray[i].selectAll('circles').remove();
+        }
+
         svgArray = [];
         for (a = 0; a <= numberBubblemaps; a++) {
             var svg1 = d3.select(document.getElementById('bubblemap_' + a));
@@ -352,8 +342,8 @@ function updateZoom() {
             });
 
             data_bubblemap.forEach(function (d) {
-                d.averageX = Math.round(d.MappedFixationPointX / (2*gridSize)) * gridSize;
-                d.averageY = Math.round(d.MappedFixationPointY / (2*gridSize)) * gridSize;
+                d.averageX = Math.round(d.MappedFixationPointX / (2 * gridSize)) * gridSize;
+                d.averageY = Math.round(d.MappedFixationPointY / (2 * gridSize)) * gridSize;
                 d.coordinates = d.averageX.toString() + " " + d.averageY.toString()
             });
 
@@ -416,10 +406,10 @@ function updateZoom() {
             //=========================================================================
             // Bubbles
             //=========================================================================
-			
-			svg.select('g').remove('g');
+
+            svg.select('g').remove('g');
             svg1.select('g').remove('g');
-			
+
             // Add dots
             svg1.append('g')
                 .selectAll("dot")
@@ -455,14 +445,13 @@ function updateZoom() {
                         .duration(500)
                         .style("opacity", 0);
                 }).call(zoom)
-				  .on("mousedown.zoom", null);
-				svgArray.push(svg1);
-				
-		}
-          
+                .on("mousedown.zoom", null);
+            svgArray.push(svg1);
+
+        }
+
     }
 }
-
 
 function createDownloadButtonsBubblemap(name) {
     // creates button
@@ -479,10 +468,10 @@ function createDownloadButtonsBubblemap(name) {
 
     // appends the newly created button to the div with all bubblemap buttons
     var downloadDiv = document.querySelector('#downloadButtonsBubblemap');
-    downloadDiv.appendChild(downloadButton);
+    downloadDiv.appendChild(downloadButton, false);
 }
 
-function xmlSvgBubblemap(name, svg) {
+function xmlSvgBubblemap(name, svg, multiple) {
     // I need to look into what XML does/is, but this gets some source of the svg
     var serializer = new XMLSerializer();
     var source = serializer.serializeToString(svg);
@@ -495,34 +484,43 @@ function xmlSvgBubblemap(name, svg) {
         source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
     }
 
+    var encodedData = window.btoa(source);
+
     //add xml declaration
     source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-
 
     //convert svg source to URI data scheme.
     var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
-    // doesn't load the image attribute but just 'no image thumbnial'-thing
-    // actual bit which downloads the file passed in the url / URI data scheme
-    var link = document.createElement("a");
-    link.download = name.substring(0, name.indexOf(".")) + "_bubblemap" + '.svg';
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    if (multiple) {
+        return encodedData;
+    } else {
+        // doesn't load the image attribute but just 'no image thumbnial'-thing
+        // actual bit which downloads the file passed in the url / URI data scheme
+        var link = document.createElement("a");
+        link.download = name.substring(0, name.indexOf(".")) + "_bubblemap" + '.svg';
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
     // d3.select('#bubblemap' + num_of_bubblemap).select('#backgroundImageBubblemapDownload').remove();
 }
 
-function downloadBubblemap(name) {
+function downloadBubblemap(name, multiple) {
     var num_of_bubblemap = name.substring(name.indexOf('/') + 1, name.length);
 
     var removingImgBlob = d3.select('#bubblemap_' + num_of_bubblemap);
-   // removingImgBlob.select('#imageblob').attr('opacity', 0);
+    // removingImgBlob.select('#imageblob').attr('opacity', 0);
 
     var svgDownload = document.getElementById("bubblemap_" + num_of_bubblemap);
 
-    xmlSvgBubblemap(name, svgDownload);
+    if (multiple) {
+        return xmlSvgBubblemap(name, svgDownload, multiple)
+    } else {
+        xmlSvgBubblemap(name, svgDownload, multiple)
+    }
 
     //removingImgBlob.select('#imageblob').attr('opacity', 1);
 }

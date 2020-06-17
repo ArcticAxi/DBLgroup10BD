@@ -27,7 +27,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     file.addEventListener('change', function () {
         var file = document.querySelector('#dataset-input').files[0];
-        var filenameButton = file.name.substr(0, file.name.lastIndexOf('.'));
+        var filenameButton;
+        if (file != undefined) {
+            filenameButton = file.name.substr(0, file.name.lastIndexOf('.'));
+        }
         document.getElementById('label_file').innerHTML = filenameButton || defaultLabelText;
     });
 
@@ -41,7 +44,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (filesImages.length > 1) {
             imagename = "Multiple images selected";
         } else {
-            imagename = filesImages[0].name.substr(0, filesImages[0].name.lastIndexOf('.'));
+            if (filesImages[0] != undefined) {
+                imagename = filesImages[0].name.substr(0, filesImages[0].name.lastIndexOf('.'));
+            }
         }
         document.getElementById('label_image').innerHTML = imagename || defaultLabelText;
     });
@@ -50,10 +55,13 @@ document.addEventListener("DOMContentLoaded", function () {
         fileJson.click();
     });
 
-    fileJson.addEventListener('change', function() {
-       var fileJson = document.querySelector('#json-input').files[0];
-       var jsonName = fileJson.name;
-       document.getElementById('label_json').innerHTML = jsonName || defaultLabelText;
+    fileJson.addEventListener('change', function () {
+        var fileJson = document.querySelector('#json-input').files[0];
+        var jsonName;
+        if (fileJson != undefined) {
+            jsonName = fileJson.name;
+        }
+        document.getElementById('label_json').innerHTML = jsonName || defaultLabelText;
     });
 
 // INTERNET EXPLORER GIVES A SYNTAX ERROR HERE, CHANGE THIS TO NORMAL
@@ -65,10 +73,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const file = document.querySelector('#dataset-input').files[0];
         const jason = document.querySelector('#json-input').files[0];
         const imagesFile = document.querySelector('#stimuli-input').files;
-        
+
         const reader = new FileReader();
         const readerjson = new FileReader();
 
+        imageURLS = [];
+        imageNames = [];
         for (var i = 0; i < imagesFile.length; i++) {
             const imageReader = new FileReader;
             imageReader.onload = function (readerImg) {
@@ -95,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         //reads the files and processes them in the way defined in the onload functions 
         reader.readAsText(file, 'ISO-8859-1');
-        if (jason !== undefined){
+        if (jason !== undefined) {
             readerjson.readAsText(jason)
         }
     });
@@ -132,7 +142,15 @@ function removePrevCheckboxes() {
 // creates checkboxes
 function createCheckboxes(dataset) {
     var selectionForm = document.getElementById("formSelectionData");
-    selectionForm.style.height = '400px';
+    console.log(dataset.length);
+    var heightSelection;
+    if (dataset.length <= 15) {
+        heightSelection = dataset.length * 20 + 25;
+    } else {
+        heightSelection = 325;
+    }
+    var heightSelection = heightSelection + 'px';
+    selectionForm.style.height = heightSelection;
     selectionForm.style.padding = '20px 20px';
 
     for (var i = 0; i < dataset.length; i++) {
@@ -170,7 +188,7 @@ function createCheckboxes(dataset) {
 
 // d3.tsv reads csv (commas) but with tabs from an URL, data is the result
 function loadCSV(tsv) {
-    tsv.map(function(d) {
+    tsv.map(function (d) {
         //replaces corrupted character, first is ü, second is ö
         d.StimuliName = d.StimuliName.replace('\u00c3\u00bc', '\u00fc').replace('\u00c3\u00b6', '\u00f6');
         d.Timestamp = +d.Timestamp;
