@@ -37,12 +37,12 @@
     <div class="submitlink">
         <form class="uploadData" method="post" enctype="multipart/form-data">
             <div>
-                <input type="button" id="fileButton" value="Upload Data">
+                <input type="button" id="fileButton" value="Upload data">
                 <input type="file" id="dataset-input" accept=".csv, .txt" name="name"/>
                 <label for="dataset-input" id="label_file"> No file selected</label>
             </div>
             <div>
-                <input type="button" id="imageButton" value="Upload Stimuli Images">
+                <input type="button" id="imageButton" value="Upload stimuli images">
                 <input type="file" id="stimuli-input" accept=".png, .jpg, .jpeg"  multiple/>
                 <label for="stimuli-input" id="label_image"> No file selected</label>
             </div>
