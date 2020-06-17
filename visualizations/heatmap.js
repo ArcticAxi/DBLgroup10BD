@@ -415,7 +415,6 @@ function downloadHeatmap(name, multiple) {
         //document.body.appendChild(canvas);
 
         if (multiple) {
-            console.log(img);
             return img;
         } else {
             //download popup

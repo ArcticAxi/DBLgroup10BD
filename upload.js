@@ -142,7 +142,6 @@ function removePrevCheckboxes() {
 // creates checkboxes
 function createCheckboxes(dataset) {
     var selectionForm = document.getElementById("formSelectionData");
-    console.log(dataset.length);
     var heightSelection;
     if (dataset.length <= 15) {
         heightSelection = dataset.length * 20 + 25;

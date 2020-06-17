@@ -1,4 +1,5 @@
-    <div class="sidebar">
+<?php ?>
+<div class="sidebar">
 
         <p class="devider">User Selection</p>
 

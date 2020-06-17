@@ -272,7 +272,6 @@ function createDownloadButtonsBoxplot(name) {
 }
 
 function downloadBoxplot(name, multiple) {
-    console.log(name);
     var svg = document.getElementById(name);
 
     // I need to look into what XML does/is, but this gets some source of the svg
