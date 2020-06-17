@@ -396,13 +396,11 @@ function heatmap(content, name, width, height, idName, vars) {
     // updates heatmap if variables are provided
     if (typeof vars == 'object'){
         if (vars.preset_timestamps.length >= heatmaps.length) {
-            userSelectionHeatmap(highlightedUsers_heatmap);
-            timestamp_slider_input(true, id_num_add);
+            redrawAllHeatmaps();
         }
     };
-
-    redrawAllHeatmaps();
 }
+    
 
 function downloadHeatmap(name, multiple) {
     var div = 'a' + name.substring(0, name.lastIndexOf(".")) + "_heatmap";
