@@ -16,7 +16,7 @@ Disclaimer: Since our web-based tool has not yet been implemented on a server, o
 4. Press "Visualizations page" in the rop right corner. 
 5. In "Upload data", select any file in your computer that is .csv or .txt in Tab Separated Values format. (Required)
 6. In "Upload stimuli images", select stimuli images to show behind visualizations. Make sure the image filenames match the names in the stimuliName column! The tool automatically selects the matching names. The support image file formats are .png, .jpg, and .jpeg. (Recommended)
-7. If you have previously used our tool and downloaded thee .json file with variable values, this file can be uploaded again in "Upload previous settings". (Optional)
+7. If you have previously used our tool and downloaded thee .json file with variable values, this file can be uploaded again in "Upload previous settings". (Recommended)
 8. After you have selected all your files, press the submit button. This loads the stimuli.
 9. Select the stimuli you want to visualize and press the confirm selection button.
 
