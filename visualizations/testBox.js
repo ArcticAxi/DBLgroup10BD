@@ -99,8 +99,8 @@ function boxplot(content, name, idName) {
         return d.totalDuration;
     });
     var x = d3.scaleLinear()
-        .domain([4, max + 1000])
-        .range([0, width_boxplot])
+        .domain([1, max + 1000])
+        .range([100, width_boxplot])
     svg.append("g")
         .attr("transform", "translate(0," + height_boxplot + ")")
         .call(d3.axisBottom(x).ticks(5))
