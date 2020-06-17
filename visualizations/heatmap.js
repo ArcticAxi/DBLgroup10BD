@@ -397,9 +397,11 @@ function heatmap(content, name, width, height, idName, vars) {
     if (typeof vars == 'object'){
         if (vars.preset_timestamps.length >= heatmaps.length) {
             userSelectionHeatmap(highlightedUsers_heatmap);
-            timestamp_slider_input(true, id_num_add)
+            timestamp_slider_input(true, id_num_add);
         }
     };
+
+    redrawAllHeatmaps();
 }
 
 function downloadHeatmap(name, multiple) {
@@ -451,4 +453,11 @@ function updateVarsHeatmap(variables, num) {
     preset_timestamps = variables.preset_timestamps;
 
     preset_checkboxes = variables.preset_checkboxes;
+}
+
+function redrawAllHeatmaps() {
+    userSelectionHeatmap(highlightedUsers_heatmap);
+    for (map in heatmaps) {
+        timestamp_slider_input(true, map)
+    }
 }

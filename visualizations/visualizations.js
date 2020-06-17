@@ -371,8 +371,9 @@ downloadVarsButton.onclick = function () {
 
     //updates the heatmap variables
     json.heatmap.intensity_heatmap = parseInt(intensity_slider_heatmap.value)
-    json.radius_heatmap = parseInt(radius_slider_heatmap.value)
-    json.blur_heatmap = parseInt(blur_slider_heatmap.value)
+    json.heatmap.radius_heatmap = parseInt(radius_slider_heatmap)
+    json.heatmap.blur_heatmap = parseInt(blur_slider_heatmap)
+    json.heatmap.highlighted_users_heatmap = highlighted_users;
 
     //bit that does the actual downloading, directly copied from StackOverflow, cause why not
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json));
