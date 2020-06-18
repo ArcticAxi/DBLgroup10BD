@@ -159,7 +159,7 @@
 
     document.getElementById('heatmap').addEventListener('mousemove', printPosition)
 
-	document.getElementById('scanpath_0').addEventListener('mousemove',printPosition)
+	document.getElementById('scanpath').addEventListener('mousemove',printPosition)
 	
 	function getPosition(e) {
 	var rect = e.target.getBoundingClientRect();
