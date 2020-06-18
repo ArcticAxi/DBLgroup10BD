@@ -531,3 +531,10 @@ div.tooltip {
     display: block;
     width: 100%;
 }
+
+.coordinate{
+    position: fixed;
+    bottom: 250px;
+    right: 200px;
+    width: 300px;
+}
