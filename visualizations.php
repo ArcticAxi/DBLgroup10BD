@@ -132,6 +132,9 @@
             </div>
         </div>
     </div>
+	
+	<div id="xycoordinates" class="coordinate">
+	</div>
 
     <div class="visualization" id="scanpath">
     </div>
@@ -151,4 +154,26 @@
     <script src="visualizations/bubblemap.js"></script>
     <script src="visualizations/testBox.js"></script>
     <script src="visualizations/visualizations.js" charset="utf-8"></script>
+	<script>
+	document.getElementById('bubblemap').addEventListener('mousemove', printPosition)
+
+    document.getElementById('heatmap').addEventListener('mousemove', printPosition)
+
+	document.getElementById('scanpath_0').addEventListener('mousemove',printPosition)
+	
+	function getPosition(e) {
+	var rect = e.target.getBoundingClientRect();
+	var x = ~~(e.clientX - rect.left);
+	var y = ~~(e.clientY - rect.top);
+	document.getElementById("xycoordinates").innerHTML="Coordinates: (" + x + "," + y + ")";
+	return {
+		x,
+		y
+	}
+	}
+
+	function printPosition(e) {
+	var position = getPosition(e);
+	}
+	</script>
 
