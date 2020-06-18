@@ -74,6 +74,7 @@ table {
     grid-template-rows: auto 3fr 3fr;
     grid-template-areas: "emptytitle emptytitle emptytitle emptytitle" "introduction introduction introduction introduction" "picture1 picture2 picture3 picture4";
     margin: 0 8% 0 8%;
+	height: 100vh;
 }
 /* style for the navigation bar*/
 
@@ -126,8 +127,8 @@ table {
 }
 #hello {
 	grid-area: intro1;
-	width: 500px;
-	height: 30px;
+	width: 32.5vw;
+	height: 4.1vh;
 	text-align: center;
 	margin: 8% 0 0 5%;
 	font-size: 1.5em;
@@ -176,7 +177,7 @@ table {
 
 #photo_introduction{
    grid-area: intro2;
-   margin: 6% 0 0 0;
+   margin: 10% 0 0 0;
    width: 560px;
    height: 215px;
    border: solid 3px;
@@ -189,16 +190,18 @@ table {
 	grid-area: intro1;
 	text-align: left;
 	margin: 18% 10% 0 13%;
+	/*font-size: 1vw;*/
 	
 }
 #ending {
 	grid-area: intro1;
 	text-align: left;
-	margin: 45% 0 0 13%;
+	margin: 47% 0 10% 13%;
+	/*font-size: 1vw;*/
 }
 .introduction {
     grid-area: introduction;
-    height: 400px;
+    height: 100%;
     background-color:var(--main-blue-color); /* before HoneyDew;*/
 	display: grid;
     grid-template-columns: 1fr 1fr;
@@ -213,6 +216,7 @@ table {
 .picture {
   background-color: var(--light-grey-color);
   border-right: 1px double black;
+  border-bottom: 1px solid black;
 	
 
   /*background-color: var(--main-blue-color);*/
