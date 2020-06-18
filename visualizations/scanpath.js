@@ -54,7 +54,7 @@
 //passed variables
     var stimulus;
     var has_image = false;
-
+    var timecalled = false;
     var canvas;
 }
 
@@ -233,6 +233,9 @@ function attachImage(data_scanpath, users, canvas) {
 
 //creates the actual visualization
 function createVis(data_scanpath, users, canvas) {
+    //clears canvas
+    canvas.selectAll("g").remove()
+
     //create group object
     var group = canvas.append("g")
         .attr("class", "paths");
@@ -316,10 +319,11 @@ function createVis(data_scanpath, users, canvas) {
                 return base_colour
             }
         });
+        redrawAllHeatmaps();
 }
 
 //interactions draw
-{
+
 //draw scanpath after interactions
     function redrawScanpath() {
         for (j = 0; j <= numberScanpaths; j++) {
@@ -382,11 +386,6 @@ function createVis(data_scanpath, users, canvas) {
         }
     };
 
-//redraws visualization
-    function redraw(temp_can) {
-    }
-}
-
 //timeslider draw (needs one specific map instead of all)
 {
     function timerScanpath(idNum, data_scanpath) {
@@ -405,7 +404,6 @@ function createVis(data_scanpath, users, canvas) {
     }
 
     function timerDraw(data_scanpath, users, svg) {
-
         //clear svg
         svg.selectAll("g").remove();
 
