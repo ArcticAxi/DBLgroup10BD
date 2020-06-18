@@ -253,6 +253,19 @@ function loadingImage(content, name) {
                 scanpathImage.style.backgroundImage = stimuliLocationURL;
                 scanpathImage.style.backgroundRepeat = 'no-repeat';
             }
+			else{
+				var stimuliLocationURL = "url(stimuli/grid.jpg)";
+
+                bubblemapImage.style.backgroundImage = stimuliLocationURL;
+                bubblemapImage.style.backgroundRepeat = 'no-repeat';
+
+                heatmapImage.style.backgroundImage = stimuliLocationURL;
+                heatmapImage.style.backgroundRepeat = 'no-repeat';
+
+                scanpathImage.style.backgroundImage = stimuliLocationURL;
+                scanpathImage.style.backgroundRepeat = 'no-repeat';
+				
+			}
 
             bubblemapImage.style.width = sizeWidth + "px";
             bubblemapImage.style.height = sizeHeight + "px";
