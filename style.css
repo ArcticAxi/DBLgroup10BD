@@ -82,12 +82,12 @@ table {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-areas: "emptytitle emptytitle" "submit selectingdata";
-    margin: 0 0% 0 16%;
+    margin: 0 0% 0 20%;
     background-color: var(--light-grey-color);
 }
 
 .visualizationpage {
-    margin: 0 0% 0 16%;
+    margin: 0 0% 0 20%;
 
 }
 
@@ -518,7 +518,7 @@ div.tooltip {
 /* styling for the sidebar on the visualization page */
 .sidebar {
   height: 90%;
-  width: 16%;
+  width:20%;
   position: fixed;
   z-index: 1;
   top: 0;

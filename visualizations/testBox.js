@@ -1,3 +1,10 @@
+var highlighted_user_box = []
+
+function userSelectionBoxplot(highlighted_users) {
+    var highlighted_user_box = highlighted_users;
+}
+
+
 function boxplot(content, name, idName) {
 
     stimulus = name;
@@ -55,9 +62,8 @@ function boxplot(content, name, idName) {
         })
     });
 
-    var highlighted_users = []
     selectedUsersDraw = noDubbles.filter(function (d) {
-        return highlighted_users.includes(d.user);
+        return highlighted_user_box.includes(d.user);
 
     })
 
