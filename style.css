@@ -537,8 +537,5 @@ div.tooltip {
 }
 
 .coordinate{
-    position: fixed;
     bottom: 250px;
-    right: 200px;
-    width: 300px;
 }
