@@ -255,7 +255,8 @@ function loadingImage(content, name) {
             }
 			else{
 				var stimuliLocationURL = "url(stimuli/grid.jpg)";
-
+				sizeWidth = 825;
+				sizeHeight = 625;
                 bubblemapImage.style.backgroundImage = stimuliLocationURL;
                 bubblemapImage.style.backgroundRepeat = 'no-repeat';
 
@@ -330,8 +331,8 @@ function getMeta(content, name, url, callback) {
             return +d.MappedFixationPointY;
         });
 
-        maxWidth += 100;
-        maxHeight += 100;
+        maxWidth += 150;
+        maxHeight += 150;
 
         // it loads the visualization all the way to the left which cuts off circles and such
         callback(maxWidth, maxHeight, false)
