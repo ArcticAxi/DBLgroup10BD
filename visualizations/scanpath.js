@@ -54,7 +54,7 @@
 //passed variables
     var stimulus;
     var has_image = false;
-    var timecalled = false;
+
     var canvas;
 }
 
@@ -233,9 +233,6 @@ function attachImage(data_scanpath, users, canvas) {
 
 //creates the actual visualization
 function createVis(data_scanpath, users, canvas) {
-    //clears canvas
-    canvas.selectAll("g").remove()
-
     //create group object
     var group = canvas.append("g")
         .attr("class", "paths");
@@ -319,11 +316,10 @@ function createVis(data_scanpath, users, canvas) {
                 return base_colour
             }
         });
-        redrawAllHeatmaps();
 }
 
 //interactions draw
-
+{
 //draw scanpath after interactions
     function redrawScanpath() {
         for (j = 0; j <= numberScanpaths; j++) {
@@ -386,6 +382,11 @@ function createVis(data_scanpath, users, canvas) {
         }
     };
 
+//redraws visualization
+    function redraw(temp_can) {
+    }
+}
+
 //timeslider draw (needs one specific map instead of all)
 {
     function timerScanpath(idNum, data_scanpath) {
@@ -404,6 +405,7 @@ function createVis(data_scanpath, users, canvas) {
     }
 
     function timerDraw(data_scanpath, users, svg) {
+
         //clear svg
         svg.selectAll("g").remove();
 
@@ -573,11 +575,8 @@ function xmlSvg(name, svg, multiple) {
         source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
     }
 
-    var encodedData = window.btoa(source);
-
 //add xml declaration
     source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-
 
 //convert svg source to URI data scheme.
     var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
@@ -585,7 +584,7 @@ function xmlSvg(name, svg, multiple) {
 // doesn't load the image attribute but just 'no image thumbnial'-thing
 // actual bit which downloads the file passed in the url / URI data scheme
     if (multiple) {
-        return encodedData;
+        return url;
     } else {
         var link = document.createElement("a");
         link.download = name.substring(0, name.indexOf(".")) + "_scanpath" + '.svg';
@@ -600,6 +599,7 @@ function xmlSvg(name, svg, multiple) {
 // downloads the scanpath visualization
 function downloadScanpath(name, multiple) {
     var num_of_scanpath = name.substring(name.indexOf('/') + 1, name.length);
+
     var svg = document.getElementById("scanpath_" + num_of_scanpath);
 
     if (multiple) {
