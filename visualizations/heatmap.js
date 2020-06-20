@@ -212,8 +212,11 @@ function timestamp_slider_input(e, num) {
         });
     }
 
-    // draws scanpath
-    timerScanpath(idNum, filteredTimestamp);
+    // draws scanpath if a timestamp is present for it
+
+    if (num <= preset_timestamps.length) {
+        timerScanpath(idNum, filteredTimestamp);
+    }
 
     filteredTimestamp = timestampUsers(filteredTimestamp);
 
@@ -396,7 +399,7 @@ function heatmap(content, name, width, height, idName, vars) {
     // updates heatmap if variables are provided
     if (typeof vars == 'object'){
         if (vars.preset_timestamps.length >= heatmaps.length) {
-            redrawAllHeatmaps();
+            redrawAllHeatmaps(heatmaps.length);
         }
     };
 }
@@ -441,21 +444,23 @@ function updateVarsHeatmap(variables, num) {
     intensity_slider_heatmap.value = variables.intensity_heatmap;
 
     radius_heatmap = variables.radius_heatmap * 4;
-    radius_slider_heatmap = variables.radius_heatmap;
+    radius_slider_heatmap.value = variables.radius_heatmap;
 
     blur_heatmap = variables.blur_heatmap *3;
-    blur_slider_heatmap = variables.blur_heatmap;
+    blur_slider_heatmap.value = variables.blur_heatmap;
 
-    highlightedUsers_heatmap = variables.highlightedUsers_heatmap;
+    highlightedUsers_heatmap = variables.highlighted_Users_heatmap;
 
     preset_timestamps = variables.preset_timestamps;
 
     preset_checkboxes = variables.preset_checkboxes;
 }
 
-function redrawAllHeatmaps() {
+function redrawAllHeatmaps(num) {
     userSelectionHeatmap(highlightedUsers_heatmap);
-    for (map in heatmaps) {
-        timestamp_slider_input(true, map)
+    if (num <= (preset_timestamps.length - 1)) {
+        for (map in heatmaps) {
+            timestamp_slider_input(true, map)
+        }
     }
 }

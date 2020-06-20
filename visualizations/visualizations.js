@@ -16,12 +16,15 @@ var basicJSON = {
     "bubblemap": {
         "gridsize": 100
     },
-    "heatmap": {
-        "rainbow": false,
-        "intensity_heatmap": 5,
-        "radius_heatmap": 6,
-        "blur_heatmap": 10
-    }
+    "heatmap" : {
+        "rainbow" : true,
+        "intensity_heatmap" : 5,
+        "radius_heatmap" : 6,
+        "blur_heatmap" : 10,
+        "highlighted_Users_heatmap" : [],
+        "preset_timestamps" : [],
+        "preset_checkboxes" : []
+}
 }
 
 function sortByDateAscending(a, b) {
@@ -385,9 +388,27 @@ downloadVarsButton.onclick = function () {
 
     //updates the heatmap variables
     json.heatmap.intensity_heatmap = parseInt(intensity_slider_heatmap.value)
-    json.heatmap.radius_heatmap = parseInt(radius_slider_heatmap)
-    json.heatmap.blur_heatmap = parseInt(blur_slider_heatmap)
+    json.heatmap.radius_heatmap = parseInt(radius_slider_heatmap.value)
+    json.heatmap.blur_heatmap = parseInt(blur_slider_heatmap.value)
     json.heatmap.highlighted_users_heatmap = highlighted_users;
+
+    // clears timeslider arrays
+    json.heatmap.preset_timestamps = [];
+    json.heatmap.preset_checkboxes = [];
+    
+    // fills in the timeslider arrays in order the of the created maps
+    for (num in heatmaps) {
+        var id = names_heatmap[num];
+        id = id.substring(0, id.lastIndexOf('.'));
+        id = "#a" + id + "_heatmap/" + num;
+        id_check = "'timestamp_slider_checkbox." + id + "'";
+        var checkbox = document.getElementById(id_check);
+        json.heatmap.preset_checkboxes.push(checkbox.checked);
+
+        id_slide = "'timestamp_slider_heatmap." + id + "'";
+        var slider = document.getElementById(id_slide);
+        json.heatmap.preset_timestamps.push(slider.value);
+    }
 
     //bit that does the actual downloading, directly copied from StackOverflow, cause why not
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json));
