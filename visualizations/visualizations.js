@@ -27,6 +27,8 @@ var basicJSON = {
 }
 }
 
+var beginTime = new Date();
+
 function sortByDateAscending(a, b) {
     return a.Timestamp - b.Timestamp;
 }
@@ -255,8 +257,7 @@ function loadingImage(content, name) {
 
                 scanpathImage.style.backgroundImage = stimuliLocationURL;
                 scanpathImage.style.backgroundRepeat = 'no-repeat';
-            }
-			else{
+            } else {
 				var stimuliLocationURL = "url(stimuli/grid.jpg)";
 				sizeWidth = 825;
 				sizeHeight = 625;
@@ -268,7 +269,6 @@ function loadingImage(content, name) {
 
                 scanpathImage.style.backgroundImage = stimuliLocationURL;
                 scanpathImage.style.backgroundRepeat = 'no-repeat';
-				
 			}
 
             bubblemapImage.style.width = sizeWidth + "px";
@@ -301,6 +301,9 @@ function loadingImage(content, name) {
                 heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
                 boxplot(copyContent, name, idNameBoxplot);
             }
+
+            var endTime = new Date();
+            console.log((endTime.getTime() - beginTime.getTime()) / 1000);
         });
 }
 
