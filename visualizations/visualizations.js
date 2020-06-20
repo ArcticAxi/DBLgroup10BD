@@ -303,7 +303,7 @@ function loadingImage(content, name) {
             }
 
             var endTime = new Date();
-            console.log((endTime.getTime() - beginTime.getTime()) / 1000);
+            //console.log((endTime.getTime() - beginTime.getTime()) / 1000);
         });
 }
 

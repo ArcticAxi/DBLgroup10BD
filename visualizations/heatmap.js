@@ -456,11 +456,9 @@ function updateVarsHeatmap(variables, num) {
     preset_checkboxes = variables.preset_checkboxes;
 }
 
-function redrawAllHeatmaps(num) {
+function redrawAllHeatmaps() {
     userSelectionHeatmap(highlightedUsers_heatmap);
-    if (num <= (preset_timestamps.length - 1)) {
         for (map in heatmaps) {
             timestamp_slider_input(true, map)
-        }
     }
 }

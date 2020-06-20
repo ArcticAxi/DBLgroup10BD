@@ -64,7 +64,6 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, ha
     if (typeof vars == 'object') {
         if (typeof vars.base_stroke_width == 'number') {
             updateVarsScanpath(vars);
-            console.log('done')
         }
     }
     stimulus = name;
@@ -143,7 +142,6 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, ha
 
 //draw the scanpath visualisation
 function drawScanpath(original_data_scanpath, idName, vars) {
-    console.log('draw')
     numberScanpaths += 1;
     //create canvas
     var canvas = d3.select(idName)
@@ -283,6 +281,7 @@ function createVis(data_scanpath, users, canvas, vars) {
         })
         .attr("stroke-opacity", function (d) {
             if (highlighted_users.indexOf(d[0].user) !== -1) {
+                console.log(highlight_stroke_opacity)
                 return highlight_stroke_opacity
             } else {
                 return base_stroke_opacity
@@ -322,7 +321,7 @@ function createVis(data_scanpath, users, canvas, vars) {
         });
         if (typeof vars == 'object') {
             if (typeof vars.base_stroke_width == 'number') {
-                redrawAllHeatmaps(numberScanpaths);
+                redrawAllHeatmaps();
             }
         }
 }
@@ -640,7 +639,6 @@ function updateVarsScanpath(variables) {
 
     highlight_fixation_opacity = variables.highlight_fixation_opacity;
     highlight_fixation_opacity_slider.value = variables.highlight_fixation_opacity;
-    console.log(highlight_fixation_opacity)
 
     highlighted_users = variables.highlighted_users;
 
