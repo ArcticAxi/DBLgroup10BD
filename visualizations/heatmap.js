@@ -214,9 +214,7 @@ function timestamp_slider_input(e, num) {
 
     // draws scanpath if a timestamp is present for it
 
-    if (num <= preset_timestamps.length) {
-        timerScanpath(idNum, filteredTimestamp);
-    }
+    timerScanpath(idNum, filteredTimestamp);
 
     filteredTimestamp = timestampUsers(filteredTimestamp);
 

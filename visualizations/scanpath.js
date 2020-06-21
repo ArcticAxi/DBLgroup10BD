@@ -409,7 +409,8 @@ function createVis(data_scanpath, users, canvas, vars) {
 
     function timerDraw(data_scanpath, users, svg) {
         //clear svg
-        svg.selectAll("g").remove();
+        svg.selectAll("g.paths").remove();
+        svg.selectAll("g.fixations").remove();
 
         //create group object
         var group = svg.append("g")
@@ -622,10 +623,10 @@ function updateVarsScanpath(variables) {
     highlight_stroke_width = variables.highlight_stroke_width;
     highlight_stroke_width_slider.value = variables.highlight_stroke_width;
 
-    base_stroke_opacity = variables.base_stroke_opacity;
+    base_stroke_opacity = variables.base_stroke_opacity / 10;
     base_stroke_opacity_slider.value = variables.base_stroke_opacity;
 
-    highlight_stroke_opacity = variables.highlight_stroke_opacity;
+    highlight_stroke_opacity = variables.highlight_stroke_opacity / 10;
     highlight_stroke_opacity_slider.value = variables.highlight_stroke_opacity;
 
     base_fixation_radius = variables.base_fixation_radius;
@@ -634,10 +635,10 @@ function updateVarsScanpath(variables) {
     highlight_fixation_radius = variables.highlight_fixation_radius;
     highlight_fixation_radius_slider.value = variables.highlight_fixation_radius;
 
-    base_fixation_opacity = variables.base_fixation_opacity;
+    base_fixation_opacity = variables.base_fixation_opacity /  10;
     base_fixation_opacity_slider.value = variables.base_fixation_opacity;
 
-    highlight_fixation_opacity = variables.highlight_fixation_opacity;
+    highlight_fixation_opacity = variables.highlight_fixation_opacity / 10;
     highlight_fixation_opacity_slider.value = variables.highlight_fixation_opacity;
 
     highlighted_users = variables.highlighted_users;
