@@ -534,7 +534,7 @@ function createUserButtons(users) {
             }
             redrawScanpath();
             userSelectionHeatmap(highlighted_users);
-            userSelectionBoxplot(highlighted_users);
+            drawUserSelectionBoxplot();
         };
         if(highlighted_users.indexOf(users[user]) != -1) {
             button.style.backgroundColor = highlight_colour;
