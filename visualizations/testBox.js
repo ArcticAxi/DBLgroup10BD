@@ -2,10 +2,14 @@ var highlighted_user_box = [];
 var selectedUsersDraw = [];
 var svg;
 var noDubbles = [];
-var x;
-var y;
+var xArray = [];
+var yArray = [];
 var tooltipBoxplot;
 var boxplot_div_name;
+var boxplotNameArray = [];
+var data_nd_array = [];
+var x;
+var y;
 
 // set the dimensions and margins of the graph
     var margin = {top: 10, right: 30, bottom: 50, left: 120},
@@ -24,10 +28,12 @@ function initBoxplot() {
         .append("svg")
         .attr("width", width_boxplot + margin.left + margin.right)
         .attr("height", height_boxplot + margin.top + margin.bottom)
-        .attr('id', name + '/svg')
+        .attr('id', boxplot_div_name + "_svg")
         .append("g")
+        .attr("id", boxplot_div_name + "_g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
+    boxplotNameArray.push(boxplot_div_name + "_g");
 
     createBoxplot(svg);
 
@@ -75,7 +81,7 @@ function createBoxplot(svg) {
         })
     });
 
-    
+    data_nd_array.push(noDubbles)
 
     // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
     var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
@@ -104,6 +110,8 @@ function createBoxplot(svg) {
         .range([height_boxplot, 0])
         .domain([stimulus])
         .padding(.4);
+
+    yArray.push(y);
     svg.append("g")
         .call(d3.axisLeft(y).tickSize(0))
         .select(".domain").remove()
@@ -116,6 +124,8 @@ function createBoxplot(svg) {
     x = d3.scaleLinear()
         .domain([1, max + 1000])
         .range([100, width_boxplot])
+
+    xArray.push(x);
     svg.append("g")
         .attr("transform", "translate(0," + height_boxplot + ")")
         .call(d3.axisBottom(x).ticks(5))
@@ -240,49 +250,56 @@ function createBoxplot(svg) {
 
 function drawUserSelectionBoxplot() {
 
-    console.log(highlighted_users)
+    for (i in boxplotNameArray) {
+        svg = d3.select(document.getElementById(boxplotNameArray[i]))
+        noDubbles = data_nd_array[i]
+       var x = xArray[i] 
+        var y = yArray[i] 
 
-    selectedUsersDraw = noDubbles.filter(function (d) {
+
+        selectedUsersDraw = noDubbles.filter(function (d) {
         return highlighted_users.includes(d.user);
 
-    })
+        })
 
-    svg
-        .selectAll("circle")
-        .remove()
+        svg
+            .selectAll("circle")
+            .remove()
 
-    // Add individual points with jitter
-    var jitterWidth = 50
-    svg
-        .selectAll("indPoints")
-        .data(selectedUsersDraw)
-        .enter()
-        .append("circle")
-        .attr("cx", function (d) {
-            return (x(d.totalDuration))
-        })
-        .attr("cy", function (d) {
-            return (9 * (y.bandwidth() / 8) - jitterWidth / 2 + Math.random() * jitterWidth)
-        })
-        .attr("r", 5)
-        .style("fill", "#4477BD")
-        .attr("stroke", "black")
-        .on("mouseover", function (d) {
-            tooltipBoxplot
-                .transition()
-                .duration(200)
-                .style("opacity", 1)
-            tooltipBoxplot
-                .html("<span>" + "User: " + d.user + '<br>' + "Total Duration: " + d.totalDuration + " ms </span>")
-                .style("left", (d3.event.pageX + 10) + "px")
-                .style("top", (d3.event.pageY -28) + "px")
-        })
-        .on("mouseleave", function (d) {
-            tooltipBoxplot
-                .transition()
-                .duration(200)
-                .style("opacity", 0)
-        })
+
+        // Add individual points with jitter
+        var jitterWidth = 50
+        svg
+            .selectAll("indPoints")
+            .data(selectedUsersDraw)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d) {
+                return (x(d.totalDuration))
+            })
+            .attr("cy", function (d) {
+                return (9 * (y.bandwidth() / 8) - jitterWidth / 2 + Math.random() * jitterWidth)
+            })
+            .attr("r", 5)
+            .style("fill", "#4477BD")
+            .attr("stroke", "black")
+            .on("mouseover", function (d) {
+                tooltipBoxplot
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 1)
+                tooltipBoxplot
+                    .html("<span>" + "User: " + d.user + '<br>' + "Total Duration: " + d.totalDuration + " ms </span>")
+                    .style("left", (d3.event.pageX + 10) + "px")
+                    .style("top", (d3.event.pageY -28) + "px")
+            })
+            .on("mouseleave", function (d) {
+                tooltipBoxplot
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0)
+            })
+    }
 }
 
 
