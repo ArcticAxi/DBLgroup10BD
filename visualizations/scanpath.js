@@ -74,8 +74,7 @@ function scanpath(content, name, sizeWidth, sizeHeight, idName, sizeDecrease, ha
     drawScanpath(content, idName, vars);
 }
 
-//interactions
-{
+{//interactions
 //path sliders
 //update base stroke width when moving slider
     base_stroke_width_slider.oninput = function () {
@@ -390,8 +389,7 @@ function createVis(data_scanpath, users, canvas, vars) {
         }
     };
 
-//timeslider draw (needs one specific map instead of all)
-{
+{//timeslider draw (needs one specific map instead of all)
     function timerScanpath(idNum, data_scanpath) {
         var svg_0 = document.getElementById("scanpath_" + idNum)
         var svg = d3.select(svg_0)

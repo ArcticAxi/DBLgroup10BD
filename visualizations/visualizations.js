@@ -1,5 +1,6 @@
 var dataAll;
 var downloadVarsButton = document.getElementById('downloadVarsButton')
+var background;
 var basicJSON = {
     "scanpath": {
         "base_stroke_width": 1,
@@ -66,7 +67,7 @@ for (var iMainLoop = 0; iMainLoop < selected.length; iMainLoop++) {
 
 createDownloadButtonEverything();
 
-var background;
+
 
 function createDownloadButtonEverything() {
     // creates button
