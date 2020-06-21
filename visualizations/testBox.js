@@ -7,6 +7,8 @@ var highlighted_user_box = []
 
 function userSelectionBoxplot(highlighted_users) {
     var highlighted_user_box = highlighted_users;
+
+    initBoxplot();
 }
 
 function initBoxplot() {
@@ -235,6 +237,12 @@ function createBoxplot(svg) {
         .attr("stroke", "black")
         .style("width", 80)
 
+    drawUserSelection(svg, selectedUsersDraw);
+}
+
+function drawUserSelection(svg, selectedUsersDraw) {
+
+
     // Add individual points with jitter
     var jitterWidth = 50
     svg
@@ -268,6 +276,7 @@ function createBoxplot(svg) {
                 .style("opacity", 0)
         })
 }
+
 
 
 function createDownloadButtonsBoxplot(name) {
