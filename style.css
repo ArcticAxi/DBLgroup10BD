@@ -389,8 +389,11 @@ input[type = "file"] {
 }
 
 .left_elem {
-    float: left;
-    margin-right: 10px;
+    display: block;
+}
+
+.right_elem {
+    display: block;
 }
 
 /* Checkbox styling in old_upload.html page */
