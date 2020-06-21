@@ -1,25 +1,26 @@
-var highlighted_user_box = []
-
-function userSelectionBoxplot(highlighted_users) {
-    var highlighted_user_box = highlighted_users;
-}
-
-
-function boxplot(content, name, idName) {
-
-    stimulus = name;
-    data_boxplot = JSON.parse(JSON.stringify(content));
-    boxplot_div_name = idName;
-
+var highlighted_user_box = [];
+var selectedUsersDraw = [];
+var svg;
+var noDubbles = [];
+var x;
+var y;
+var tooltipBoxplot;
+var boxplot_div_name;
 
 // set the dimensions and margins of the graph
     var margin = {top: 10, right: 30, bottom: 50, left: 120},
         width_boxplot = 460 - margin.left - margin.right,
         height_boxplot = 400 - margin.top - margin.bottom;
 
+function initBoxplot() {
+    // create a tooltip
+    tooltipBoxplot = d3.select("body")
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltipBoxplot")
 
-// append the svg object to the body of the page
-    var svg = d3.select(boxplot_div_name)
+    // append the svg object to the body of the page
+    svg = d3.select(boxplot_div_name)
         .append("svg")
         .attr("width", width_boxplot + margin.left + margin.right)
         .attr("height", height_boxplot + margin.top + margin.bottom)
@@ -28,12 +29,24 @@ function boxplot(content, name, idName) {
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
-// create a tooltip
-    var tooltip = d3.select(boxplot_div_name)
-        .append("div")
-        .style("opacity", 0)
-        .attr("class", "tooltip")
-        .style("font-size", "16px")
+    createBoxplot(svg);
+
+}
+
+function boxplot(content, name, idName) {
+
+    stimulus = name;
+    data_boxplot = JSON.parse(JSON.stringify(content));
+    boxplot_div_name = idName;
+
+    
+
+    initBoxplot();
+}
+
+
+function createBoxplot(svg) {
+    
 
 
 // Read the data and compute summary statistics for each specie
@@ -42,7 +55,7 @@ function boxplot(content, name, idName) {
 
     });
 
-    data_boxplot.forEach(function (d) {							// calculates total duration per user
+    data_boxplot.forEach(function (d) {                         // calculates total duration per user
         d.totalDuration = d.FixationDuration;
         data_boxplot.forEach(function (e) {
             if (d.user == e.user && d.StimuliName == e.StimuliName) {
@@ -52,20 +65,17 @@ function boxplot(content, name, idName) {
         d.stimuliUser = d.StimuliName.toString() + " " + d.user.toString()
     })
 
-    var dubbles = [...new Set(data_boxplot.map(function (d) {		// collecting all dubble entries
+    var dubbles = [...new Set(data_boxplot.map(function (d) {       // collecting all dubble entries
         return d.stimuliUser;
     }))]
 
-    var noDubbles = dubbles.map(function (d) {				// create array of objects without duplicates (coordinates)
+    noDubbles = dubbles.map(function (d) {              // create array of objects without duplicates (coordinates)
         return data_boxplot.find(function (e) {
             return e.stimuliUser === d
         })
     });
 
-    selectedUsersDraw = noDubbles.filter(function (d) {
-        return highlighted_user_box.includes(d.user);
-
-    })
+    
 
     // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
     var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
@@ -89,9 +99,8 @@ function boxplot(content, name, idName) {
         })
         .entries(noDubbles)
 
-
-    // Show the Y scale
-    var y = d3.scaleBand()
+        // Show the Y scale
+    y = d3.scaleBand()
         .range([height_boxplot, 0])
         .domain([stimulus])
         .padding(.4);
@@ -104,7 +113,7 @@ function boxplot(content, name, idName) {
     var max = d3.max(data_boxplot, function (d) {
         return d.totalDuration;
     });
-    var x = d3.scaleLinear()
+    x = d3.scaleLinear()
         .domain([1, max + 1000])
         .range([100, width_boxplot])
     svg.append("g")
@@ -226,6 +235,22 @@ function boxplot(content, name, idName) {
         .attr("stroke", "black")
         .style("width", 80)
 
+    drawUserSelectionBoxplot();
+}
+
+function drawUserSelectionBoxplot() {
+
+    console.log(highlighted_users)
+
+    selectedUsersDraw = noDubbles.filter(function (d) {
+        return highlighted_users.includes(d.user);
+
+    })
+
+    svg
+        .selectAll("circle")
+        .remove()
+
     // Add individual points with jitter
     var jitterWidth = 50
     svg
@@ -243,22 +268,24 @@ function boxplot(content, name, idName) {
         .style("fill", "#4477BD")
         .attr("stroke", "black")
         .on("mouseover", function (d) {
-            tooltip
+            tooltipBoxplot
                 .transition()
                 .duration(200)
                 .style("opacity", 1)
-            tooltip
+            tooltipBoxplot
                 .html("<span>" + "User: " + d.user + '<br>' + "Total Duration: " + d.totalDuration + " ms </span>")
-                .style("left", (d3.mouse(this)[0] + 30) + "px")
-                .style("top", (d3.mouse(this)[1] + 30) + "px")
+                .style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY -28) + "px")
         })
         .on("mouseleave", function (d) {
-            tooltip
+            tooltipBoxplot
                 .transition()
                 .duration(200)
                 .style("opacity", 0)
         })
 }
+
+
 
 function createDownloadButtonsBoxplot(name) {
     // creates button

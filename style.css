@@ -473,6 +473,18 @@ input[type = "file"] {
   opacity: 1;
 }
 
+div.tooltipBoxplot {
+  position: absolute;
+  background-color: var(--light-grey-color);
+  border: none;
+  border-radius: 5px;
+  padding: 15px;
+  text-align: left;
+  color: black;
+  font: 12px;
+  pointer-events: none;
+}
+
 div.tooltip {	
     position: absolute;			
     text-align: center;			
