@@ -204,7 +204,7 @@ function attachImage(data_scanpath, users, canvas, vars) {
                 width = childImageScanpath[i].style.width;
                 height = childImageScanpath[i].style.height;
                 childImageScanpath[i].style.backgroundImage = "";
-                numberFileScanpath = i;
+                numberFileScanpath = imageNames.indexOf(stimulus);
             }
         }
 

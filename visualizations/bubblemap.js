@@ -33,7 +33,7 @@ function attachImgBubblemap(svg) {
                 width = childImageBubblemap[i].style.width;
                 height = childImageBubblemap[i].style.height;
                 childImageBubblemap[i].style.backgroundImage = "";
-                numberFileBubblemap = i;
+                numberFileBubblemap = imageNames.indexOf(stimulus);
             }
         }
 

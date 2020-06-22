@@ -385,7 +385,8 @@ function heatmap(content, name, width, height, idName, vars) {
     // default uses 5 different colours I believe, doesn't seem like a good idea to mess with this
     // I messed with it anyway ~Tobias
     if (rainbow) {
-        heat.gradient({0.48: '#86007D', 0.55: '#0000F9', 0.60 : '#008018', 0.7 : '#FFFF41', 0.75 : '#FFA52C', 1: '#FF0018'});
+        // {0.48: '#86007D', 0.55: '#0000F9', 0.60 : '#008018', 0.7 : '#FFFF41', 0.75 : '#FFA52C', 1: '#FF0018'}
+        heat.gradient({0.25: '#86007D', 0.40: '#0000F9', 0.55: '#008018', 0.7: '#FFFF41', 0.95: '#FFA52C', 1: '#FF0018'});
     }
 
     if(id_num_add <= preset_timestamps.length -1){
