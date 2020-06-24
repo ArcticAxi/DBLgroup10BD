@@ -89,7 +89,7 @@ function createHeatmapTime(timestamp, id) {
     var div = document.createElement('div');
     div.id = "'timestamp_heatmap" + id + "'";
     var par = document.createElement('p');
-    var par_node = document.createTextNode("Timestamp:");
+    var par_node = document.createTextNode("Timestamp (" + id.substring(2, id.lastIndexOf("_")) + "):");
     par.appendChild(par_node);
     div.appendChild(par);
 

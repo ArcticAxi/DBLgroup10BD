@@ -209,20 +209,11 @@ function attachImage(data_scanpath, users, canvas, vars) {
         }
 
         if (numberFileScanpath > -1) {
-            const imagesFile = document.querySelector('#stimuli-input').files[numberFileScanpath];
-            const imagesFileReader = new FileReader();
+            var image = canvas.append("svg:image").attr("xlink:href", imageURLS[numberFileScanpath])
+                .attr('width', width)
+                .attr('height', height);
 
-            imagesFileReader.addEventListener('load', function () {
-                var image = canvas.append("svg:image").attr("xlink:href", imagesFileReader.result)
-                    .attr('width', width)
-                    .attr('height', height);
-
-                createVis(data_scanpath, users, canvas, vars);
-            }, false);
-
-            if (imagesFile) {
-                imagesFileReader.readAsDataURL(imagesFile)
-            }
+            createVis(data_scanpath, users, canvas, vars);
         }
     } else {
         createVis(data_scanpath, users, canvas, vars);

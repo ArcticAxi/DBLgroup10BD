@@ -38,18 +38,48 @@ dataAll = initialRead.sort(sortByDateAscending);
 
 for (var iMainLoop = 0; iMainLoop < selected.length; iMainLoop++) {
     let stimuliName = selected[iMainLoop];
-    let specificStimuliName = stimuliName.substr(0, stimuliName.lastIndexOf('.'));
+    let specificStimuliName = stimuliName;
+    if (stimuliName.includes('.jpg') || stimuliName.includes('.png') || stimuliName.includes('.jpeg')) {
+        specificStimuliName = stimuliName.substr(0, stimuliName.lastIndexOf('.'));
+    }
+
     var stimuliBubblemap = document.createElement('div');
     stimuliBubblemap.id = "a" + specificStimuliName + "_bubblemap";
+    stimuliBubblemap.classList.add('specificVisualization');
 
     var stimuliHeatmap = document.createElement('div');
     stimuliHeatmap.id = "a" + specificStimuliName + "_heatmap";
+    stimuliHeatmap.classList.add('specificVisualization');
 
     var stimuliScanpath = document.createElement('div');
     stimuliScanpath.id = "a" + specificStimuliName + "_scanpath";
+    stimuliScanpath.classList.add('specificVisualization');
 
     var stimuliBoxplot = document.createElement('div');
     stimuliBoxplot.id = "a" + specificStimuliName + "_boxplot";
+    stimuliBoxplot.classList.add('specificVisualization');
+
+    // tooltips which display name of visualization when overing over them
+    var tooltipBubblemap = document.createElement('span');
+    tooltipBubblemap.id = "b" + specificStimuliName + "_bubblemap";
+    tooltipBubblemap.classList.add('tooltipSpecificVis');
+
+    var tooltipHeatmap = document.createElement('span');
+    tooltipHeatmap.id = "b" + specificStimuliName + "_heatmap";
+    tooltipHeatmap.classList.add('tooltipSpecificVis');
+
+    var tooltipScanpath = document.createElement('span');
+    tooltipScanpath.id = "b" + specificStimuliName + "_scanpath";
+    tooltipScanpath.classList.add('tooltipSpecificVis');
+
+    var tooltipBoxplot = document.createElement('span');
+    tooltipBoxplot.id = "b" + specificStimuliName + "_boxplot";
+    tooltipBoxplot.classList.add('tooltipSpecificVis');
+
+    stimuliBubblemap.appendChild(tooltipBubblemap);
+    stimuliHeatmap.appendChild(tooltipHeatmap);
+    stimuliBoxplot.appendChild(tooltipBoxplot);
+    stimuliScanpath.appendChild(tooltipScanpath);
 
     var bubblemapImage = document.querySelector('#bubblemap');
     var heatmapImage = document.querySelector('#heatmap');
@@ -65,9 +95,14 @@ for (var iMainLoop = 0; iMainLoop < selected.length; iMainLoop++) {
     createDownloadButtons(stimuliName, iMainLoop);
 }
 
+$(".specificVisualization").hover(function() {
+    let visualizationStimuli = this.id.substring(1, this.id.lastIndexOf("_"));
+
+    let hoverTooltip = document.getElementById("b" + visualizationStimuli + this.id.substr(this.id.lastIndexOf("_")));
+    hoverTooltip.textContent = visualizationStimuli;
+});
+
 createDownloadButtonEverything();
-
-
 
 function createDownloadButtonEverything() {
     // creates button
@@ -238,10 +273,16 @@ function loadingImage(content, name) {
             let sizeWidth = width / sizeDecrease;
             let sizeHeight = height / sizeDecrease;
 
-            let idNameBubblemap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_bubblemap";
-            let idNameHeatmap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_heatmap";
-            let idNameScanpath = "#a" + name.substr(0, name.lastIndexOf('.')) + "_scanpath";
-            let idNameBoxplot = "#a" + name.substr(0, name.lastIndexOf('.')) + "_boxplot";
+            let idNameBubblemap = "#a" + name + "_bubblemap";
+            let idNameHeatmap = "#a" + name + "_heatmap";
+            let idNameScanpath = "#a" + name + "_scanpath";
+            let idNameBoxplot = "#a" + name + "_boxplot";
+            if (name.includes('.jpg') || name.includes('.png') || name.includes('.jpeg')) {
+                idNameBubblemap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_bubblemap";
+                idNameHeatmap = "#a" + name.substr(0, name.lastIndexOf('.')) + "_heatmap";
+                idNameScanpath = "#a" + name.substr(0, name.lastIndexOf('.')) + "_scanpath";
+                idNameBoxplot = "#a" + name.substr(0, name.lastIndexOf('.')) + "_boxplot";
+            }
 
             var bubblemapImage = document.querySelector(idNameBubblemap);
             var heatmapImage = document.querySelector(idNameHeatmap);
@@ -302,6 +343,8 @@ function loadingImage(content, name) {
                 heatmap(copyContent, name, sizeWidth, sizeHeight, idNameHeatmap);
                 boxplot(copyContent, name, idNameBoxplot);
             }
+
+
 
             var endTime = new Date();
             //console.log((endTime.getTime() - beginTime.getTime()) / 1000);

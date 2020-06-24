@@ -209,7 +209,6 @@ function stimuliNames(data) {
 
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
-            // create new localStorage containing array with names of the stimuli
             selected.push(checkboxes[i].id);
         }
     }
