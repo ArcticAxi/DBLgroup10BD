@@ -109,8 +109,6 @@
                 </div></p>
                 <input type="range" min="0" max="10" value="10" class="slider" id="blur_slider_heatmap">
             </div>
-            <p> Checking the checkbox next to the timestamp slider shows a 2-second interval of fixations around the selected timestamp. </p>
-            <p> When the checkbox is unchecked it shows the cumulative fixations upto the selected timestamp. </p>
        
 
         <div class="buttoncontainer" id="heatmap_rainbow">

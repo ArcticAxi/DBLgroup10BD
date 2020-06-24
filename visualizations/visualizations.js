@@ -159,7 +159,7 @@ function createDownloadButtonAll(selected, current) {
 function downloadAll(selected, current) {
     let scanpathURI = downloadScanpath(selected + 'downloadButton_scanpath/' + current, true);
     let bubblemapURI = downloadBubblemap(selected + 'downloadButton_bubblemap/' + current, true);
-    let boxplotURI = downloadBoxplot(selected + '/svg', true);
+    let boxplotURI = downloadBoxplot('#a' + selected.substring(0, selected.lastIndexOf('.')) + '_boxplot_svg', true);
 
     var div = 'a' + selected.substring(0, selected.lastIndexOf(".")) + "_heatmap";
     div = document.getElementById(div);
