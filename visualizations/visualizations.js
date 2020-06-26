@@ -109,7 +109,7 @@ function createDownloadButtonEverything() {
     var downloadButton = document.createElement('input');
     downloadButton.type = 'button';
     downloadButton.id = 'downloadButton_every';
-    downloadButton.value = 'Download every vis.';
+    downloadButton.value = 'Download all';
 
 // adds event listener which runs the actual download function
     downloadButton.addEventListener("click", function () {
@@ -179,7 +179,7 @@ function createDownloadButtonAll(selected, current) {
     var downloadButton = document.createElement('input');
     downloadButton.type = 'button';
     downloadButton.id = selected + '.downloadButton_all' + '/' + current;
-    downloadButton.value = 'Download all vis. of ' + selected.substring(0, selected.indexOf('.'));
+    downloadButton.value = 'Download ' + selected.substring(0, selected.indexOf('.'));
 
 // adds event listener which runs the actual download function
     downloadButton.addEventListener("click", function () {
