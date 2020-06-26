@@ -249,13 +249,16 @@ function createBubblemap(svg) {
             if (d3.event.transform !== d3.zoomIdentity) {
                 if (svg1 != null) {
                     svg1.transition()
-                        .delay(3000)
+					    .delay(3000)
+                        .duration(1000)
                         .call(d3.event.target.transform, d3.zoomIdentity);
                 } else {
                     svg.transition()
-                        .delay(3000)
-                        .call(d3.event.target.transform, d3.zoomIdentity);
-                }
+					    .delay(3000)
+                        .duration(1000)
+                        .call(d3.event.target.transform, d3.zoomIdentity)
+					
+				}
             }
         });
     svg.call(zoom)
@@ -278,10 +281,9 @@ function createBubblemap(svg) {
         number = number.substring((number.length - 1), number.length);
 
         const transform = d3.zoomTransform(svgArray[number].node());
-
         let x = d3.scaleLinear()
             .domain([0, width])
-            .range([0, width]);
+            .range([0, width]);		
         let y = d3.scaleLinear()
             .domain([0, height])
             .range([0, height]);
@@ -309,7 +311,9 @@ function createBubblemap(svg) {
             d3.select(svgZoom.querySelector('image')).attr('transform', d3.event.transform)
                 .on("mousedown.zoom", null)
                 .on("move.zoom", null);
+				
         }
+		
     }
 
 //=========================================================================
@@ -323,8 +327,30 @@ function createBubblemap(svg) {
         gridSize = this.value;
         array_bubblemap = [];							// make an array to store d.coordinates
         duplicates = [];					// count how many duplicates in array
+		
+		//when zooming and changing grid simultaniously, the new bubbles appear zoomed at the right scale 
+		let safezooming;
+		let translate = null;
+		let scale;
+		let transform;
         for (var i = 0; i < svgArray.length; i++) {
-            svgArray[i].selectAll('g').remove();
+	
+			// check whether there is a picture
+			if (!svgArray[i].select('image').empty()) {
+			let str = svgArray[i].select('image').attr('transform');
+			if(str) {
+			translate = str.substring(str.indexOf('('), str.indexOf(')')+ 1);
+			scale = str.substring(str.lastIndexOf('('), str.lastIndexOf(')')+ 1);
+			}
+			if((translate != "(0,0)") && (translate!=null)) {
+           	safezooming = i; 
+			let x = translate.substring(1, translate.indexOf(','));
+			let y = translate.substring(translate.indexOf(',') + 1, translate.indexOf(')'));
+			let k = scale.substring(1, scale.indexOf(')'));
+		    transform = d3.zoomIdentity.translate(x, y).scale(k);
+			}
+			}
+			svgArray[i].selectAll('g').remove();
             svgArray[i].selectAll('circles').remove();
         }
 
@@ -387,7 +413,7 @@ function createBubblemap(svg) {
 
             //=========================================================================
             // Scale and axis
-            //==========================================================================
+            //==========================================================================	
             // Add X axis
             var x = d3.scaleLinear()
                 .domain([0, width])							// What input is accepted (doesnt cause error if too small)
@@ -402,6 +428,14 @@ function createBubblemap(svg) {
             var z = d3.scaleSqrt()
                 .domain([0, 200])
                 .range([0, 100]);
+			
+			if(safezooming == a){
+				x = transform.rescaleX(x);
+				y = transform.rescaleY(y);
+			    z = d3.scaleSqrt()
+                .domain([0, 200])
+                .range([0, (100*transform.k)]);
+			}
 
             //=========================================================================
             // Bubbles
@@ -446,10 +480,18 @@ function createBubblemap(svg) {
                         .style("opacity", 0);
                 }).call(zoom)
                 .on("mousedown.zoom", null);
+			
             svgArray.push(svg1);
-
-        }
-
+			
+			}
+			for (let j = 0; j<= numberBubblemaps; j++ ) {
+				svgArray[j]
+					.transition()
+					.delay(3000)
+					.duration(1000)
+					.call(zoom.transform, d3.zoomIdentity);
+				
+            }
     }
 }
 
