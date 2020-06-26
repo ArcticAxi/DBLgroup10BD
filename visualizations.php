@@ -156,22 +156,45 @@
     <script src="visualizations/bubblemap.js"></script>
     <script src="visualizations/testBox.js"></script>
     <script src="visualizations/visualizations.js" charset="utf-8"></script>
-
-    <script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        
+	<script>
+	    jQuery(function($) {
+        var x,y;
+        $("#scanpath").children().mousemove(function(event) {
+        var offset = $(this).offset();
+        x = event.pageX- offset.left;
+        y = event.pageY- offset.top;
+		
+	   
+	   if(x<=950 &&x>0){
+		
+        $("#xycoordinates").html("(X: "+parseInt(x)+", Y: "+parseInt(y)+")");
+	   }
+    });
+	$( "#xycoordinates" ).change(function() {
+        
+    });
+});
+	
+	</script>
+	
+	
+	
+	<script>
         document.getElementById('bubblemap').addEventListener('mousemove', getPosition);
 
         document.getElementById('heatmap').addEventListener('mousemove', getPosition);
 
-        document.getElementById('scanpath').addEventListener('mousemove',getPosition);
-
+        
 
             function getPosition(e) {
             var rect = e.target.getBoundingClientRect();
             var x = ~~(e.clientX - rect.left);
             var y = ~~(e.clientY - rect.top);
             if(x<=825&&y<=630) {
-                document.getElementById("xycoordinates").innerHTML= "Coordinates:(" + x + "," + y + ")";
+                document.getElementById("xycoordinates").innerHTML= "(X: "+x+", Y: "+y+")";
             }
         }
 	</script>
-
+	
