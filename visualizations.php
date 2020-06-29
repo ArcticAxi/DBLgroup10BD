@@ -6,13 +6,26 @@
 		    <div id="xycoordinates" class="coordinate"></div>
         </div>
 
-        <p class="devider">User Selection</p>
+            <p class="devider"> User Selection
+            </p>
 
         <div class="slidecontainer">
+            <p><div data-tooltip="Click on a user to highlight. Click again to undo.">
+                <i class="fa fa-question" style="font-size:20px"></i></div></p>
         <div class="buttoncontainer" id="highlighted_user">
             <p>Click on user to highlight</p>
             <p>Click again to undo</p>
         </div>
+        </div>
+
+        <p class="devider"> Timestamp</p>
+
+        <div class="slidecontainer">
+            <p><div data-tooltip="Unchecked checkbox shows all timestamps cumulatively. Checking the checkbox shows a two
+        second interval around the selected timestamp.">
+                <i class="fa fa-question" style="font-size:20px"></i></div></p>
+            <div class="buttoncontainer" id="timestamp_selection">
+            </div>
         </div>
         
         <p class="devider">Scanpath</p>
@@ -74,7 +87,7 @@
                 <input type="button" id = "black_base" value = "Black" name="base_colour">
             </div>
         </div>
-        
+
 
         <p class="devider">Bubblemap</p>
         <div class="slidecontainer">
@@ -110,10 +123,13 @@
        
 
         <div class="buttoncontainer" id="heatmap_rainbow">
-            <p> Click this button to turn the heatmap colors to those of a rainbow. </p>
-            <p> For optimal effect, please lower the intensity and radius. </p>
+            <div data-tooltip="Clicking this button turns the heatmap colors to those of a rainbow.
+                For optimal effect, please lower the intensity and radius. ">
+                <i class="fa fa-question" style="font-size:20px"></i>
+            </div>
             <input type="button" id="rainbow_button" value="Toggle Rainbow">
         </div>
+
     </div>
 
         <p class="devider">Download</p>

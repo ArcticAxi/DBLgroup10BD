@@ -83,13 +83,13 @@ function addBackgroundImage (i) {
     };
 }
 
-// creates the slider for the old_heatmap based on the max timestamp value
+// creates the slider for the heatmap based on the max timestamp value
 function createHeatmapTime(timestamp, id) {
-    var all_sliders = document.getElementById("all_heatmap_sliders");
+    var all_sliders = document.getElementById("timestamp_selection");
     var div = document.createElement('div');
     div.id = "'timestamp_heatmap" + id + "'";
     var par = document.createElement('p');
-    var par_node = document.createTextNode("Timestamp (" + id.substring(2, id.lastIndexOf("_")) + "):");
+    var par_node = document.createTextNode(id.substring(2, id.lastIndexOf("_")));
     par.appendChild(par_node);
     div.appendChild(par);
 
@@ -105,13 +105,13 @@ function createHeatmapTime(timestamp, id) {
     input.id = "'timestamp_slider_heatmap." + id + "/" + id_num_add + "'";
     div.appendChild(input);
 
-    all_sliders.appendChild(div);
-
     // creates the checkbox for the slider
     var checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.id = "'timestamp_slider_checkbox." + id + "/" + id_num_add + "'";
     div.appendChild(checkbox);
+
+    all_sliders.appendChild(div);
 
     // adds listener to the slider
     input.addEventListener("input", timestamp_slider_input, false);
