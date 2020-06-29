@@ -13,8 +13,6 @@
             <p><div data-tooltip="Click on a user to highlight. Click again to undo.">
                 <i class="fa fa-question" style="font-size:20px"></i></div></p>
         <div class="buttoncontainer" id="highlighted_user">
-            <p>Click on user to highlight</p>
-            <p>Click again to undo</p>
         </div>
         </div>
 
