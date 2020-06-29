@@ -163,7 +163,24 @@
 
     <div class="visualization" id="boxplot">
     </div>
+	
+	<script>
+	// it will be better if the next line is placed somewhere in the heatmap.js 
+	document.getElementById('heatmap').addEventListener('mousemove', getPosition);
 
+    function getPosition(e) {
+            var rect = e.target.getBoundingClientRect();	
+            var x = ~~(e.clientX - rect.left);
+            var y = ~~(e.clientY - rect.top);
+		   
+            if(x<=825&&y<=630) {
+                document.getElementById("xycoordinates").innerHTML= "(X: "+x+", Y: "+y+")";
+				
+            }
+        }
+	
+	</script>
+	
     <script src="visualizations/scanpath.js"></script>
     <script src="visualizations/simpleheat.js"></script>
     <script src="visualizations/heatmap.js"></script>
@@ -194,21 +211,5 @@
 	</script>
 	
 	
-	
-	<script>
-        document.getElementById('bubblemap').addEventListener('mousemove', getPosition);
 
-        document.getElementById('heatmap').addEventListener('mousemove', getPosition);
-
-        
-
-            function getPosition(e) {
-            var rect = e.target.getBoundingClientRect();
-            var x = ~~(e.clientX - rect.left);
-            var y = ~~(e.clientY - rect.top);
-            if(x<=825&&y<=630) {
-                document.getElementById("xycoordinates").innerHTML= "(X: "+x+", Y: "+y+")";
-            }
-        }
-	</script>
 	

@@ -46,11 +46,13 @@ function attachImgBubblemap(svg) {
             imagesFileReader.addEventListener('load', function () {
                 var image = svg.selectAll('image')
                     .data([0]);
+					// here imagesFileReader is in base64 encoding
                 image1 = image.enter().append("svg:image").attr("xlink:href", imagesFileReader.result)
                     .attr('width', width)
                     .attr('height', height)
                     .attr('id', 'imageForDownload');
-
+					
+      
 
                 // const objectURL = URL.createObjectURL(imagesFile);
 
@@ -66,6 +68,11 @@ function attachImgBubblemap(svg) {
 
         }
     } else {
+		// added as an overlay for the grid so that the coordinates work 
+		svg.append("rect")
+		   .attr("width", 825)
+		   .attr("height", 650)
+		   .style("opacity", 0);
         createBubblemap(svg);
     }
 }
@@ -80,7 +87,8 @@ function bubblemapInit() {
 
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
 
-
+    document.getElementById('bubblemap').addEventListener('mousemove', getPosition);
+	
     attachImgBubblemap(svg);
 }
 
@@ -98,7 +106,9 @@ function bubbleMap(content, name, width, height, idName, hasImg, vars) {
 
     array_stimuli_bubblemap.push(name);
     numberBubblemaps += 1;
-
+    
+	//function for adding mousemove event listener to bubblemaps
+	let scaleK;
     bubblemapInit();
 }
 
@@ -248,27 +258,29 @@ function createBubblemap(svg) {
         .on('end', function () {
             if (d3.event.transform !== d3.zoomIdentity) {
                 if (svg1 != null) {
-                    svg1.transition()
-					    .delay(3000)
-                        .duration(1000)
-                        .call(d3.event.target.transform, d3.zoomIdentity);
+                   svg1.transition()
+					   .delay(4000)
+                       .duration(1000)
+                       .call(d3.event.target.transform, d3.zoomIdentity);
                 } else {
-                    svg.transition()
-					    .delay(3000)
+                  svg.transition()
+					    .delay(4000)
                         .duration(1000)
                         .call(d3.event.target.transform, d3.zoomIdentity)
-					
 				}
             }
         });
     svg.call(zoom)
         .on("mousedown.zoom", null);
     svgArray.push(svg);
-
+   
+	
     function updateZoom() {
 
         let number;
         let svgZoom;
+		document.getElementById('bubblemap').removeEventListener('mousemove', getPosition);
+		document.getElementById('bubblemap').addEventListener('mousemove', coordinates);
 
         if (this.tagName == 'svg') {
             svgZoom = this;
@@ -281,6 +293,7 @@ function createBubblemap(svg) {
         number = number.substring((number.length - 1), number.length);
 
         const transform = d3.zoomTransform(svgArray[number].node());
+		
         let x = d3.scaleLinear()
             .domain([0, width])
             .range([0, width]);		
@@ -290,10 +303,13 @@ function createBubblemap(svg) {
 
         let newX = d3.event.transform.rescaleX(x);
         let newY = d3.event.transform.rescaleY(y);
+	
         let newZ = d3.scaleSqrt()
             .domain([0, 200])
             .range([0, (100 * d3.event.transform.k)]); //multiply range by scale factor
-
+			
+        scaleK = d3.event.transform.k;
+		
         svgArray[number].selectAll("circle")
             .attr('cx', function (d) {
                 return newX(d.averageX);
@@ -310,12 +326,29 @@ function createBubblemap(svg) {
         if (svgZoom.querySelector('image') != undefined) {
             d3.select(svgZoom.querySelector('image')).attr('transform', d3.event.transform)
                 .on("mousedown.zoom", null)
-                .on("move.zoom", null);
-				
-        }
+                .on("move.zoom", null);	
+		}
+		else {
+			d3.select(svgZoom.querySelector('rect')).attr('transform', d3.event.transform)
+					.on("mousedown.zoom", null)
+					.on("move.zoom", null);			
+		}
+		
+	//	console.log("d3.event.transform.k " + d3.event.transform.k + " scale " + scaleK);
 		
     }
-
+	
+function coordinates(e) {
+	   let rect1 = e.target.getBoundingClientRect();
+	   let x1 = ~~(e.clientX - rect1.left);
+       let y1 = ~~(e.clientY - rect1.y);
+	   let coordX = x1/scaleK;
+	   let coordY= y1/scaleK;
+	  // console.log(scaleK);
+	   if(coordX<=825&&coordY<=630) {
+            document.getElementById("xycoordinates").innerHTML = "(X: " + ~~(coordX) + ", Y: " + ~~(coordY) +")";
+		    }
+		}
 //=========================================================================
 //=========================================================================
 // Redraw bubbles
@@ -484,13 +517,14 @@ function createBubblemap(svg) {
             svgArray.push(svg1);
 			
 			}
+			//added this for zooming and changing grid simultaniously
 			for (let j = 0; j<= numberBubblemaps; j++ ) {
 				svgArray[j]
 					.transition()
-					.delay(3000)
+					.delay(4000)
 					.duration(1000)
 					.call(zoom.transform, d3.zoomIdentity);
-				
+	
             }
     }
 }
