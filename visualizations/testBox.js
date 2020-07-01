@@ -13,7 +13,7 @@ var y;
 
 // set the dimensions and margins of the graph
     var margin = {top: 10, right: 30, bottom: 50, left: 120},
-        width_boxplot = 560 - margin.left - margin.right,
+        width_boxplot = 460 - margin.left - margin.right,
         height_boxplot = 400 - margin.top - margin.bottom;
 
 function initBoxplot() {
@@ -107,7 +107,7 @@ function createBoxplot(svg) {
 
         // Show the Y scale
     y = d3.scaleBand()
-        .range([height_boxplot+100, 0])
+        .range([height_boxplot, 0])
         .domain([stimulus])
         .padding(.4);
 
@@ -123,7 +123,7 @@ function createBoxplot(svg) {
     });
     x = d3.scaleLinear()
         .domain([1, max + 1000])
-        .range([100, width_boxplot - 30])
+        .range([100, width_boxplot])
 
     xArray.push(x);
     svg.append("g")
