@@ -363,14 +363,31 @@ function coordinates(e) {
 		
 		//when zooming and changing grid simultaniously, the new bubbles appear zoomed at the right scale 
 		let safezooming;
-		let translate = null;
-		let scale;
+		//let scale;
 		let transform;
         for (var i = 0; i < svgArray.length; i++) {
-	
 			// check whether there is a picture
 			if (!svgArray[i].select('image').empty()) {
+			let translate;
+            let scale;			
 			let str = svgArray[i].select('image').attr('transform');
+			if(str) {
+			translate = str.substring(str.indexOf('('), str.indexOf(')')+ 1);
+			scale = str.substring(str.lastIndexOf('('), str.lastIndexOf(')')+ 1);
+			}
+			if((translate != "(0,0)") && (translate!=undefined)) {
+           	safezooming = i; 
+			let x = translate.substring(1, translate.indexOf(','));
+			let y = translate.substring(translate.indexOf(',') + 1, translate.indexOf(')'));
+			let k = scale.substring(1, scale.indexOf(')'));
+		    transform = d3.zoomIdentity.translate(x, y).scale(k);
+			}
+			}
+			//visualisation with a grid picture
+		else {
+			let translate;
+			let scale;
+			let str = svgArray[i].select('rect').attr('transform');
 			if(str) {
 			translate = str.substring(str.indexOf('('), str.indexOf(')')+ 1);
 			scale = str.substring(str.lastIndexOf('('), str.lastIndexOf(')')+ 1);
@@ -380,12 +397,13 @@ function coordinates(e) {
 			let x = translate.substring(1, translate.indexOf(','));
 			let y = translate.substring(translate.indexOf(',') + 1, translate.indexOf(')'));
 			let k = scale.substring(1, scale.indexOf(')'));
-		    transform = d3.zoomIdentity.translate(x, y).scale(k);
+		    transform = d3.zoomIdentity.translate(x, y).scale(k);	
 			}
-			}
+		}
 			svgArray[i].selectAll('g').remove();
             svgArray[i].selectAll('circles').remove();
         }
+		
 
         svgArray = [];
         for (a = 0; a <= numberBubblemaps; a++) {
