@@ -7,7 +7,7 @@ In order to effectively (and successfully) use the tool, the following instructi
 
 #### Connecting to the website
 1. Connect to the TUe VPN
-2. Go to <URL WEBSITE>
+2. Go to URL WEBSITE
 
 #### Loading the visualizations
 3. Press "Visualizations page" in the rop right corner. 
