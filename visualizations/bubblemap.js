@@ -19,8 +19,6 @@ var svg1 = null;
 var childImageBubblemap
 
 function attachImgBubblemap(svg) {
-
-
     if (hasImgBubblemap) {
         var imageBackBubblemap = document.querySelector('#bubblemap');
         childImageBubblemap = imageBackBubblemap.querySelectorAll("div");
@@ -34,33 +32,25 @@ function attachImgBubblemap(svg) {
                 height = childImageBubblemap[i].style.height;
                 childImageBubblemap[i].style.backgroundImage = "";
                 numberFileBubblemap = imageNames.indexOf(stimulus);
+
             }
         }
 
         if (numberFileBubblemap > -1) {
-            const imagesFile = document.querySelector('#stimuli-input').files[numberFileBubblemap];//
+            var image = svg.selectAll('image')
+                .data([0]);
+            // here imagesFileReader is in base64 encoding
+            image1 = image.enter().append("svg:image").attr("xlink:href", imageURLS[numberFileBubblemap])
+                .attr('width', width)
+                .attr('height', height)
+                .attr('id', 'imageForDownload');
 
 
-            const imagesFileReader = new FileReader();
+            // const objectURL = URL.createObjectURL(imagesFile);
 
-            imagesFileReader.addEventListener('load', function () {
-                var image = svg.selectAll('image')
-                    .data([0]);
-					// here imagesFileReader is in base64 encoding
-                image1 = image.enter().append("svg:image").attr("xlink:href", imagesFileReader.result)
-                    .attr('width', width)
-                    .attr('height', height)
-                    .attr('id', 'imageForDownload');
-					
-      
-
-                // const objectURL = URL.createObjectURL(imagesFile);
-
-                // image1 = svg.append("svg:image").attr("height", height)
-                //   .attr("width", width).attr("xlink:href", objectURL).attr('id', 'imageblob');
-                createBubblemap(svg);
-
-            }, false);
+            // image1 = svg.append("svg:image").attr("height", height)
+            //   .attr("width", width).attr("xlink:href", objectURL).attr('id', 'imageblob');
+            createBubblemap(svg);
 
             if (imagesFile) {
                 imagesFileReader.readAsDataURL(imagesFile)
@@ -68,11 +58,11 @@ function attachImgBubblemap(svg) {
 
         }
     } else {
-		// added as an overlay for the grid so that the coordinates work 
-		svg.append("rect")
-		   .attr("width", 825)
-		   .attr("height", 650)
-		   .style("opacity", 0);
+        // added as an overlay for the grid so that the coordinates work
+        svg.append("rect")
+            .attr("width", 825)
+            .attr("height", 650)
+            .style("opacity", 0);
         createBubblemap(svg);
     }
 }
@@ -88,7 +78,7 @@ function bubblemapInit() {
     //.attr("transform", "translate(" + 100 + "," + 100 + ")");
 
     document.getElementById('bubblemap').addEventListener('mousemove', getPosition);
-	
+
     attachImgBubblemap(svg);
 }
 
@@ -106,9 +96,9 @@ function bubbleMap(content, name, width, height, idName, hasImg, vars) {
 
     array_stimuli_bubblemap.push(name);
     numberBubblemaps += 1;
-    
-	//function for adding mousemove event listener to bubblemaps
-	let scaleK;
+
+    //function for adding mousemove event listener to bubblemaps
+    let scaleK;
     bubblemapInit();
 }
 
@@ -258,28 +248,29 @@ function createBubblemap(svg) {
         .on('end', function () {
             if (d3.event.transform !== d3.zoomIdentity) {
                 if (svg1 != null) {
-                   svg1.transition()
-					   .delay(4000)
-                       .duration(1000)
-                       .call(d3.event.target.transform, d3.zoomIdentity);
+                    svg1.transition()
+                        .delay(4000)
+                        .duration(1000)
+                        .call(d3.event.target.transform, d3.zoomIdentity);
                 } else {
-                  svg.transition()
-					    .delay(4000)
+                    svg.transition()
+                        .delay(4000)
                         .duration(1000)
                         .call(d3.event.target.transform, d3.zoomIdentity)
-				}
+                }
             }
         });
     svg.call(zoom)
         .on("mousedown.zoom", null);
     svgArray.push(svg);
-   
-	
+
+
     function updateZoom() {
 
         let number;
         let svgZoom;
-		document.getElementById('bubblemap').addEventListener('mousemove', coordinates);
+        document.getElementById('bubblemap').removeEventListener('mousemove', getPosition);
+        document.getElementById('bubblemap').addEventListener('mousemove', coordinates);
 
         if (this.tagName == 'svg') {
             svgZoom = this;
@@ -292,23 +283,23 @@ function createBubblemap(svg) {
         number = number.substring((number.length - 1), number.length);
 
         const transform = d3.zoomTransform(svgArray[number].node());
-		
+
         let x = d3.scaleLinear()
             .domain([0, width])
-            .range([0, width]);		
+            .range([0, width]);
         let y = d3.scaleLinear()
             .domain([0, height])
             .range([0, height]);
 
         let newX = d3.event.transform.rescaleX(x);
         let newY = d3.event.transform.rescaleY(y);
-	
+
         let newZ = d3.scaleSqrt()
             .domain([0, 200])
             .range([0, (100 * d3.event.transform.k)]); //multiply range by scale factor
-			
+
         scaleK = d3.event.transform.k;
-		
+
         svgArray[number].selectAll("circle")
             .attr('cx', function (d) {
                 return newX(d.averageX);
@@ -325,21 +316,19 @@ function createBubblemap(svg) {
         if (svgZoom.querySelector('image') != undefined) {
             d3.select(svgZoom.querySelector('image')).attr('transform', d3.event.transform)
                 .on("mousedown.zoom", null)
-                .on("move.zoom", null);	
-		}
-		else {
-			d3.select(svgZoom.querySelector('rect')).attr('transform', d3.event.transform)
-					.on("mousedown.zoom", null)
-					.on("move.zoom", null);			
-		}
-		
-	//	console.log("d3.event.transform.k " + d3.event.transform.k + " scale " + scaleK);
-		
+                .on("move.zoom", null);
+        } else {
+            d3.select(svgZoom.querySelector('rect')).attr('transform', d3.event.transform)
+                .on("mousedown.zoom", null)
+                .on("move.zoom", null);
+        }
+
+        //	console.log("d3.event.transform.k " + d3.event.transform.k + " scale " + scaleK);
+
     }
-	
-function coordinates(e) {
-	
-	   let rect1;
+
+    function coordinates(e) {
+       let rect1;
 	   let x1,y1;
 	   rect1 = e.target.getBoundingClientRect();
 	   if(~~(rect1.width)!=~~(rect1.height)){
@@ -359,6 +348,8 @@ function coordinates(e) {
             document.getElementById("xycoordinates").innerHTML = "(X: " + ~~(coordX) + ", Y: " + ~~(coordY) +")";
 		    }
 		}
+    
+
 //=========================================================================
 //=========================================================================
 // Redraw bubbles
@@ -370,50 +361,50 @@ function coordinates(e) {
         gridSize = this.value;
         array_bubblemap = [];							// make an array to store d.coordinates
         duplicates = [];					// count how many duplicates in array
-		
-		//when zooming and changing grid simultaniously, the new bubbles appear zoomed at the right scale 
-		let safezooming;
-		//let scale;
-		let transform;
+
+        //when zooming and changing grid simultaniously, the new bubbles appear zoomed at the right scale
+        let safezooming;
+        //let scale;
+        let transform;
         for (var i = 0; i < svgArray.length; i++) {
-			// check whether there is a picture
-			if (!svgArray[i].select('image').empty()) {
-			let translate;
-            let scale;			
-			let str = svgArray[i].select('image').attr('transform');
-			if(str) {
-			translate = str.substring(str.indexOf('('), str.indexOf(')')+ 1);
-			scale = str.substring(str.lastIndexOf('('), str.lastIndexOf(')')+ 1);
-			}
-			if((translate != "(0,0)") && (translate!=undefined)) {
-           	safezooming = i; 
-			let x = translate.substring(1, translate.indexOf(','));
-			let y = translate.substring(translate.indexOf(',') + 1, translate.indexOf(')'));
-			let k = scale.substring(1, scale.indexOf(')'));
-		    transform = d3.zoomIdentity.translate(x, y).scale(k);
-			}
-			}
-			//visualisation with a grid picture
-		else {
-			let translate;
-			let scale;
-			let str = svgArray[i].select('rect').attr('transform');
-			if(str) {
-			translate = str.substring(str.indexOf('('), str.indexOf(')')+ 1);
-			scale = str.substring(str.lastIndexOf('('), str.lastIndexOf(')')+ 1);
-			}
-			if((translate != "(0,0)") && (translate!=null)) {
-           	safezooming = i; 
-			let x = translate.substring(1, translate.indexOf(','));
-			let y = translate.substring(translate.indexOf(',') + 1, translate.indexOf(')'));
-			let k = scale.substring(1, scale.indexOf(')'));
-		    transform = d3.zoomIdentity.translate(x, y).scale(k);	
-			}
-		}
-			svgArray[i].selectAll('g').remove();
+            // check whether there is a picture
+            if (!svgArray[i].select('image').empty()) {
+                let translate;
+                let scale;
+                let str = svgArray[i].select('image').attr('transform');
+                if (str) {
+                    translate = str.substring(str.indexOf('('), str.indexOf(')') + 1);
+                    scale = str.substring(str.lastIndexOf('('), str.lastIndexOf(')') + 1);
+                }
+                if ((translate != "(0,0)") && (translate != undefined)) {
+                    safezooming = i;
+                    let x = translate.substring(1, translate.indexOf(','));
+                    let y = translate.substring(translate.indexOf(',') + 1, translate.indexOf(')'));
+                    let k = scale.substring(1, scale.indexOf(')'));
+                    transform = d3.zoomIdentity.translate(x, y).scale(k);
+                }
+            }
+            //visualisation with a grid picture
+            else {
+                let translate;
+                let scale;
+                let str = svgArray[i].select('rect').attr('transform');
+                if (str) {
+                    translate = str.substring(str.indexOf('('), str.indexOf(')') + 1);
+                    scale = str.substring(str.lastIndexOf('('), str.lastIndexOf(')') + 1);
+                }
+                if ((translate != "(0,0)") && (translate != null)) {
+                    safezooming = i;
+                    let x = translate.substring(1, translate.indexOf(','));
+                    let y = translate.substring(translate.indexOf(',') + 1, translate.indexOf(')'));
+                    let k = scale.substring(1, scale.indexOf(')'));
+                    transform = d3.zoomIdentity.translate(x, y).scale(k);
+                }
+            }
+            svgArray[i].selectAll('g').remove();
             svgArray[i].selectAll('circles').remove();
         }
-		
+
 
         svgArray = [];
         for (a = 0; a <= numberBubblemaps; a++) {
@@ -489,14 +480,14 @@ function coordinates(e) {
             var z = d3.scaleSqrt()
                 .domain([0, 200])
                 .range([0, 100]);
-			
-			if(safezooming == a){
-				x = transform.rescaleX(x);
-				y = transform.rescaleY(y);
-			    z = d3.scaleSqrt()
-                .domain([0, 200])
-                .range([0, (100*transform.k)]);
-			}
+
+            if (safezooming == a) {
+                x = transform.rescaleX(x);
+                y = transform.rescaleY(y);
+                z = d3.scaleSqrt()
+                    .domain([0, 200])
+                    .range([0, (100 * transform.k)]);
+            }
 
             //=========================================================================
             // Bubbles
@@ -541,19 +532,19 @@ function coordinates(e) {
                         .style("opacity", 0);
                 }).call(zoom)
                 .on("mousedown.zoom", null);
-			
+
             svgArray.push(svg1);
-			
-			}
-			//added this for zooming and changing grid simultaniously
-			for (let j = 0; j<= numberBubblemaps; j++ ) {
-				svgArray[j]
-					.transition()
-					.delay(4000)
-					.duration(1000)
-					.call(zoom.transform, d3.zoomIdentity);
-	
-            }
+
+        }
+        //added this for zooming and changing grid simultaniously
+        for (let j = 0; j <= numberBubblemaps; j++) {
+            svgArray[j]
+                .transition()
+                .delay(4000)
+                .duration(1000)
+                .call(zoom.transform, d3.zoomIdentity);
+
+        }
     }
 }
 
