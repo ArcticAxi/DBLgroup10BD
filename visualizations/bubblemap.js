@@ -354,7 +354,7 @@ function coordinates(e) {
 	   }
 	   let coordX = x1/scaleK;
 	   let coordY = y1/scaleK;
-	   console.log(rect1);
+	   
 	   if(coordX<=825&&coordY<=630) {
             document.getElementById("xycoordinates").innerHTML = "(X: " + ~~(coordX) + ", Y: " + ~~(coordY) +")";
 		    }
