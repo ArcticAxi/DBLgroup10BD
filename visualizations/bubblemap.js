@@ -38,16 +38,10 @@ function attachImgBubblemap(svg) {
         }
 
         if (numberFileBubblemap > -1) {
-            const imagesFile = document.querySelector('#stimuli-input').files[numberFileBubblemap];//
-
-
-            const imagesFileReader = new FileReader();
-
-            imagesFileReader.addEventListener('load', function () {
                 var image = svg.selectAll('image')
                     .data([0]);
 					// here imagesFileReader is in base64 encoding
-                image1 = image.enter().append("svg:image").attr("xlink:href", imagesFileReader.result)
+                image1 = image.enter().append("svg:image").attr("xlink:href", imageURLS[numberFileBubblemap])
                     .attr('width', width)
                     .attr('height', height)
                     .attr('id', 'imageForDownload');
@@ -59,13 +53,6 @@ function attachImgBubblemap(svg) {
                 // image1 = svg.append("svg:image").attr("height", height)
                 //   .attr("width", width).attr("xlink:href", objectURL).attr('id', 'imageblob');
                 createBubblemap(svg);
-
-            }, false);
-
-            if (imagesFile) {
-                imagesFileReader.readAsDataURL(imagesFile)
-            }
-
         }
     } else {
 		// added as an overlay for the grid so that the coordinates work 
