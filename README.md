@@ -22,12 +22,13 @@ In order to effectively (and successfully) use the tool, the following instructi
 	1. Hovering over any visualization shows the stimuli name in the top left corner.
 	2. User selection, reflected in the scanpath, heat map, and boxplot. Clicking once will select the user and clicking a second time will undo the selection.
 	3. Timestamp, reflected in the scanpath and heat map. When the checkbox next to the timestamp slider is unchecked, the slider filters the data shown upto the selected timestamp. When the checkbox is checked, it shows the data one second before and one second after the selected timestamp.
-10. The scanpath visualization offers a lot of customization for how the paths are displayed.
-	1. There are a couple of sliders to regulate the opacity and size of the regular paths and fixations.
+10. The scanpath visualization offers a lot of customization for how the saccades are displayed.
+	1. There are a couple of sliders to regulate the opacity and size of the regular saccades and fixations.
 	2. There are a couple of sliders to regulate the same attributes of the highlighted variant.	
-11. The bubble map has some customization regarding the gridsize using a slider and a hover interactions.
-	1. The gridsize slider groups the bubbles using a smaller or larger grid.
+11. The bubble map has some customization to change the gridsize and a hover interactions.
+	1. The gridsize slider groups the bubbles using a smaller or larger size of grid.
 	2. Hovering over a bubble shows how many fixations are grouped into that bubble.
-12. The heatmap visualization offers some sliders to customize it's layout and filter the data shown based on timestamps.
-	1. The intensity slider changes at which concentration a part of the heat map becomes another color. Sliding it to the left sets a lower concentration limit to change colour and to the right a higher limit. 
+12. The heatmap visualization offers some sliders to customize its layout.
+	1. The intensity slider changes at which concentration limit the heat map gradient changes colour. Sliding it to the left sets a lower concentration limit to change colour and to the right a higher limit. 
 	2. The blur and radius sliders work similarly to the scanpath sliders.
+	3. There is a button named 'Toggle Rainbow', this changes the gradient to the colours of the pride flag.
