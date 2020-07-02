@@ -7,13 +7,13 @@ In order to effectively (and successfully) use the tool, the following instructi
 
 #### Connecting to the website
 1. Connect to the TU/e VPN
-2. Go to URL WEBSITE
+2. Go to dblserver.win.tue.nl:2006/~20193572 in your browser (we recommend Chrome, but the tool is also compatible with Microsoft Edge, Firefox, Opera, and some Chromium based browsers)
 
 #### Loading the visualizations
 3. Press "Visualizations page" in the top right corner. 
-4. In "Upload data", select any file in your computer that is .csv or .txt in Tab Separated Values format. (Required)
-5. In "Upload stimuli images", select stimuli images to show behind visualizations. Make sure the image filenames match the names in the stimuliName column! The tool automatically selects the matching names. The support image file formats are .png, .jpg, and .jpeg. (Recommended)
-6. If you have previously used our tool and downloaded thee .json file with variable values, this file can be uploaded again in "Upload previous settings". (Recommended)
+4. In "Upload data", select any file on your computer that is .csv, .tsv, .dsv or .txt in Tab Separated Values format. (Required)
+5. In "Upload stimuli images", select stimuli images to show behind visualizations. Make sure the image filenames match the names in the stimuliName column! The tool automatically selects the matching names. The supported image file formats are .png, .jpg, and .jpeg. (Recommended)
+6. If you have previously used our tool and downloaded the .json file with variable values, this file can be uploaded again in "Upload previous settings". (Recommended)
 7. After you have selected all your files, press the submit button. This loads the stimuli.
 8. Select the stimuli you want to visualize and press the confirm selection button.
 
